@@ -1,0 +1,21 @@
+{
+  "name": "Victory Sport",
+  "short_name": "Victory",
+  "start_url": "/index.php",
+  "display": "standalone",
+  "background_color": "#0f0f0f",
+  "theme_color": "#e53935",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/images/app-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
