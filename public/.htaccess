@@ -1,7 +1,34 @@
 <IfModule mod_rewrite.c>
-    Options -Multiviews
+    Options -Multiviews -Indexes
     RewriteEngine On
-    RewriteBase /auth/public
+    RewriteBase /
+
+    # Block access to hidden files and directories
+    RewriteRule (^\.|/\.) - [F]
+
+    # Block access to backup and source files
+    RewriteRule \.(bak|config|sql|fla|psd|ini|log|sh|inc|swp|dist|env)$ - [F]
+
+    # Serve existing files and directories directly
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
+
+    # Route everything else through index.php
+    RewriteRule ^(.+)$ index.php [QSA,L]
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Disable directory listing
+Options -Indexes
+
+# Prevent PHP execution in uploads directory
+<IfModule mod_rewrite.c>
+    RewriteRule ^uploads/.*\.php$ - [F,L]
 </IfModule>

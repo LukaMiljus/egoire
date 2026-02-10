@@ -16,20 +16,20 @@
         </div>
         <div class="header-links">
             <div class="main-links">
-            <a href="">Početna</a>
-            <a href="">Porudžbine</a>
-            <a href="">Artikli</a>
-            <a href="">Kategorije</a>
-            <a href="">Brendovi</a>
-            <a href="">Korisnici</a>
-            <a href="">Loyalty</a>
-            <a href="">Analitika</a>
-            <a href="">Email Marketing</a>
+            <a href="/admin/dashboard">Početna</a>
+            <a href="/admin/orders">Porudžbine</a>
+            <a href="/admin/products">Artikli</a>
+            <a href="/admin/categories">Kategorije</a>
+            <a href="/admin/brands">Brendovi</a>
+            <a href="/admin/users">Korisnici</a>
+            <a href="/admin/loyalty">Loyalty</a>
+            <a href="/admin/analytics">Analitika</a>
+            <a href="/admin/email-marketing">Email Marketing</a>
             </div>
             
             <div class="user-links">
                 <p class="active-user">Name </p>
-                <a href="admin-logout.php">Izloguj se</a>
+                <a href="/admin-logout">Izloguj se</a>
             </div>
         </div>
     </div>
@@ -57,20 +57,20 @@
 <div class="mobile-menu-overlay">
     <div class="mobile-menu-content">
         <nav class="mobile-nav-links">
-            <a href="">Početna</a>
-            <a href="">Porudžbine</a>
-            <a href="">Artikli</a>
-            <a href="">Kategorije</a>
-            <a href="">Brendovi</a>
-            <a href="">Korisnici</a>
-            <a href="">Loyalty</a>
-            <a href="">Analitika</a>
-            <a href="">Email Marketing</a>
+            <a href="/admin/dashboard">Početna</a>
+            <a href="/admin/orders">Porudžbine</a>
+            <a href="/admin/products">Artikli</a>
+            <a href="/admin/categories">Kategorije</a>
+            <a href="/admin/brands">Brendovi</a>
+            <a href="/admin/users">Korisnici</a>
+            <a href="/admin/loyalty">Loyalty</a>
+            <a href="/admin/analytics">Analitika</a>
+            <a href="/admin/email-marketing">Email Marketing</a>
         </nav>
 
         <div class="mobile-user-links">
             <p class="active-user">Name</p>
-            <a href="admin-logout.php">Izloguj se</a>
+            <a href="/admin-logout">Izloguj se</a>
         </div>
     </div>
 </div>
