@@ -1,0 +1,219 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Satoshi', sans-serif;
+    /* letter-spacing: 0.02em; */
+}
+
+.header-holder{
+    width: 100%;
+    height: 80px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+}
+
+.logo-holder{
+    width: 20%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-holder img{
+    width: 50%;
+}
+
+.header-links{
+    width: 80%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.main-links{
+    margin-right: 20px;
+    font-size: 18px;
+    color: black;
+    text-decoration: none;
+}
+
+.user-links{
+    display: flex;
+    align-items: center;
+    width: 20%;
+}
+
+.header-links a{
+    text-decoration: none;
+    color: black;
+    font-size: 18px;
+    padding: 8px;
+}
+
+.header-links a {
+    position: relative;
+    transition: color 0.2s;
+}
+
+.header-links a::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: gold;
+    transition: width 0.3s;
+}
+
+.header-links a:hover {
+    color: goldenrod;
+}
+
+.header-links a:hover::after {
+    width: 100%;
+}
+
+/* =========================
+   MOBILE ADMIN HEADER
+========================= */
+
+.mobile-header {
+    display: none;
+}
+
+/* MOBILE BREAKPOINT */
+@media (max-width: 992px) {
+
+    /* sakrivamo PC header */
+    .header-holder {
+        display: none;
+    }
+
+    /* MOBILE TOP BAR */
+    .mobile-header {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        background: white;
+        z-index: 1000;
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .mobile-header-inner {
+        height: 100%;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .mobile-logo img {
+        height: 35px;
+    }
+
+    /* HAMBURGER */
+    .hamburger {
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .hamburger span {
+        width: 28px;
+        height: 2px;
+        background: black;
+        transition: all 0.3s ease;
+    }
+
+    /* OVERLAY MENU */
+    .mobile-menu-overlay {
+        position: fixed;
+        inset: 0;
+        background: white;
+        z-index: 999;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.4s ease;
+    }
+
+    .mobile-menu-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .mobile-menu-content {
+        height: 100%;
+        padding: 100px 30px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* NAV LINKS */
+    .mobile-nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+    }
+
+    .mobile-nav-links a {
+        font-size: 22px;
+        text-decoration: none;
+        color: black;
+        font-weight: 500;
+        letter-spacing: 0.02em;
+    }
+
+    /* USER LINKS */
+    .mobile-user-links {
+        border-top: 1px solid #eee;
+        padding-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .mobile-user-links a {
+        text-decoration: none;
+        color: goldenrod;
+        font-weight: 500;
+    }
+
+
+}
+
+/* HAMBURGER -> X ANIMATION */
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+}
+
+.hamburger span {
+    transition: transform 0.3s ease, opacity 0.2s ease;
+}
+
+

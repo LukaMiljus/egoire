@@ -1,23 +1,46 @@
 <?php
-    require __DIR__ . "/../src/bootstrap.php";
-    // view("header",['title' => 'Victory Sport']);
+require __DIR__ . "/../src/bootstrap.php";
+require __DIR__ . "/../src/inc/admin-header.php";
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="\css\style.css?v=<?php echo time();?>"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 
 </head>
 <body>
 
-<a href="admin/login.php">admin</a>
-<a href="admin/admin-home.php">admin home</a>
-<a href="user/item-select.php">user item select</a>
-<a href="user/home-page.php">user home page</a>
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero ut deserunt voluptatibus nostrum exercitationem praesentium cumque omnis provident quas commodi soluta voluptates, facere in labore. Ipsum mollitia cupiditate consectetur rem?
 
-<a href="user/cart.php">cart</a>
 
 
 
