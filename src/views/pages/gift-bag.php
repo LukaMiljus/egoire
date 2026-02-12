@@ -42,20 +42,11 @@ require __DIR__ . '/../layout/header.php';
             <div class="gift-bag-card">
                 <h3><?= htmlspecialchars($r['name']) ?></h3>
                 <div class="gift-bag-details">
-                    <p>Minimalni iznos: <strong><?= formatPrice((float) $r['min_order_amount']) ?></strong></p>
-                    <p>Popust:
-                        <strong>
-                        <?php if ($r['discount_type'] === 'percentage'): ?>
-                            <?= (float) $r['discount_value'] ?>%
-                        <?php elseif ($r['discount_type'] === 'fixed'): ?>
-                            <?= formatPrice((float) $r['discount_value']) ?>
-                        <?php else: ?>
-                            Besplatan proizvod
-                        <?php endif; ?>
-                        </strong>
-                    </p>
-                    <?php if ($r['end_date']): ?>
-                    <p class="text-muted">Važi do: <?= formatDate($r['end_date']) ?></p>
+                    <?php if ($r['min_order_value']): ?>
+                    <p>Minimalni iznos: <strong><?= formatPrice((float) $r['min_order_value']) ?></strong></p>
+                    <?php endif; ?>
+                    <?php if ($r['min_products']): ?>
+                    <p>Minimalni broj proizvoda: <strong><?= (int) $r['min_products'] ?></strong></p>
                     <?php endif; ?>
                 </div>
                 <a href="/products" class="btn btn-primary">Kupuj</a>

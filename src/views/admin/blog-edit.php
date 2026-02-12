@@ -11,18 +11,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = [
         'title'            => inputString('title', '', $_POST),
         'slug'             => inputString('slug', '', $_POST) ?: generateSlug(inputString('title', '', $_POST)),
-        'content'          => trim($_POST['content'] ?? ''),
+        'body'             => trim($_POST['content'] ?? ''),
         'excerpt'          => inputString('excerpt', '', $_POST),
-        'author'           => inputString('author', '', $_POST),
-        'meta_title'       => inputString('meta_title', '', $_POST),
-        'meta_description' => inputString('meta_description', '', $_POST),
-        'is_published'     => isset($_POST['is_published']) ? 1 : 0,
+        'status'           => isset($_POST['is_published']) ? 'published' : 'draft',
+        'published_at'     => isset($_POST['is_published']) ? date('Y-m-d H:i:s') : null,
     ];
 
     if (!empty($_FILES['featured_image']['name'])) {
-        $result = uploadImage($_FILES['featured_image'], 'uploads/blog');
-        if ($result['success']) {
-            $data['featured_image'] = $result['path'];
+        $result = uploadImage($_FILES['featured_image'], 'blog');
+        if ($result) {
+            $data['featured_image'] = $result;
         }
     }
 
@@ -66,7 +64,7 @@ require __DIR__ . '/../layout/admin-header.php';
                 </div>
                 <div class="form-group">
                     <label>Sadržaj (HTML)</label>
-                    <textarea name="content" rows="15" class="form-control"><?= htmlspecialchars($post['content'] ?? '') ?></textarea>
+                    <textarea name="content" rows="15" class="form-control"><?= htmlspecialchars($post['body'] ?? '') ?></textarea>
                 </div>
             </div>
         </div>
@@ -74,12 +72,8 @@ require __DIR__ . '/../layout/admin-header.php';
             <div class="card mb-4">
                 <h3>Detalji</h3>
                 <div class="form-group">
-                    <label>Autor</label>
-                    <input type="text" name="author" class="form-control" value="<?= htmlspecialchars($post['author'] ?? '') ?>">
-                </div>
-                <div class="form-group">
                     <label class="checkbox-label">
-                        <input type="checkbox" name="is_published" value="1" <?= ($post['is_published'] ?? 0) ? 'checked' : '' ?>>
+                        <input type="checkbox" name="is_published" value="1" <?= ($post['status'] ?? 'draft') === 'published' ? 'checked' : '' ?>>
                         Objavljen
                     </label>
                 </div>

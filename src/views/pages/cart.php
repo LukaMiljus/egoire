@@ -3,7 +3,7 @@ declare(strict_types=1);
 $title = 'Korpa | Egoire';
 
 $cartItems = fetchCartItems();
-$totals = calculateCartTotals();
+$totals = calculateCartTotals($cartItems);
 
 require __DIR__ . '/../layout/header.php';
 ?>
@@ -27,31 +27,28 @@ require __DIR__ . '/../layout/header.php';
         <div class="cart-layout">
             <div class="cart-items">
                 <?php foreach ($cartItems as $item): ?>
-                <div class="cart-item" data-cart-id="<?= $item['id'] ?>">
+                <div class="cart-item" data-cart-id="<?= $item['cart_id'] ?>">
                     <div class="cart-item-image">
                         <?php $imgs = fetchProductImages((int) $item['product_id']); ?>
                         <?php if (!empty($imgs)): ?>
-                        <img src="<?= htmlspecialchars($imgs[0]['image_url']) ?>" alt="">
+                        <img src="<?= htmlspecialchars($imgs[0]['image_path']) ?>" alt="">
                         <?php endif; ?>
                     </div>
                     <div class="cart-item-info">
-                        <a href="/product/<?= htmlspecialchars($item['product_slug'] ?? '') ?>" class="cart-item-name"><?= htmlspecialchars($item['product_name']) ?></a>
-                        <?php if ($item['variant_label']): ?>
-                        <span class="cart-item-variant"><?= htmlspecialchars($item['variant_label']) ?></span>
-                        <?php endif; ?>
-                        <span class="cart-item-price"><?= formatPrice((float) $item['price']) ?></span>
+                        <a href="/product/<?= htmlspecialchars($item['slug'] ?? '') ?>" class="cart-item-name"><?= htmlspecialchars($item['name']) ?></a>
+                        <span class="cart-item-price"><?= formatPrice((float) productDisplayPrice($item)) ?></span>
                     </div>
                     <div class="cart-item-quantity">
                         <div class="quantity-selector">
-                            <button type="button" class="qty-btn" onclick="updateCartQty(<?= $item['id'] ?>, <?= $item['quantity'] - 1 ?>)">−</button>
+                            <button type="button" class="qty-btn" onclick="updateCartQty(<?= $item['cart_id'] ?>, <?= $item['quantity'] - 1 ?>)">−</button>
                             <input type="number" value="<?= $item['quantity'] ?>" min="1" max="10" readonly>
-                            <button type="button" class="qty-btn" onclick="updateCartQty(<?= $item['id'] ?>, <?= $item['quantity'] + 1 ?>)">+</button>
+                            <button type="button" class="qty-btn" onclick="updateCartQty(<?= $item['cart_id'] ?>, <?= $item['quantity'] + 1 ?>)">+</button>
                         </div>
                     </div>
                     <div class="cart-item-total">
-                        <?= formatPrice((float) $item['price'] * (int) $item['quantity']) ?>
+                        <?= formatPrice(productDisplayPrice($item) * (int) $item['quantity']) ?>
                     </div>
-                    <button type="button" class="cart-item-remove" onclick="removeCartItem(<?= $item['id'] ?>)" title="Ukloni">&times;</button>
+                    <button type="button" class="cart-item-remove" onclick="removeCartItem(<?= $item['cart_id'] ?>)" title="Ukloni">&times;</button>
                 </div>
                 <?php endforeach; ?>
             </div>

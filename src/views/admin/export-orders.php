@@ -23,8 +23,8 @@ foreach ($orders as $o) {
         $o['email'],
         $o['status'],
         $o['payment_method'],
-        $o['subtotal_price'],
-        $o['shipping_price'],
+        $o['subtotal'],
+        $o['shipping_cost'],
         $o['gift_card_amount'] ?? 0,
         $o['total_price'],
     ]);

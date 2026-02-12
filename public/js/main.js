@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(function (data) {
                 if (data.success) {
                     // Update cart badge
-                    const badge = document.querySelector('.cart-badge');
+                    const badge = document.getElementById('cartCount');
                     if (badge) {
                         badge.textContent = data.cart_count;
                         badge.style.display = 'flex';

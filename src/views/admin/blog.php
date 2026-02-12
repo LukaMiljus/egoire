@@ -38,8 +38,8 @@ require __DIR__ . '/../layout/admin-header.php';
                     <?php endif; ?>
                 </td>
                 <td><a href="/admin/blog/edit?id=<?= $p['id'] ?>"><?= htmlspecialchars($p['title']) ?></a></td>
-                <td><?= htmlspecialchars($p['author'] ?? '-') ?></td>
-                <td><span class="badge <?= $p['is_published'] ? 'badge-success' : 'badge-secondary' ?>"><?= $p['is_published'] ? 'Objavljen' : 'Draft' ?></span></td>
+                <td>-</td>
+                <td><span class="badge <?= $p['status'] === 'published' ? 'badge-success' : 'badge-secondary' ?>"><?= $p['status'] === 'published' ? 'Objavljen' : 'Draft' ?></span></td>
                 <td><?= formatDate($p['created_at']) ?></td>
                 <td class="actions-cell">
                     <a href="/admin/blog/edit?id=<?= $p['id'] ?>" class="btn btn-sm">Uredi</a>

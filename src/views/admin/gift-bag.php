@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && inputString('action', '', $_POST) =
     $ruleId = inputInt('rule_id', 0, $_POST);
     if ($ruleId) {
         $db = db();
-        $db->prepare("DELETE FROM gift_bag_discounts WHERE gift_bag_rule_id = ?")->execute([$ruleId]);
+        $db->prepare("DELETE FROM gift_bag_discounts WHERE rule_id = ?")->execute([$ruleId]);
         $db->prepare("DELETE FROM gift_bag_rules WHERE id = ?")->execute([$ruleId]);
         flash('success', 'Pravilo obrisano.');
         redirect('/admin/gift-bag');
@@ -32,8 +32,8 @@ require __DIR__ . '/../layout/admin-header.php';
             <?php foreach ($rules as $r): ?>
             <tr>
                 <td><a href="/admin/gift-bag/edit?id=<?= $r['id'] ?>"><?= htmlspecialchars($r['name']) ?></a></td>
-                <td><?= formatPrice((float) $r['min_order_amount']) ?></td>
-                <td><?= htmlspecialchars($r['discount_type']) ?></td>
+                <td><?= formatPrice((float) ($r['min_order_value'] ?? 0)) ?></td>
+                <td>-</td>
                 <td><span class="badge <?= $r['is_active'] ? 'badge-success' : 'badge-secondary' ?>"><?= $r['is_active'] ? 'Aktivno' : 'Neaktivno' ?></span></td>
                 <td class="actions-cell">
                     <a href="/admin/gift-bag/edit?id=<?= $r['id'] ?>" class="btn btn-sm">Uredi</a>

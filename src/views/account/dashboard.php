@@ -28,12 +28,8 @@ require __DIR__ . '/../layout/header.php';
                     </div>
                     <?php if ($loyalty): ?>
                     <div class="account-stat">
-                        <span class="stat-value"><?= (int) $loyalty['points'] ?></span>
+                        <span class="stat-value"><?= (int) $loyalty['points_balance'] ?></span>
                         <span class="stat-label">Loyalty bodova</span>
-                    </div>
-                    <div class="account-stat">
-                        <span class="stat-value"><?= ucfirst($loyalty['tier']) ?></span>
-                        <span class="stat-label">Tier</span>
                     </div>
                     <?php endif; ?>
                 </div>

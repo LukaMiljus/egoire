@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($uid && $action === 'toggle_status') {
         $user = fetchUserById($uid);
         if ($user) {
-            updateUserStatus($uid, $user['is_active'] ? 0 : 1);
+            updateUserStatus($uid, $user['status'] === 'active' ? 'blocked' : 'active');
             flash('success', 'Status korisnika ažuriran.');
         }
         redirect('/admin/users');
@@ -70,8 +70,8 @@ require __DIR__ . '/../layout/admin-header.php';
                 <td><?= htmlspecialchars($u['first_name'] . ' ' . $u['last_name']) ?></td>
                 <td><?= htmlspecialchars($u['email']) ?></td>
                 <td><?= htmlspecialchars($u['phone'] ?? '-') ?></td>
-                <td><?= (int) ($u['loyalty_points'] ?? 0) ?></td>
-                <td><span class="badge <?= $u['is_active'] ? 'badge-success' : 'badge-danger' ?>"><?= $u['is_active'] ? 'Aktivan' : 'Blokiran' ?></span></td>
+                <td><?= (int) ($u['points_balance'] ?? 0) ?></td>
+                <td><span class="badge <?= $u['status'] === 'active' ? 'badge-success' : 'badge-danger' ?>"><?= $u['status'] === 'active' ? 'Aktivan' : 'Blokiran' ?></span></td>
                 <td><?= formatDate($u['created_at']) ?></td>
                 <td class="actions-cell">
                     <a href="/admin/user?id=<?= $u['id'] ?>" class="btn btn-sm">Detalji</a>
@@ -79,7 +79,7 @@ require __DIR__ . '/../layout/admin-header.php';
                         <?= csrfField() ?>
                         <input type="hidden" name="action" value="toggle_status">
                         <input type="hidden" name="user_id" value="<?= $u['id'] ?>">
-                        <button type="submit" class="btn btn-sm <?= $u['is_active'] ? 'btn-warning' : 'btn-success' ?>"><?= $u['is_active'] ? 'Blokiraj' : 'Aktiviraj' ?></button>
+                        <button type="submit" class="btn btn-sm <?= $u['status'] === 'active' ? 'btn-warning' : 'btn-success' ?>"><?= $u['status'] === 'active' ? 'Blokiraj' : 'Aktiviraj' ?></button>
                     </form>
                 </td>
             </tr>

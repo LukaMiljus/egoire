@@ -13,13 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pts = inputInt('points', 0, $_POST);
         $reason = inputString('reason', '', $_POST);
         if ($pts != 0 && $reason) {
-            addLoyaltyPoints($id, $pts, $pts > 0 ? 'admin_add' : 'admin_subtract', $reason);
+            addLoyaltyPoints($id, $pts, $pts > 0 ? 'admin_add' : 'admin_remove', null, $reason);
             flash('success', 'Loyalty bodovi ažurirani.');
             redirect('/admin/user?id=' . $id);
         }
     }
     if ($action === 'toggle_status') {
-        updateUserStatus($id, $user['is_active'] ? 0 : 1);
+        updateUserStatus($id, $user['status'] === 'active' ? 'blocked' : 'active');
         flash('success', 'Status ažuriran.');
         redirect('/admin/user?id=' . $id);
     }
@@ -47,7 +47,7 @@ require __DIR__ . '/../layout/admin-header.php';
     <form method="POST" class="inline-form">
         <?= csrfField() ?>
         <input type="hidden" name="action" value="toggle_status">
-        <button type="submit" class="btn <?= $user['is_active'] ? 'btn-warning' : 'btn-success' ?>"><?= $user['is_active'] ? 'Blokiraj' : 'Aktiviraj' ?></button>
+        <button type="submit" class="btn <?= $user['status'] === 'active' ? 'btn-warning' : 'btn-success' ?>"><?= $user['status'] === 'active' ? 'Blokiraj' : 'Aktiviraj' ?></button>
     </form>
 </div>
 
@@ -57,7 +57,7 @@ require __DIR__ . '/../layout/admin-header.php';
         <dl class="info-list">
             <dt>Email</dt><dd><?= htmlspecialchars($user['email']) ?></dd>
             <dt>Telefon</dt><dd><?= htmlspecialchars($user['phone'] ?? '-') ?></dd>
-            <dt>Status</dt><dd><span class="badge <?= $user['is_active'] ? 'badge-success' : 'badge-danger' ?>"><?= $user['is_active'] ? 'Aktivan' : 'Blokiran' ?></span></dd>
+            <dt>Status</dt><dd><span class="badge <?= $user['status'] === 'active' ? 'badge-success' : 'badge-danger' ?>"><?= $user['status'] === 'active' ? 'Aktivan' : 'Blokiran' ?></span></dd>
             <dt>Email verifikovan</dt><dd><?= $user['email_verified'] ? 'Da' : 'Ne' ?></dd>
             <dt>Registrovan</dt><dd><?= formatDateTime($user['created_at']) ?></dd>
         </dl>
@@ -67,10 +67,9 @@ require __DIR__ . '/../layout/admin-header.php';
         <h3>Loyalty program</h3>
         <?php if ($loyalty): ?>
         <dl class="info-list">
-            <dt>Bodovi</dt><dd><strong><?= (int) $loyalty['points'] ?></strong></dd>
-            <dt>Ukupno zarađeno</dt><dd><?= (int) $loyalty['total_earned'] ?></dd>
-            <dt>Ukupno potrošeno</dt><dd><?= (int) $loyalty['total_spent'] ?></dd>
-            <dt>Tier</dt><dd><span class="badge"><?= htmlspecialchars(ucfirst($loyalty['tier'])) ?></span></dd>
+            <dt>Bodovi</dt><dd><strong><?= (int) ($loyalty['points_balance'] ?? 0) ?></strong></dd>
+            <dt>Ukupno zarađeno</dt><dd><?= (int) ($loyalty['total_earned'] ?? 0) ?></dd>
+            <dt>Ukupno potrošeno</dt><dd><?= (int) ($loyalty['total_spent'] ?? 0) ?></dd>
         </dl>
         <?php else: ?>
         <p class="text-muted">Nije u loyalty programu.</p>
@@ -105,7 +104,7 @@ require __DIR__ . '/../layout/admin-header.php';
             <p><?= htmlspecialchars($addr['address']) ?></p>
             <p><?= htmlspecialchars($addr['city']) ?>, <?= htmlspecialchars($addr['postal_code']) ?></p>
             <p><?= htmlspecialchars($addr['country']) ?></p>
-            <p><?= htmlspecialchars($addr['phone']) ?></p>
+            <p><?= htmlspecialchars($addr['phone'] ?? '') ?></p>
             <?php if ($addr['is_default']): ?><span class="badge badge-info">Podrazumevana</span><?php endif; ?>
         </div>
         <?php endforeach; ?>

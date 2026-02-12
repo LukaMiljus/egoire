@@ -13,8 +13,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $senderName = inputString('sender_name', '', $_POST);
         $message = inputString('message', '', $_POST);
         if ($amount > 0) {
-            $code = createGiftCard($amount, null, $recipientEmail ?: null, $senderName ?: null, $message ?: null);
-            flash('success', 'Poklon kartica kreirana: ' . $code);
+            $result = createGiftCard($amount, null, $recipientEmail ?: null, $senderName ?: null, $message ?: null);
+            if ($result['success']) {
+                flash('success', 'Poklon kartica kreirana: ' . $result['code']);
+            } else {
+                flash('error', $result['error'] ?? 'Greška pri kreiranju.');
+            }
             redirect('/admin/gift-cards');
         } else {
             flash('error', 'Iznos mora biti veći od 0.');
@@ -23,16 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'update_settings') {
         $db = db();
-        $settings = [
-            'is_active'      => isset($_POST['gc_active']) ? '1' : '0',
-            'min_amount'     => (string) inputFloat('gc_min', 0, $_POST),
-            'max_amount'     => (string) inputFloat('gc_max', 0, $_POST),
-            'validity_days'  => (string) inputInt('gc_validity', 365, $_POST),
-        ];
-        foreach ($settings as $key => $val) {
-            $db->prepare("INSERT INTO gift_card_settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)")
-               ->execute([$key, $val]);
-        }
+        $isActive = isset($_POST['gc_active']) ? 1 : 0;
+        $customMin = inputFloat('gc_min', 500, $_POST);
+        $customMax = inputFloat('gc_max', 50000, $_POST);
+        $expiryDays = inputInt('gc_validity', 365, $_POST);
+        $db->prepare("UPDATE gift_card_settings SET is_active = ?, custom_min = ?, custom_max = ?, default_expiry_days = ?, updated_at = NOW() ORDER BY id DESC LIMIT 1")
+           ->execute([$isActive, $customMin, $customMax, $expiryDays]);
         flash('success', 'Podešavanja sačuvana.');
         redirect('/admin/gift-cards');
     }
@@ -58,23 +58,23 @@ require __DIR__ . '/../layout/admin-header.php';
             <input type="hidden" name="action" value="update_settings">
             <div class="form-group">
                 <label class="checkbox-label">
-                    <input type="checkbox" name="gc_active" value="1" <?= ($gcSettings['is_active'] ?? '1') === '1' ? 'checked' : '' ?>>
+                    <input type="checkbox" name="gc_active" value="1" <?= ($gcSettings['is_active'] ?? 1) ? 'checked' : '' ?>>
                     Aktivno
                 </label>
             </div>
             <div class="form-row">
                 <div class="form-group">
                     <label>Min iznos</label>
-                    <input type="number" name="gc_min" class="form-control" value="<?= $gcSettings['min_amount'] ?? 500 ?>">
+                    <input type="number" name="gc_min" class="form-control" value="<?= $gcSettings['custom_min'] ?? 500 ?>">
                 </div>
                 <div class="form-group">
                     <label>Max iznos</label>
-                    <input type="number" name="gc_max" class="form-control" value="<?= $gcSettings['max_amount'] ?? 50000 ?>">
+                    <input type="number" name="gc_max" class="form-control" value="<?= $gcSettings['custom_max'] ?? 50000 ?>">
                 </div>
             </div>
             <div class="form-group">
                 <label>Važnost (dana)</label>
-                <input type="number" name="gc_validity" class="form-control" value="<?= $gcSettings['validity_days'] ?? 365 ?>">
+                <input type="number" name="gc_validity" class="form-control" value="<?= $gcSettings['default_expiry_days'] ?? 365 ?>">
             </div>
             <button type="submit" class="btn btn-primary btn-sm">Sačuvaj</button>
         </form>
@@ -125,9 +125,9 @@ require __DIR__ . '/../layout/admin-header.php';
             <?php foreach ($giftCards as $gc): ?>
             <tr>
                 <td><code><?= htmlspecialchars($gc['code']) ?></code></td>
-                <td><?= formatPrice((float) $gc['amount']) ?></td>
-                <td><?= formatPrice((float) $gc['remaining_amount']) ?></td>
-                <td><span class="badge <?= $gc['is_active'] ? 'badge-success' : 'badge-secondary' ?>"><?= $gc['is_active'] ? 'Aktivna' : 'Neaktivna' ?></span></td>
+                <td><?= formatPrice((float) $gc['initial_amount']) ?></td>
+                <td><?= formatPrice((float) $gc['balance']) ?></td>
+                <td><span class="badge <?= $gc['status'] === 'active' ? 'badge-success' : 'badge-secondary' ?>"><?= $gc['status'] === 'active' ? 'Aktivna' : htmlspecialchars(ucfirst($gc['status'])) ?></span></td>
                 <td><?= htmlspecialchars($gc['recipient_email'] ?? '-') ?></td>
                 <td><?= formatDate($gc['created_at']) ?></td>
                 <td><?= $gc['expires_at'] ? formatDate($gc['expires_at']) : '-' ?></td>

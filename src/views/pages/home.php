@@ -2,11 +2,11 @@
 declare(strict_types=1);
 $title = 'Egoire | Luxury Hair Care';
 
-$featuredProducts = fetchProducts(['flags' => ['bestseller'], 'active' => true, 'limit' => 8]);
+$featuredProducts = fetchProducts(['flags' => ['best_seller'], 'active' => true, 'limit' => 8]);
 $newProducts = fetchProducts(['flags' => ['new'], 'active' => true, 'limit' => 4]);
 $categories = fetchCategories();
 $brands = fetchBrands();
-$blogPosts = fetchBlogPosts(['limit' => 3, 'published' => true]);
+$blogPosts = fetchBlogPosts(['limit' => 3, 'published_only' => true]);
 
 require __DIR__ . '/../layout/header.php';
 ?>
@@ -50,7 +50,7 @@ require __DIR__ . '/../layout/header.php';
             <a href="/product/<?= htmlspecialchars($p['slug']) ?>" class="product-card">
                 <div class="product-image">
                     <?php if (!empty($imgs)): ?>
-                    <img src="<?= htmlspecialchars($imgs[0]['image_url']) ?>" alt="<?= htmlspecialchars($p['name']) ?>" loading="lazy">
+                    <img src="<?= htmlspecialchars($imgs[0]['image_path']) ?>" alt="<?= htmlspecialchars($p['name']) ?>" loading="lazy">
                     <?php else: ?>
                     <div class="no-image-placeholder">Egoire</div>
                     <?php endif; ?>
@@ -58,7 +58,7 @@ require __DIR__ . '/../layout/header.php';
                     <?php if ($flags): ?>
                     <div class="product-badges">
                         <?php foreach ($flags as $f): ?>
-                        <span class="product-badge badge-<?= $f['flag'] ?>"><?= ucfirst($f['flag']) ?></span>
+                        <span class="product-badge badge-<?= $f ?>"><?= ucfirst($f) ?></span>
                         <?php endforeach; ?>
                     </div>
                     <?php endif; ?>
@@ -97,7 +97,7 @@ require __DIR__ . '/../layout/header.php';
             <a href="/product/<?= htmlspecialchars($p['slug']) ?>" class="product-card">
                 <div class="product-image">
                     <?php if (!empty($imgs)): ?>
-                    <img src="<?= htmlspecialchars($imgs[0]['image_url']) ?>" alt="<?= htmlspecialchars($p['name']) ?>" loading="lazy">
+                    <img src="<?= htmlspecialchars($imgs[0]['image_path']) ?>" alt="<?= htmlspecialchars($p['name']) ?>" loading="lazy">
                     <?php else: ?>
                     <div class="no-image-placeholder">Egoire</div>
                     <?php endif; ?>
@@ -166,7 +166,7 @@ require __DIR__ . '/../layout/header.php';
                 <div class="blog-card-body">
                     <span class="blog-date"><?= formatDate($bp['created_at']) ?></span>
                     <h3><?= htmlspecialchars($bp['title']) ?></h3>
-                    <p><?= htmlspecialchars($bp['excerpt'] ?? truncate(strip_tags($bp['content']), 120)) ?></p>
+                    <p><?= htmlspecialchars($bp['excerpt'] ?? truncate(strip_tags($bp['body']), 120)) ?></p>
                 </div>
             </a>
             <?php endforeach; ?>

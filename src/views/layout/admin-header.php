@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../public/css/header/admin-header.css">
+    <title><?= htmlspecialchars($title ?? 'Admin') ?> – Egoire Admin</title>
+    <link rel="stylesheet" href="<?= asset('/css/admin.css') ?>">
+    <link rel="stylesheet" href="<?= asset('/css/header/admin-header.css') ?>">
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
-
 </head>
 <body>
 <!-- PC ADMIN HEADER  -->
 
     <div class="header-holder">
         <div class="logo-holder">
-            <img src="../../public/images/logos/egoire-logo.png" alt="egoire-logo">
+            <img src="/images/logos/egoire-logo.png" alt="egoire-logo">
         </div>
         <div class="header-links">
             <div class="main-links">
@@ -24,7 +25,7 @@
             <a href="/admin/users">Korisnici</a>
             <a href="/admin/loyalty">Loyalty</a>
             <a href="/admin/analytics">Analitika</a>
-            <a href="/admin/email-marketing">Email Marketing</a>
+            <a href="/admin/marketing">Email Marketing</a>
             </div>
             
             <div class="user-links">
@@ -43,7 +44,7 @@
 <div class="mobile-header">
     <div class="mobile-header-inner">
         <div class="mobile-logo">
-            <img src="../../public/images/logos/egoire-logo.png" alt="egoire-logo">
+            <img src="/images/logos/egoire-logo.png" alt="egoire-logo">
         </div>
 
         <button class="hamburger" aria-label="Open menu">
@@ -65,7 +66,7 @@
             <a href="/admin/users">Korisnici</a>
             <a href="/admin/loyalty">Loyalty</a>
             <a href="/admin/analytics">Analitika</a>
-            <a href="/admin/email-marketing">Email Marketing</a>
+            <a href="/admin/marketing">Email Marketing</a>
         </nav>
 
         <div class="mobile-user-links">
@@ -85,6 +86,6 @@
     });
 </script>
 
+<?= renderFlash() ?>
 
-</body>
-</html>
+<div class="admin-content">

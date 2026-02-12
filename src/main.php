@@ -294,8 +294,13 @@ function fetchProducts(array $filters = []): array
     $sql = 'SELECT p.*, b.name AS brand_name FROM products p LEFT JOIN brands b ON b.id = p.brand_id WHERE 1=1';
     $params = [];
 
-    if (!empty($filters['active_only'])) {
+    if (!empty($filters['active_only']) || !empty($filters['active'])) {
         $sql .= ' AND p.is_active = 1';
+    }
+
+    if (!empty($filters['exclude_id'])) {
+        $sql .= ' AND p.id != ?';
+        $params[] = (int) $filters['exclude_id'];
     }
 
     if (!empty($filters['brand_id'])) {
@@ -329,6 +334,12 @@ function fetchProducts(array $filters = []): array
         $params[] = $filters['flag'];
     }
 
+    if (!empty($filters['flags'])) {
+        $flagPlaceholders = implode(',', array_fill(0, count($filters['flags']), '?'));
+        $sql .= " AND p.id IN (SELECT product_id FROM product_flags WHERE flag IN ($flagPlaceholders))";
+        $params = array_merge($params, $filters['flags']);
+    }
+
     if (!empty($filters['search'])) {
         $sql .= ' AND (p.name LIKE ? OR p.sku LIKE ? OR p.short_description LIKE ?)';
         $searchTerm = '%' . $filters['search'] . '%';
@@ -346,7 +357,15 @@ function fetchProducts(array $filters = []): array
         $params[] = (float) $filters['price_max'];
     }
 
-    $sql .= ' ORDER BY ' . ($filters['order_by'] ?? 'p.created_at DESC');
+    // Sort handling
+    $orderBy = match ($filters['sort'] ?? '') {
+        'price_asc'  => 'p.price ASC',
+        'price_desc' => 'p.price DESC',
+        'newest'     => 'p.created_at DESC',
+        'name_asc'   => 'p.name ASC',
+        default      => $filters['order_by'] ?? 'p.created_at DESC',
+    };
+    $sql .= ' ORDER BY ' . $orderBy;
 
     if (!empty($filters['limit'])) {
         $sql .= ' LIMIT ' . (int) $filters['limit'];
@@ -365,7 +384,7 @@ function countProducts(array $filters = []): int
     $sql = 'SELECT COUNT(DISTINCT p.id) FROM products p WHERE 1=1';
     $params = [];
 
-    if (!empty($filters['active_only'])) {
+    if (!empty($filters['active_only']) || !empty($filters['active'])) {
         $sql .= ' AND p.is_active = 1';
     }
 
@@ -413,7 +432,7 @@ function fetchProductById(int $id, bool $onlyActive = true): ?array
 
 function fetchProductBySlug(string $slug): ?array
 {
-    $stmt = db()->prepare('SELECT p.*, b.name AS brand_name FROM products p LEFT JOIN brands b ON b.id = p.brand_id WHERE p.slug = ? AND p.is_active = 1');
+    $stmt = db()->prepare('SELECT p.*, b.name AS brand_name, b.slug AS brand_slug FROM products p LEFT JOIN brands b ON b.id = p.brand_id WHERE p.slug = ? AND p.is_active = 1');
     $stmt->execute([$slug]);
     return $stmt->fetch() ?: null;
 }

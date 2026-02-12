@@ -17,14 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'meta_title'       => inputString('meta_title', '', $_POST),
         'meta_description' => inputString('meta_description', '', $_POST),
         'sort_order'       => inputInt('sort_order', 0, $_POST),
-        'is_active'        => isset($_POST['is_active']) ? 1 : 0,
+        'status'           => isset($_POST['is_active']) ? 'active' : 'inactive',
     ];
 
     // Image upload
     if (!empty($_FILES['image']['name'])) {
-        $result = uploadImage($_FILES['image'], 'uploads/categories');
-        if ($result['success']) {
-            $data['image'] = $result['path'];
+        $result = uploadImage($_FILES['image'], 'categories');
+        if ($result) {
+            $data['image'] = $result;
         }
     }
 
@@ -84,7 +84,7 @@ require __DIR__ . '/../layout/admin-header.php';
                 </div>
                 <div class="form-group">
                     <label class="checkbox-label">
-                        <input type="checkbox" name="is_active" value="1" <?= ($category['is_active'] ?? 1) ? 'checked' : '' ?>>
+                        <input type="checkbox" name="is_active" value="1" <?= (($category['status'] ?? 'active') === 'active') ? 'checked' : '' ?>>
                         Aktivna
                     </label>
                 </div>

@@ -26,8 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'add_note') {
         $note = inputString('note', '', $_POST);
         if ($note) {
-            $adminId = $_SESSION['admin_id'] ?? null;
-            addOrderNote($id, $note, $adminId);
+            $author = $_SESSION['admin_username'] ?? 'admin';
+            addOrderNote($id, $note, $author);
             flash('success', 'Beleška dodata.');
             redirect('/admin/order?id=' . $id);
         }
@@ -58,8 +58,8 @@ require __DIR__ . '/../layout/admin-header.php';
             <?php else: ?>
             <dt>Korisnik</dt><dd>Gost</dd>
             <?php endif; ?>
-            <?php if ($order['gift_card_code']): ?>
-            <dt>Poklon kartica</dt><dd><?= htmlspecialchars($order['gift_card_code']) ?> (−<?= formatPrice((float) $order['gift_card_amount']) ?>)</dd>
+            <?php if ((float) ($order['gift_card_amount'] ?? 0) > 0): ?>
+            <dt>Poklon kartica</dt><dd>−<?= formatPrice((float) $order['gift_card_amount']) ?></dd>
             <?php endif; ?>
             <?php if ((float) $order['loyalty_earned'] > 0): ?>
             <dt>Loyalty bodovi (zarađeno)</dt><dd>+<?= (int) $order['loyalty_earned'] ?></dd>
@@ -77,12 +77,12 @@ require __DIR__ . '/../layout/admin-header.php';
         <dl class="info-list">
             <dt>Ime</dt><dd><?= htmlspecialchars($address['first_name'] . ' ' . $address['last_name']) ?></dd>
             <dt>Email</dt><dd><?= htmlspecialchars($order['email']) ?></dd>
-            <dt>Telefon</dt><dd><?= htmlspecialchars($address['phone']) ?></dd>
+            <dt>Telefon</dt><dd><?= htmlspecialchars($address['phone'] ?? '') ?></dd>
             <dt>Adresa</dt><dd><?= htmlspecialchars($address['address']) ?></dd>
             <dt>Grad</dt><dd><?= htmlspecialchars($address['city']) ?>, <?= htmlspecialchars($address['postal_code']) ?></dd>
             <dt>Država</dt><dd><?= htmlspecialchars($address['country']) ?></dd>
-            <?php if ($address['note']): ?>
-            <dt>Napomena</dt><dd><?= htmlspecialchars($address['note']) ?></dd>
+            <?php if (!empty($order['customer_note'])): ?>
+            <dt>Napomena</dt><dd><?= htmlspecialchars($order['customer_note']) ?></dd>
             <?php endif; ?>
         </dl>
         <?php endif; ?>
@@ -96,10 +96,9 @@ require __DIR__ . '/../layout/admin-header.php';
         <thead>
             <tr>
                 <th>Proizvod</th>
-                <th>Varijanta</th>
+                <th>SKU</th>
                 <th>Cena</th>
                 <th>Kol.</th>
-                <th>Popust</th>
                 <th>Ukupno</th>
             </tr>
         </thead>
@@ -107,40 +106,37 @@ require __DIR__ . '/../layout/admin-header.php';
             <?php
             $subtotal = 0;
             foreach ($items as $item):
-                $lineTotal = (float)$item['price'] * (int)$item['quantity'];
-                $discount = (float)($item['discount_amount'] ?? 0);
-                $lineFinal = $lineTotal - $discount;
+                $lineFinal = (float)$item['subtotal'];
                 $subtotal += $lineFinal;
             ?>
             <tr>
                 <td><?= htmlspecialchars($item['product_name']) ?></td>
-                <td><?= htmlspecialchars($item['variant_label'] ?? '-') ?></td>
-                <td><?= formatPrice((float) $item['price']) ?></td>
+                <td><?= htmlspecialchars($item['product_sku'] ?? '-') ?></td>
+                <td><?= formatPrice((float) $item['unit_price']) ?></td>
                 <td><?= (int) $item['quantity'] ?></td>
-                <td><?= $discount > 0 ? '-' . formatPrice($discount) : '-' ?></td>
                 <td><?= formatPrice($lineFinal) ?></td>
             </tr>
             <?php endforeach; ?>
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="5" class="text-right"><strong>Međuzbir</strong></td>
+                <td colspan="4" class="text-right"><strong>Međuzbir</strong></td>
                 <td><?= formatPrice($subtotal) ?></td>
             </tr>
-            <?php if ((float) $order['shipping_price'] > 0): ?>
+            <?php if ((float) $order['shipping_cost'] > 0): ?>
             <tr>
-                <td colspan="5" class="text-right">Dostava</td>
-                <td><?= formatPrice((float) $order['shipping_price']) ?></td>
+                <td colspan="4" class="text-right">Dostava</td>
+                <td><?= formatPrice((float) $order['shipping_cost']) ?></td>
             </tr>
             <?php endif; ?>
             <?php if ((float) ($order['gift_card_amount'] ?? 0) > 0): ?>
             <tr>
-                <td colspan="5" class="text-right">Poklon kartica</td>
+                <td colspan="4" class="text-right">Poklon kartica</td>
                 <td>-<?= formatPrice((float) $order['gift_card_amount']) ?></td>
             </tr>
             <?php endif; ?>
             <tr class="total-row">
-                <td colspan="5" class="text-right"><strong>Ukupno</strong></td>
+                <td colspan="4" class="text-right"><strong>Ukupno</strong></td>
                 <td><strong><?= formatPrice((float) $order['total_price']) ?></strong></td>
             </tr>
         </tfoot>
@@ -153,7 +149,7 @@ $giftBagInfo = null;
 try {
     $db = db();
     $stmt = $db->prepare("SELECT og.*, gbr.name AS rule_name FROM order_gift_bag og
-        LEFT JOIN gift_bag_rules gbr ON og.gift_bag_rule_id = gbr.id
+        LEFT JOIN gift_bag_rules gbr ON og.rule_id = gbr.id
         WHERE og.order_id = ?");
     $stmt->execute([$id]);
     $giftBagInfo = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -191,8 +187,8 @@ if ($giftBagInfo): ?>
             <?php foreach ($notes as $note): ?>
             <div class="note-item">
                 <span class="note-date"><?= formatDateTime($note['created_at']) ?></span>
-                <?php if (!empty($note['admin_name'])): ?>
-                <span class="badge badge-info"><?= htmlspecialchars($note['admin_name']) ?></span>
+                <?php if (!empty($note['author'])): ?>
+                <span class="badge badge-info"><?= htmlspecialchars($note['author']) ?></span>
                 <?php endif; ?>
                 <p><?= nl2br(htmlspecialchars($note['note'])) ?></p>
             </div>

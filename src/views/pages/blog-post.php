@@ -2,7 +2,7 @@
 declare(strict_types=1);
 $slug = $routeParams['slug'] ?? '';
 $post = fetchBlogPostBySlug($slug);
-if (!$post || !$post['is_published']) { http_response_code(404); require __DIR__ . '/404.php'; return; }
+if (!$post || $post['status'] !== 'published') { http_response_code(404); require __DIR__ . '/404.php'; return; }
 
 $title = ($post['meta_title'] ?: $post['title']) . ' | Blog | Egoire';
 require __DIR__ . '/../layout/header.php';
@@ -23,15 +23,12 @@ require __DIR__ . '/../layout/header.php';
         <header class="blog-header">
             <h1><?= htmlspecialchars($post['title']) ?></h1>
             <div class="blog-meta">
-                <span><?= formatDate($post['created_at']) ?></span>
-                <?php if ($post['author']): ?>
-                <span>• <?= htmlspecialchars($post['author']) ?></span>
-                <?php endif; ?>
+                <span><?= formatDate($post['published_at'] ?? $post['created_at']) ?></span>
             </div>
         </header>
 
         <div class="content-block blog-content">
-            <?= $post['content'] ?>
+            <?= $post['body'] ?>
         </div>
 
         <div class="blog-share mt-4">

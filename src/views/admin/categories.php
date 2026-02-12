@@ -55,7 +55,7 @@ require __DIR__ . '/../layout/admin-header.php';
                 <td class="text-muted"><?= htmlspecialchars($c['slug']) ?></td>
                 <td><?= $c['parent_id'] ? htmlspecialchars($catMap[$c['parent_id']] ?? '-') : '—' ?></td>
                 <td><?= (int) $c['sort_order'] ?></td>
-                <td><span class="badge <?= $c['is_active'] ? 'badge-success' : 'badge-secondary' ?>"><?= $c['is_active'] ? 'Aktivna' : 'Neaktivna' ?></span></td>
+                <td><span class="badge <?= $c['status'] === 'active' ? 'badge-success' : 'badge-secondary' ?>"><?= $c['status'] === 'active' ? 'Aktivna' : 'Neaktivna' ?></span></td>
                 <td class="actions-cell">
                     <a href="/admin/category/edit?id=<?= $c['id'] ?>" class="btn btn-sm">Uredi</a>
                     <form method="POST" class="inline-form" onsubmit="return confirm('Obriši kategoriju?')">

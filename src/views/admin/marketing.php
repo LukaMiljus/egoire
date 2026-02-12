@@ -11,7 +11,7 @@ require __DIR__ . '/../layout/admin-header.php';
 
 <div class="page-header">
     <h1>Marketing</h1>
-    <a href="/admin/campaign/new" class="btn btn-primary">+ Nova kampanja</a>
+    <a href="/admin/campaign/create" class="btn btn-primary">+ Nova kampanja</a>
 </div>
 
 <div class="form-grid-2">

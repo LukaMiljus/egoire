@@ -35,9 +35,9 @@ require __DIR__ . '/../layout/header.php';
                     <h3>Stavke</h3>
                     <?php foreach ($items as $item): ?>
                     <div class="order-item-row">
-                        <span><?= htmlspecialchars($item['product_name']) ?> <?= $item['variant_label'] ? '(' . htmlspecialchars($item['variant_label']) . ')' : '' ?></span>
+                        <span><?= htmlspecialchars($item['product_name']) ?></span>
                         <span>× <?= (int) $item['quantity'] ?></span>
-                        <span><?= formatPrice((float) $item['price'] * (int) $item['quantity']) ?></span>
+                        <span><?= formatPrice((float) $item['unit_price'] * (int) $item['quantity']) ?></span>
                     </div>
                     <?php endforeach; ?>
                     <hr>
@@ -55,7 +55,7 @@ require __DIR__ . '/../layout/header.php';
                         <?= htmlspecialchars($address['first_name'] . ' ' . $address['last_name']) ?><br>
                         <?= htmlspecialchars($address['address']) ?><br>
                         <?= htmlspecialchars($address['city']) ?>, <?= htmlspecialchars($address['postal_code']) ?><br>
-                        <?= htmlspecialchars($address['phone']) ?>
+                        <?= htmlspecialchars($address['phone'] ?? '') ?>
                     </p>
                 </div>
                 <?php endif; ?>

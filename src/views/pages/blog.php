@@ -20,7 +20,7 @@ require __DIR__ . '/../layout/header.php';
                 <div class="blog-card-body">
                     <span class="blog-date"><?= formatDate($bp['created_at']) ?></span>
                     <h3><?= htmlspecialchars($bp['title']) ?></h3>
-                    <p><?= htmlspecialchars($bp['excerpt'] ?? truncate(strip_tags($bp['content']), 120)) ?></p>
+                    <p><?= htmlspecialchars($bp['excerpt'] ?? truncate(strip_tags($bp['body']), 120)) ?></p>
                     <span class="read-more">Pročitaj više →</span>
                 </div>
             </a>

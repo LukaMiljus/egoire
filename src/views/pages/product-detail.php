@@ -15,7 +15,7 @@ $flags = fetchProductFlags((int) $product['id']);
 $stock = fetchProductStock((int) $product['id']);
 $displayPrice = productDisplayPrice($product);
 
-$title = ($product['meta_title'] ?: $product['name']) . ' | Egoire';
+$title = (($product['meta_title'] ?? '') ?: $product['name']) . ' | Egoire';
 $metaDescription = $product['meta_description'] ?? $product['short_description'] ?? '';
 
 // Related products from same brand
@@ -48,7 +48,7 @@ require __DIR__ . '/../layout/header.php';
             <div class="product-gallery">
                 <div class="main-image">
                     <?php if (!empty($images)): ?>
-                    <img src="<?= htmlspecialchars($images[0]['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" id="mainProductImage">
+                    <img src="<?= htmlspecialchars($images[0]['image_path']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" id="mainProductImage">
                     <?php else: ?>
                     <div class="no-image-placeholder large">Egoire</div>
                     <?php endif; ?>
@@ -56,7 +56,7 @@ require __DIR__ . '/../layout/header.php';
                 <?php if (count($images) > 1): ?>
                 <div class="thumbnail-row">
                     <?php foreach ($images as $i => $img): ?>
-                    <img src="<?= htmlspecialchars($img['image_url']) ?>" alt="" class="thumbnail <?= $i === 0 ? 'active' : '' ?>" onclick="document.getElementById('mainProductImage').src=this.src; document.querySelectorAll('.thumbnail').forEach(t=>t.classList.remove('active')); this.classList.add('active');">
+                    <img src="<?= htmlspecialchars($img['image_path']) ?>" alt="" class="thumbnail <?= $i === 0 ? 'active' : '' ?>" onclick="document.getElementById('mainProductImage').src=this.src; document.querySelectorAll('.thumbnail').forEach(t=>t.classList.remove('active')); this.classList.add('active');">
                     <?php endforeach; ?>
                 </div>
                 <?php endif; ?>
@@ -73,7 +73,7 @@ require __DIR__ . '/../layout/header.php';
                 <?php if ($flags): ?>
                 <div class="product-badges">
                     <?php foreach ($flags as $f): ?>
-                    <span class="product-badge badge-<?= $f['flag'] ?>"><?= ucfirst($f['flag']) ?></span>
+                    <span class="product-badge badge-<?= $f ?>"><?= ucfirst($f) ?></span>
                     <?php endforeach; ?>
                 </div>
                 <?php endif; ?>
@@ -96,38 +96,28 @@ require __DIR__ . '/../layout/header.php';
                 <?php endif; ?>
 
                 <!-- Add to Cart Form -->
+                <?php $inStock = !$stock || (int) $stock['quantity'] > 0; ?>
                 <form class="add-to-cart-form" id="addToCartForm">
                     <?= csrfMetaTag() ?>
                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
 
-                    <?php if ($stock): ?>
+                    <?php if (!$inStock): ?>
                     <div class="form-group">
-                        <label>Varijanta</label>
-                        <div class="variant-options">
-                            <?php foreach ($stock as $i => $sv): ?>
-                            <label class="variant-option <?= $i === 0 ? 'active' : '' ?>" data-qty="<?= (int) $sv['quantity'] ?>">
-                                <input type="radio" name="variant_label" value="<?= htmlspecialchars($sv['variant_label']) ?>" <?= $i === 0 ? 'checked' : '' ?>>
-                                <span><?= htmlspecialchars($sv['variant_label']) ?></span>
-                                <?php if ((int) $sv['quantity'] < 1): ?>
-                                <small class="out-of-stock">Nema na stanju</small>
-                                <?php endif; ?>
-                            </label>
-                            <?php endforeach; ?>
-                        </div>
+                        <span class="out-of-stock-notice">Trenutno nema na stanju</span>
                     </div>
                     <?php endif; ?>
 
                     <div class="form-group">
                         <label>Količina</label>
                         <div class="quantity-selector">
-                            <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
-                            <input type="number" name="quantity" value="1" min="1" max="10" id="qtyInput">
-                            <button type="button" class="qty-btn" onclick="changeQty(1)">+</button>
+                            <button type="button" class="qty-btn" onclick="changeQty(-1)" <?= !$inStock ? 'disabled' : '' ?>>−</button>
+                            <input type="number" name="quantity" value="1" min="1" max="10" id="qtyInput" <?= !$inStock ? 'disabled' : '' ?>>
+                            <button type="button" class="qty-btn" onclick="changeQty(1)" <?= !$inStock ? 'disabled' : '' ?>>+</button>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-lg btn-block add-to-cart-btn" id="addToCartBtn">
-                        Dodaj u korpu
+                    <button type="submit" class="btn btn-primary btn-lg btn-block add-to-cart-btn" id="addToCartBtn" <?= !$inStock ? 'disabled' : '' ?>>
+                        <?= $inStock ? 'Dodaj u korpu' : 'Nema na stanju' ?>
                     </button>
                 </form>
 
@@ -167,7 +157,7 @@ require __DIR__ . '/../layout/header.php';
             <a href="/product/<?= htmlspecialchars($rp['slug']) ?>" class="product-card">
                 <div class="product-image">
                     <?php if (!empty($rImgs)): ?>
-                    <img src="<?= htmlspecialchars($rImgs[0]['image_url']) ?>" alt="" loading="lazy">
+                    <img src="<?= htmlspecialchars($rImgs[0]['image_path']) ?>" alt="" loading="lazy">
                     <?php else: ?>
                     <div class="no-image-placeholder">Egoire</div>
                     <?php endif; ?>
@@ -226,7 +216,7 @@ document.getElementById('addToCartForm').addEventListener('submit', function(e) 
     .then(data => {
         if (data.success) {
             btn.textContent = '✓ Dodato!';
-            const badge = document.getElementById('cartBadge');
+            const badge = document.getElementById('cartCount');
             if (badge) badge.textContent = data.cart_count;
             setTimeout(() => { btn.textContent = 'Dodaj u korpu'; btn.disabled = false; }, 2000);
         } else {

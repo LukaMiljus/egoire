@@ -71,10 +71,13 @@ $routes = [
     'admin/orders'          => ['admin/orders', 'admin'],
     'admin/order'           => ['admin/order-detail', 'admin'],
     'admin/products'        => ['admin/products', 'admin'],
+    'admin/product/new'     => ['admin/product-edit', 'admin'],
     'admin/product/edit'    => ['admin/product-edit', 'admin'],
     'admin/categories'      => ['admin/categories', 'admin'],
+    'admin/category/new'    => ['admin/category-edit', 'admin'],
     'admin/category/edit'   => ['admin/category-edit', 'admin'],
     'admin/brands'          => ['admin/brands', 'admin'],
+    'admin/brand/new'       => ['admin/brand-edit', 'admin'],
     'admin/brand/edit'      => ['admin/brand-edit', 'admin'],
     'admin/users'           => ['admin/users', 'admin'],
     'admin/user'            => ['admin/user-detail', 'admin'],
@@ -83,10 +86,12 @@ $routes = [
     'admin/marketing'       => ['admin/marketing', 'admin'],
     'admin/campaign/create' => ['admin/campaign-create', 'admin'],
     'admin/gift-bag'        => ['admin/gift-bag', 'admin'],
+    'admin/gift-bag/new'    => ['admin/gift-bag-edit', 'admin'],
     'admin/gift-bag/edit'   => ['admin/gift-bag-edit', 'admin'],
     'admin/gift-cards'      => ['admin/gift-cards', 'admin'],
     'admin/contacts'        => ['admin/contacts', 'admin'],
     'admin/blog'            => ['admin/blog', 'admin'],
+    'admin/blog/new'        => ['admin/blog-edit', 'admin'],
     'admin/blog/edit'       => ['admin/blog-edit', 'admin'],
     'admin/pages'           => ['admin/pages', 'admin'],
     'admin/faq'             => ['admin/faq-manage', 'admin'],
@@ -94,7 +99,29 @@ $routes = [
 ];
 
 // Match route
+$routeParams = [];
 $route = $routes[$path] ?? null;
+
+// For static pages, set slug from the path itself
+if ($route && in_array($path, ['about', 'terms', 'privacy', 'shipping'])) {
+    $routeParams = ['slug' => $path];
+}
+
+// Dynamic slug-based routes (e.g. /product/slug, /category/slug)
+if (!$route) {
+    $dynamicRoutes = [
+        'product'  => ['pages/product-detail', false],
+        'category' => ['pages/category', false],
+        'brand'    => ['pages/brand', false],
+        'blog'     => ['pages/blog-post', false],
+    ];
+
+    $segments = explode('/', $path);
+    if (count($segments) === 2 && isset($dynamicRoutes[$segments[0]])) {
+        $route = $dynamicRoutes[$segments[0]];
+        $routeParams = ['slug' => $segments[1]];
+    }
+}
 
 if ($route) {
     [$viewFile, $auth] = $route;

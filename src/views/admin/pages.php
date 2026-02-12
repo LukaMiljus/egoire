@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $content = trim($_POST['page_content'] ?? '');
         if ($slug && $pageTitle) {
             $db = db();
-            $db->prepare("UPDATE pages SET title = ?, content = ?, updated_at = NOW() WHERE slug = ?")
+            $db->prepare("UPDATE pages SET title = ?, body = ?, updated_at = NOW() WHERE slug = ?")
                ->execute([$pageTitle, $content, $slug]);
             flash('success', 'Stranica ažurirana.');
             redirect('/admin/pages');
@@ -77,7 +77,7 @@ require __DIR__ . '/../layout/admin-header.php';
         </div>
         <div class="form-group">
             <label>Sadržaj (HTML)</label>
-            <textarea name="page_content" rows="6" class="form-control"><?= htmlspecialchars($p['content'] ?? '') ?></textarea>
+            <textarea name="page_content" rows="6" class="form-control"><?= htmlspecialchars($p['body'] ?? '') ?></textarea>
         </div>
         <button type="submit" class="btn btn-primary btn-sm">Sačuvaj</button>
     </form>

@@ -12,15 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'name'             => inputString('name', '', $_POST),
         'slug'             => inputString('slug', '', $_POST) ?: generateSlug(inputString('name', '', $_POST)),
         'description'      => trim($_POST['description'] ?? ''),
-        'meta_title'       => inputString('meta_title', '', $_POST),
-        'meta_description' => inputString('meta_description', '', $_POST),
         'is_active'        => isset($_POST['is_active']) ? 1 : 0,
+        'sort_order'       => inputInt('sort_order', 0, $_POST),
     ];
 
     if (!empty($_FILES['logo']['name'])) {
-        $result = uploadImage($_FILES['logo'], 'uploads/brands');
-        if ($result['success']) {
-            $data['logo'] = $result['path'];
+        $result = uploadImage($_FILES['logo'], 'brands');
+        if ($result) {
+            $data['logo'] = $result;
         }
     }
 

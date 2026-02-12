@@ -21,26 +21,12 @@ require __DIR__ . '/../layout/header.php';
                 <?php if ($loyalty): ?>
                 <div class="loyalty-summary">
                     <div class="loyalty-card">
-                        <div class="lc-tier <?= $loyalty['tier'] ?>"><?= ucfirst($loyalty['tier']) ?></div>
-                        <div class="lc-points"><?= (int) $loyalty['points'] ?> <small>bodova</small></div>
-                        <div class="lc-value"><?= formatPrice((float) $loyalty['points'] * (float) ($settings['rsd_per_point'] ?? 1)) ?></div>
+                        <div class="lc-points"><?= (int) $loyalty['points_balance'] ?> <small>bodova</small></div>
+                        <div class="lc-value"><?= formatPrice((float) $loyalty['points_balance'] * (float) ($settings['rsd_per_point'] ?? 1)) ?></div>
                     </div>
                     <div class="loyalty-info">
                         <p>Ukupno zarađeno: <strong><?= (int) $loyalty['total_earned'] ?></strong> bodova</p>
                         <p>Ukupno potrošeno: <strong><?= (int) $loyalty['total_spent'] ?></strong> bodova</p>
-                        <p>Vaš tier: <strong><?= ucfirst($loyalty['tier']) ?></strong></p>
-                        <?php
-                        $nextTier = match ($loyalty['tier']) {
-                            'bronze' => ['Silver', (int) ($settings['silver_threshold'] ?? 1000)],
-                            'silver' => ['Gold', (int) ($settings['gold_threshold'] ?? 5000)],
-                            'gold' => ['Platinum', (int) ($settings['platinum_threshold'] ?? 15000)],
-                            default => null,
-                        };
-                        if ($nextTier):
-                            $remaining = $nextTier[1] - (int) $loyalty['total_earned'];
-                        ?>
-                        <p>Do <?= $nextTier[0] ?> tiera: <strong><?= max(0, $remaining) ?></strong> bodova</p>
-                        <?php endif; ?>
                     </div>
                 </div>
 

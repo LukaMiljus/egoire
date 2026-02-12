@@ -100,7 +100,7 @@ require __DIR__ . '/../layout/admin-header.php';
                 <td>
                     <?php $imgs = fetchProductImages((int) $p['id']); ?>
                     <?php if (!empty($imgs)): ?>
-                    <img src="<?= htmlspecialchars($imgs[0]['image_url']) ?>" alt="" class="thumb-sm">
+                    <img src="<?= htmlspecialchars($imgs[0]['image_path']) ?>" alt="" class="thumb-sm">
                     <?php else: ?>
                     <span class="no-image">—</span>
                     <?php endif; ?>

@@ -13,7 +13,7 @@ require __DIR__ . '/../layout/header.php';
 <section class="section">
     <div class="container container-md">
         <div class="content-block">
-            <?= $page['content'] ?>
+            <?= $page['body'] ?>
         </div>
     </div>
 </section>

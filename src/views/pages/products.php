@@ -111,14 +111,14 @@ require __DIR__ . '/../layout/header.php';
                     <a href="/product/<?= htmlspecialchars($p['slug']) ?>" class="product-card">
                         <div class="product-image">
                             <?php if (!empty($imgs)): ?>
-                            <img src="<?= htmlspecialchars($imgs[0]['image_url']) ?>" alt="<?= htmlspecialchars($p['name']) ?>" loading="lazy">
+                            <img src="<?= htmlspecialchars($imgs[0]['image_path']) ?>" alt="<?= htmlspecialchars($p['name']) ?>" loading="lazy">
                             <?php else: ?>
                             <div class="no-image-placeholder">Egoire</div>
                             <?php endif; ?>
                             <?php if ($flags): ?>
                             <div class="product-badges">
                                 <?php foreach ($flags as $f): ?>
-                                <span class="product-badge badge-<?= $f['flag'] ?>"><?= ucfirst($f['flag']) ?></span>
+                                <span class="product-badge badge-<?= $f ?>"><?= ucfirst($f) ?></span>
                                 <?php endforeach; ?>
                             </div>
                             <?php endif; ?>

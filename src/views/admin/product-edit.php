@@ -2,17 +2,17 @@
 declare(strict_types=1);
 
 $id = inputInt('id');
-$product = $id ? fetchProductById($id) : null;
+$product = $id ? fetchProductById($id, false) : null;
 $isEdit = $product !== null;
 $title = $isEdit ? 'Uredi proizvod' : 'Novi proizvod';
 
 $brands = fetchBrands();
 $categories = fetchCategories();
-$allFlags = ['bestseller', 'new', 'sale', 'limited', 'exclusive'];
+$allFlags = ['new', 'on_sale', 'best_seller'];
 $productImages = $isEdit ? fetchProductImages($id) : [];
-$productCategories = $isEdit ? array_column(fetchProductCategories($id), 'category_id') : [];
-$productFlags = $isEdit ? array_column(fetchProductFlags($id), 'flag') : [];
-$stockVariants = $isEdit ? fetchProductStock($id) : [];
+$productCategories = $isEdit ? array_column(fetchProductCategories($id), 'id') : [];
+$productFlags = $isEdit ? fetchProductFlags($id) : [];
+$stock = $isEdit ? fetchProductStock($id) : null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     requireCsrf();
@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'meta_title'       => inputString('meta_title', '', $_POST),
         'meta_description' => inputString('meta_description', '', $_POST),
         'is_active'        => isset($_POST['is_active']) ? 1 : 0,
+        'on_sale'          => (inputFloat('sale_price', 0, $_POST) > 0) ? 1 : 0,
     ];
 
     $errors = [];
@@ -45,19 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $flags = array_intersect($_POST['flags'] ?? [], $allFlags);
         syncProductFlags($savedId, $flags);
 
-        // Stock variants
-        if (!empty($_POST['stock_label'])) {
-            // Clear old stock
-            $db = db();
-            $db->prepare("DELETE FROM product_stock WHERE product_id = ?")->execute([$savedId]);
-            foreach ($_POST['stock_label'] as $i => $label) {
-                $label = trim($label);
-                if ($label === '') continue;
-                $qty = (int) ($_POST['stock_qty'][$i] ?? 0);
-                $sku = trim($_POST['stock_sku'][$i] ?? '');
-                updateProductStock($savedId, $label, $qty, $sku ?: null);
-            }
-        }
+        // Stock
+        $stockQty = inputInt('stock_qty', 0, $_POST);
+        $stockThreshold = inputInt('stock_threshold', 5, $_POST);
+        updateProductStock($savedId, $stockQty, $stockThreshold);
 
         // Image upload
         if (!empty($_FILES['images']['name'][0])) {
@@ -69,10 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'error'    => $_FILES['images']['error'][$i],
                     'size'     => $_FILES['images']['size'][$i],
                 ];
-                $result = uploadImage($file, 'uploads/products');
-                if ($result['success']) {
+                $result = uploadImage($file, 'products');
+                if ($result) {
                     $sortOrder = count($productImages) + $i;
-                    addProductImage($savedId, $result['path'], $sortOrder);
+                    addProductImage($savedId, $result, null, $sortOrder);
                 }
             }
         }
@@ -142,27 +134,17 @@ require __DIR__ . '/../layout/admin-header.php';
             </div>
 
             <div class="card mb-4">
-                <h3>Varijante / Zalihe</h3>
-                <div id="stock-container">
-                    <?php if ($stockVariants): ?>
-                        <?php foreach ($stockVariants as $sv): ?>
-                        <div class="stock-row">
-                            <input type="text" name="stock_label[]" class="form-control" placeholder="Npr: 250ml" value="<?= htmlspecialchars($sv['variant_label']) ?>">
-                            <input type="number" name="stock_qty[]" class="form-control" placeholder="Količina" value="<?= (int) $sv['quantity'] ?>">
-                            <input type="text" name="stock_sku[]" class="form-control" placeholder="SKU" value="<?= htmlspecialchars($sv['sku'] ?? '') ?>">
-                            <button type="button" class="btn btn-sm btn-danger remove-stock">&times;</button>
-                        </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="stock-row">
-                            <input type="text" name="stock_label[]" class="form-control" placeholder="Npr: 250ml">
-                            <input type="number" name="stock_qty[]" class="form-control" placeholder="Količina">
-                            <input type="text" name="stock_sku[]" class="form-control" placeholder="SKU">
-                            <button type="button" class="btn btn-sm btn-danger remove-stock">&times;</button>
-                        </div>
-                    <?php endif; ?>
+                <h3>Zalihe</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Količina</label>
+                        <input type="number" name="stock_qty" class="form-control" value="<?= $stock['quantity'] ?? 0 ?>" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Prag niske zalihe</label>
+                        <input type="number" name="stock_threshold" class="form-control" value="<?= $stock['low_stock_threshold'] ?? 5 ?>" min="0">
+                    </div>
                 </div>
-                <button type="button" class="btn btn-sm btn-secondary mt-2" id="add-stock-row">+ Dodaj varijantu</button>
             </div>
         </div>
 
@@ -205,7 +187,7 @@ require __DIR__ . '/../layout/admin-header.php';
                 <div class="image-gallery">
                     <?php foreach ($productImages as $img): ?>
                     <div class="image-item">
-                        <img src="<?= htmlspecialchars($img['image_url']) ?>" alt="">
+                        <img src="<?= htmlspecialchars($img['image_path'] ?? '') ?>" alt="">
                         <a href="/admin/product/delete-image?id=<?= $img['id'] ?>&product_id=<?= $id ?>" class="btn btn-sm btn-danger" onclick="return confirm('Obriši sliku?')">×</a>
                     </div>
                     <?php endforeach; ?>
@@ -236,23 +218,5 @@ require __DIR__ . '/../layout/admin-header.php';
         <a href="/admin/products" class="btn btn-secondary">Otkaži</a>
     </div>
 </form>
-
-<script>
-document.getElementById('add-stock-row').addEventListener('click', function() {
-    const c = document.getElementById('stock-container');
-    const row = document.createElement('div');
-    row.className = 'stock-row';
-    row.innerHTML = '<input type="text" name="stock_label[]" class="form-control" placeholder="Npr: 250ml">'
-        + '<input type="number" name="stock_qty[]" class="form-control" placeholder="Količina">'
-        + '<input type="text" name="stock_sku[]" class="form-control" placeholder="SKU">'
-        + '<button type="button" class="btn btn-sm btn-danger remove-stock">&times;</button>';
-    c.appendChild(row);
-});
-document.getElementById('stock-container').addEventListener('click', function(e) {
-    if (e.target.classList.contains('remove-stock')) {
-        e.target.closest('.stock-row').remove();
-    }
-});
-</script>
 
 <?php require __DIR__ . '/../layout/admin-footer.php'; ?>

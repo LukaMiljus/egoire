@@ -3,7 +3,7 @@ declare(strict_types=1);
 $title = 'Checkout | Egoire';
 
 $cartItems = fetchCartItems();
-$totals = calculateCartTotals();
+$totals = calculateCartTotals($cartItems);
 
 if (empty($cartItems)) {
     redirect('/cart');
@@ -124,10 +124,10 @@ require __DIR__ . '/../layout/header.php';
                     </div>
 
                     <!-- Loyalty -->
-                    <?php if ($loyaltyInfo && (int) $loyaltyInfo['points'] >= (int) ($loyaltySettings['min_redeem_points'] ?? 100)): ?>
+                    <?php if ($loyaltyInfo && (int) $loyaltyInfo['points_balance'] >= (int) ($loyaltySettings['min_points_redeem'] ?? 100)): ?>
                     <div class="card mb-4">
                         <h3>Loyalty bodovi</h3>
-                        <p>Imate <strong><?= (int) $loyaltyInfo['points'] ?></strong> bodova (<?= formatPrice((float) $loyaltyInfo['points'] * (float) ($loyaltySettings['rsd_per_point'] ?? 1)) ?>)</p>
+                        <p>Imate <strong><?= (int) $loyaltyInfo['points_balance'] ?></strong> bodova (<?= formatPrice((float) $loyaltyInfo['points_balance'] * (float) ($loyaltySettings['rsd_per_point'] ?? 1)) ?>)</p>
                         <div class="form-group">
                             <label class="checkbox-label">
                                 <input type="checkbox" name="use_loyalty" value="1">
@@ -135,8 +135,8 @@ require __DIR__ . '/../layout/header.php';
                             </label>
                         </div>
                         <div class="form-group" id="loyaltyPointsField" style="display:none">
-                            <label>Broj bodova (max <?= (int) $loyaltyInfo['points'] ?>)</label>
-                            <input type="number" name="loyalty_points" class="form-control" max="<?= (int) $loyaltyInfo['points'] ?>" min="0">
+                            <label>Broj bodova (max <?= (int) $loyaltyInfo['points_balance'] ?>)</label>
+                            <input type="number" name="loyalty_points" class="form-control" max="<?= (int) $loyaltyInfo['points_balance'] ?>" min="0">
                         </div>
                     </div>
                     <?php endif; ?>
@@ -149,8 +149,8 @@ require __DIR__ . '/../layout/header.php';
                         <div class="order-items-summary">
                             <?php foreach ($cartItems as $item): ?>
                             <div class="order-summary-item">
-                                <span class="item-name"><?= htmlspecialchars($item['product_name']) ?> × <?= $item['quantity'] ?></span>
-                                <span class="item-price"><?= formatPrice((float) $item['price'] * (int) $item['quantity']) ?></span>
+                                <span class="item-name"><?= htmlspecialchars($item['name']) ?> × <?= $item['quantity'] ?></span>
+                                <span class="item-price"><?= formatPrice(productDisplayPrice($item) * (int) $item['quantity']) ?></span>
                             </div>
                             <?php endforeach; ?>
                         </div>
@@ -176,7 +176,7 @@ require __DIR__ . '/../layout/header.php';
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg btn-block mt-3" id="placeOrderBtn">Poruči</button>
                         <p class="text-muted text-center mt-2" style="font-size: 0.8rem;">
-                            Klikom na "Poruči" prihvatate naše <a href="/page/terms">uslove korišćenja</a>.
+                            Klikom na "Poruči" prihvatate naše <a href="/terms">uslove korišćenja</a>.
                         </p>
                     </div>
                 </div>

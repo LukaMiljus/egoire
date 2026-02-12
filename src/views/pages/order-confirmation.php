@@ -24,15 +24,15 @@ require __DIR__ . '/../layout/header.php';
                 <h3>Detalji porudžbine</h3>
                 <table class="admin-table">
                     <thead>
-                        <tr><th>Proizvod</th><th>Varijanta</th><th>Kol.</th><th>Cena</th></tr>
+                        <tr><th>Proizvod</th><th>SKU</th><th>Kol.</th><th>Cena</th></tr>
                     </thead>
                     <tbody>
                         <?php foreach ($items as $item): ?>
                         <tr>
                             <td><?= htmlspecialchars($item['product_name']) ?></td>
-                            <td><?= htmlspecialchars($item['variant_label'] ?? '-') ?></td>
+                            <td><?= htmlspecialchars($item['product_sku'] ?? '-') ?></td>
                             <td><?= (int) $item['quantity'] ?></td>
-                            <td><?= formatPrice((float) $item['price'] * (int) $item['quantity']) ?></td>
+                            <td><?= formatPrice((float) $item['unit_price'] * (int) $item['quantity']) ?></td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>
