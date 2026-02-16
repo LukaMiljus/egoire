@@ -631,19 +631,27 @@ function fetchCartItems(?string $sessionId = null): array
 
 function calculateCartTotals(array $items): array
 {
-    $total = 0.0;
+    $subtotal = 0.0;
     $quantity = 0;
+    $shippingThreshold = 6000.0;
+    $shippingCost = 500.0;
 
     foreach ($items as $item) {
         $unitPrice = isset($item['price']) ? productDisplayPrice($item) : 0;
         $qty = (int) ($item['quantity'] ?? 0);
-        $total += $unitPrice * $qty;
+        $subtotal += $unitPrice * $qty;
         $quantity += $qty;
     }
 
+    $shipping = $subtotal >= $shippingThreshold ? 0.0 : $shippingCost;
+
     return [
-        'total'    => round($total, 2),
-        'quantity' => $quantity,
+        'subtotal'           => round($subtotal, 2),
+        'shipping'           => $shipping,
+        'shipping_threshold' => $shippingThreshold,
+        'gift_bag_discount'  => 0.0,
+        'total'              => round($subtotal + $shipping, 2),
+        'quantity'           => $quantity,
     ];
 }
 

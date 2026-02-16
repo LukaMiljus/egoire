@@ -1,0 +1,1884 @@
+/* ============================================================
+   Egoire – Luxury Homepage Styles
+   File:  public/css/home/home.css
+   ============================================================
+
+   Table of Contents:
+   1.  Design Tokens
+   2.  Container & Section Base
+   3.  Reveal Animations
+   4.  Buttons
+   5.  Hero Section
+   6.  Section Headers
+   7.  Product Card
+   8.  Quantity Stepper
+   9.  Badges
+   10. Slider
+   11. Sale Section
+   12. New Products Grid
+   13. Gift Bag (Split Layout)
+   14. Gift Cards
+   15. Testimonials
+   16. Blog Cards
+   17. Contact Section
+   18. Form Elements
+   19. Tablet (≤ 1199px)
+   20. Mobile (≤ 767px)
+   21. Small Mobile (≤ 479px)
+   22. Reduced Motion
+   ============================================================ */
+
+
+/* ============================================================
+   1. DESIGN TOKENS
+   ============================================================ */
+
+:root {
+    /* Brand palette */
+    --eh-gold:        #C6A75E;
+    --eh-gold-light:  #D4BA7A;
+    --eh-gold-dark:   #A8893E;
+    --eh-beige:       #EAD8CF;
+    --eh-beige-light: #F5EDE8;
+    --eh-beige-pale:  #FAF6F3;
+    --eh-black:       #0a0a0a;
+    --eh-dark:        #1a1a1a;
+
+    /* Neutral palette */
+    --eh-gray-900: #222222;
+    --eh-gray-700: #555555;
+    --eh-gray-500: #888888;
+    --eh-gray-400: #aaaaaa;
+    --eh-gray-300: #cccccc;
+    --eh-gray-200: #e5e5e5;
+    --eh-gray-100: #f5f5f5;
+    --eh-white:    #ffffff;
+
+    /* Typography */
+    --eh-font-display: 'Playfair Display', serif;
+    --eh-font-heading: 'Cormorant Garamond', serif;
+    --eh-font-body:    'Inter', sans-serif;
+
+    /* Spacing */
+    --eh-section-py: 120px;
+    --eh-container-max: 1400px;
+    --eh-container-px: clamp(20px, 4vw, 60px);
+
+    /* Radii */
+    --eh-radius:    12px;
+    --eh-radius-sm:  8px;
+    --eh-radius-lg: 20px;
+
+    /* Transitions */
+    --eh-ease:      cubic-bezier(0.16, 1, 0.3, 1);
+    --eh-ease-out:  cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --eh-duration:  0.4s;
+    --eh-duration-slow: 0.6s;
+
+    /* Shadows */
+    --eh-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --eh-shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --eh-shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
+    --eh-shadow-xl: 0 16px 60px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ============================================================
+   2. CONTAINER & SECTION BASE
+   ============================================================ */
+
+.eh-container {
+    width: 100%;
+    max-width: var(--eh-container-max);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--eh-container-px);
+    padding-right: var(--eh-container-px);
+}
+
+.eh-section {
+    padding-top: var(--eh-section-py);
+    padding-bottom: var(--eh-section-py);
+    position: relative;
+}
+
+.eh-section--alt {
+    background-color: var(--eh-beige-pale);
+}
+
+.eh-section--sale {
+    background-color: var(--eh-beige-light);
+}
+
+.eh-section--gift-bag {
+    background-color: var(--eh-white);
+}
+
+.eh-section--testimonials {
+    background: linear-gradient(
+        165deg,
+        var(--eh-black) 0%,
+        var(--eh-dark) 100%
+    );
+    color: var(--eh-white);
+}
+
+.eh-section--contact {
+    background-color: var(--eh-beige-pale);
+}
+
+.eh-section-footer {
+    text-align: center;
+    margin-top: 56px;
+}
+
+
+/* ============================================================
+   3. REVEAL ANIMATIONS
+   ============================================================ */
+
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+        opacity var(--eh-duration-slow) var(--eh-ease),
+        transform var(--eh-duration-slow) var(--eh-ease);
+    will-change: opacity, transform;
+}
+
+[data-reveal].is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hero children have their own staggered entrance */
+.eh-hero[data-reveal] {
+    opacity: 1;
+    transform: none;
+}
+
+
+/* ============================================================
+   4. BUTTONS
+   ============================================================ */
+
+.eh-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 36px;
+    font-family: var(--eh-font-body);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    border-radius: var(--eh-radius-sm);
+    cursor: pointer;
+    transition:
+        background-color var(--eh-duration) var(--eh-ease-out),
+        color var(--eh-duration) var(--eh-ease-out),
+        border-color var(--eh-duration) var(--eh-ease-out),
+        box-shadow var(--eh-duration) var(--eh-ease-out),
+        transform 0.2s var(--eh-ease-out);
+    min-height: 48px;
+    white-space: nowrap;
+}
+
+.eh-btn:active {
+    transform: scale(0.97);
+}
+
+.eh-btn--primary {
+    background-color: var(--eh-gold);
+    color: var(--eh-white);
+}
+.eh-btn--primary:hover {
+    background-color: var(--eh-gold-dark);
+    box-shadow: 0 4px 16px rgba(198, 167, 94, 0.35);
+}
+
+.eh-btn--ghost {
+    background: transparent;
+    color: var(--eh-white);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.eh-btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+.eh-btn--outline {
+    background: transparent;
+    color: var(--eh-gold);
+    border: 1.5px solid var(--eh-gold);
+}
+.eh-btn--outline:hover {
+    background-color: var(--eh-gold);
+    color: var(--eh-white);
+}
+
+.eh-btn--full {
+    width: 100%;
+}
+
+
+/* ============================================================
+   5. HERO SECTION
+   ============================================================ */
+
+.eh-hero {
+    position: relative;
+    height: 85vh;
+    min-height: 600px;
+    max-height: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: var(--eh-black);
+}
+
+/* Video / image placeholder — replace with <video> */
+/* .eh-hero__media {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+    background-size: cover;
+    background-position: center;
+} */
+
+.eh-hero__media {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    min-width: 100%;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+}
+
+
+.eh-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.35) 0%,
+        rgba(0, 0, 0, 0.55) 100%
+    );
+}
+
+.eh-hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 720px;
+    padding: 0 var(--eh-container-px);
+}
+
+.eh-hero__eyebrow {
+    display: block;
+    font-family: var(--eh-font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--eh-gold);
+    margin-bottom: 20px;
+}
+
+.eh-hero__logo {
+    width: 320px;
+    height: auto;
+    margin-bottom: 24px;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.eh-hero__title {
+    font-family: var(--eh-font-display);
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 400;
+    color: var(--eh-white);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 20px;
+}
+
+.eh-hero__subtitle {
+    font-family: var(--eh-font-body);
+    font-size: clamp(15px, 1.4vw, 18px);
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.7;
+    margin: 0 0 40px;
+}
+
+.eh-hero__cta {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Scroll hint */
+.eh-hero__scroll {
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: var(--eh-font-body);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.eh-hero__scroll svg {
+    opacity: 0.5;
+}
+
+.eh-hero__scroll-dot {
+    animation: ehScrollDot 1.8s ease-in-out infinite;
+}
+
+@keyframes ehScrollDot {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    50%      { transform: translateY(4px); opacity: 0.3; }
+}
+
+
+/* ============================================================
+   6. SECTION HEADERS
+   ============================================================ */
+
+.eh-section-header {
+    text-align: center;
+    margin-bottom: 56px;
+}
+
+.eh-section-header__eyebrow {
+    display: block;
+    font-family: var(--eh-font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--eh-gold);
+    margin-bottom: 12px;
+}
+
+.eh-section--testimonials .eh-section-header__eyebrow {
+    color: var(--eh-gold-light);
+}
+
+.eh-section-header__title {
+    font-family: var(--eh-font-heading);
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 500;
+    color: var(--eh-gray-900);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+}
+
+.eh-section--testimonials .eh-section-header__title {
+    color: var(--eh-white);
+}
+
+.eh-section-header__desc {
+    font-family: var(--eh-font-body);
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--eh-gray-500);
+    line-height: 1.7;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+
+/* ============================================================
+   7. PRODUCT CARD
+   ============================================================ */
+
+.eh-card {
+    background: var(--eh-white);
+    border-radius: var(--eh-radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--eh-shadow-sm);
+    transition:
+        box-shadow var(--eh-duration) var(--eh-ease-out),
+        transform var(--eh-duration) var(--eh-ease-out);
+}
+
+.eh-card:hover {
+    box-shadow: var(--eh-shadow-md);
+    transform: translateY(-4px);
+}
+
+/* Visual / Image */
+.eh-card__visual {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--eh-gray-100);
+}
+
+.eh-card__img-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.eh-card__visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--eh-ease-out);
+}
+
+.eh-card:hover .eh-card__visual img {
+    transform: scale(1.05);
+}
+
+.eh-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--eh-font-display);
+    font-size: 24px;
+    color: var(--eh-gray-300);
+    background: var(--eh-gray-100);
+    letter-spacing: 0.1em;
+}
+
+/* Card body */
+.eh-card__body {
+    padding: 20px 20px 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.eh-card__brand {
+    font-family: var(--eh-font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--eh-gold);
+    margin-bottom: 6px;
+}
+
+.eh-card__name {
+    font-family: var(--eh-font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--eh-gray-900);
+    line-height: 1.3;
+    margin: 0 0 8px;
+}
+
+.eh-card__name a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--eh-duration) var(--eh-ease-out);
+}
+
+.eh-card__name a:hover {
+    color: var(--eh-gold);
+}
+
+.eh-card__desc {
+    font-family: var(--eh-font-body);
+    font-size: 13px;
+    color: var(--eh-gray-500);
+    line-height: 1.6;
+    margin: 0 0 14px;
+    flex: 1;
+}
+
+/* Price */
+.eh-card__price {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.eh-card__price-current {
+    font-family: var(--eh-font-body);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--eh-gray-900);
+}
+
+.eh-card__price-old {
+    font-family: var(--eh-font-body);
+    font-size: 14px;
+    color: var(--eh-gray-400);
+    text-decoration: line-through;
+}
+
+.eh-card__price-sale {
+    font-family: var(--eh-font-body);
+    font-size: 17px;
+    font-weight: 600;
+    color: #b44a4a;
+}
+
+/* Actions row */
+.eh-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.eh-card__add-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 16px;
+    height: 44px;
+    background-color: var(--eh-gold);
+    color: var(--eh-white);
+    border: none;
+    border-radius: var(--eh-radius-sm);
+    font-family: var(--eh-font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+        background-color var(--eh-duration) var(--eh-ease-out),
+        transform 0.15s var(--eh-ease-out);
+    white-space: nowrap;
+    min-height: 44px;
+}
+
+.eh-card__add-btn:hover {
+    background-color: var(--eh-gold-dark);
+}
+
+.eh-card__add-btn:active {
+    transform: scale(0.96);
+}
+
+.eh-card__add-btn svg {
+    flex-shrink: 0;
+}
+
+/* Add to cart feedback */
+.eh-card__add-btn.is-loading span {
+    opacity: 0;
+}
+
+.eh-card__add-btn.is-success {
+    background-color: #3a7d44;
+}
+
+.eh-card__add-btn.is-error {
+    background-color: #b44a4a;
+}
+
+
+/* ============================================================
+   8. QUANTITY STEPPER
+   ============================================================ */
+
+.eh-stepper {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--eh-gray-200);
+    border-radius: var(--eh-radius-sm);
+    overflow: hidden;
+    height: 44px;
+    flex-shrink: 0;
+}
+
+.eh-stepper__btn {
+    width: 36px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--eh-white);
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--eh-gray-700);
+    transition: background-color 0.2s ease;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.eh-stepper__btn:hover {
+    background: var(--eh-gray-100);
+}
+
+.eh-stepper__btn:active {
+    background: var(--eh-gray-200);
+}
+
+.eh-stepper__input {
+    width: 40px;
+    height: 100%;
+    border: none;
+    border-left: 1px solid var(--eh-gray-200);
+    border-right: 1px solid var(--eh-gray-200);
+    text-align: center;
+    font-family: var(--eh-font-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--eh-gray-900);
+    background: var(--eh-white);
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.eh-stepper__input::-webkit-outer-spin-button,
+.eh-stepper__input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+/* ============================================================
+   9. BADGES
+   ============================================================ */
+
+.eh-card__badges {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    z-index: 2;
+}
+
+.eh-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    font-family: var(--eh-font-body);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    color: var(--eh-white);
+    background: var(--eh-gray-900);
+}
+
+.eh-badge--best_seller { background: var(--eh-gold); }
+.eh-badge--new         { background: #3a7d44; }
+.eh-badge--sale        { background: #b44a4a; }
+
+
+/* ============================================================
+   10. SLIDER
+   ============================================================ */
+
+.eh-slider {
+    position: relative;
+}
+
+.eh-slider__track {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+
+    /* Hide scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.eh-slider__track::-webkit-scrollbar {
+    display: none;
+}
+
+.eh-slider__slide {
+    flex: 0 0 calc(33.333% - 16px);
+    scroll-snap-align: start;
+    min-width: 0;
+}
+
+/* Navigation */
+.eh-slider__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.eh-slider__arrow {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--eh-white);
+    border: 1px solid var(--eh-gray-200);
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--eh-gray-700);
+    transition:
+        background-color var(--eh-duration) var(--eh-ease-out),
+        border-color var(--eh-duration) var(--eh-ease-out),
+        color var(--eh-duration) var(--eh-ease-out);
+}
+
+.eh-slider__arrow:hover {
+    background: var(--eh-gold);
+    border-color: var(--eh-gold);
+    color: var(--eh-white);
+}
+
+.eh-slider__arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
+
+.eh-slider__dots {
+    display: flex;
+    gap: 8px;
+}
+
+.eh-slider__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--eh-gray-300);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.eh-slider__dot.is-active {
+    background: var(--eh-gold);
+    border-color: var(--eh-gold);
+    transform: scale(1.2);
+}
+
+.eh-slider__dot:hover:not(.is-active) {
+    border-color: var(--eh-gold-light);
+}
+
+/* Sale section slider overrides */
+.eh-section--sale .eh-slider__arrow {
+    background: var(--eh-white);
+}
+
+.eh-section--sale .eh-slider__dot.is-active {
+    background: var(--eh-gold-dark);
+    border-color: var(--eh-gold-dark);
+}
+
+
+/* ============================================================
+   12. GRIDS (New Products, Blog, Gift Cards)
+   ============================================================ */
+
+.eh-grid {
+    display: grid;
+    gap: 28px;
+}
+
+.eh-grid--3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+
+/* ============================================================
+   12b. BRANDS  –  Logo grid
+   ============================================================ */
+
+.eh-section--brands {
+    background: var(--eh-beige-light);
+}
+
+.eh-brands {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 24px;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.eh-brands__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 28px 20px;
+    background: var(--eh-white);
+    border: 1px solid rgba(198, 167, 94, 0.12);
+    border-radius: var(--eh-radius-lg);
+    text-decoration: none;
+    transition: transform 0.35s var(--eh-ease),
+                box-shadow 0.35s var(--eh-ease),
+                border-color 0.35s var(--eh-ease);
+}
+
+.eh-brands__item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(198, 167, 94, 0.12);
+    border-color: var(--eh-gold);
+}
+
+.eh-brands__logo-wrap {
+    width: 100px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.eh-brands__logo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: grayscale(40%);
+    opacity: 0.85;
+    transition: filter 0.35s var(--eh-ease), opacity 0.35s var(--eh-ease);
+}
+
+.eh-brands__item:hover .eh-brands__logo {
+    filter: grayscale(0%);
+    opacity: 1;
+}
+
+.eh-brands__name-fallback {
+    font-family: var(--eh-font-display);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--eh-gold);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.eh-brands__label {
+    font-family: var(--eh-font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--eh-gray-700);
+    letter-spacing: 0.04em;
+    text-align: center;
+    transition: color 0.3s var(--eh-ease);
+}
+
+.eh-brands__item:hover .eh-brands__label {
+    color: var(--eh-gold);
+}
+
+
+/* ============================================================
+   12c. CATEGORIES  –  Hierarchical parent + children
+   ============================================================ */
+
+.eh-section--categories {
+    background: var(--eh-black);
+    --_cat-text: var(--eh-white);
+}
+
+.eh-section--categories .eh-section-header__eyebrow {
+    color: var(--eh-gold);
+}
+
+.eh-section--categories .eh-section-header__title {
+    color: var(--_cat-text);
+}
+
+.eh-section--categories .eh-section-header__desc {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.eh-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 32px;
+}
+
+.eh-categories__group {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(198, 167, 94, 0.15);
+    border-radius: var(--eh-radius-lg);
+    overflow: hidden;
+    transition: border-color 0.35s var(--eh-ease),
+                box-shadow 0.35s var(--eh-ease);
+}
+
+.eh-categories__group:hover {
+    border-color: rgba(198, 167, 94, 0.35);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Parent category card */
+.eh-categories__parent {
+    display: block;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.eh-categories__parent-img {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.eh-categories__parent-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--eh-ease);
+}
+
+.eh-categories__group:hover .eh-categories__parent-img img {
+    transform: scale(1.06);
+}
+
+.eh-categories__parent-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--eh-gold);
+    opacity: 0.4;
+}
+
+.eh-categories__parent-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 30%, rgba(10, 10, 10, 0.85) 100%);
+    display: flex;
+    align-items: flex-end;
+    padding: 20px 24px;
+}
+
+.eh-categories__parent-name {
+    font-family: var(--eh-font-heading);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--eh-white);
+    letter-spacing: 0.02em;
+}
+
+/* Subcategories list */
+.eh-categories__children {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 0;
+}
+
+.eh-categories__child {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 24px;
+    text-decoration: none;
+    transition: background 0.25s var(--eh-ease);
+}
+
+.eh-categories__child:hover {
+    background: rgba(198, 167, 94, 0.08);
+}
+
+.eh-categories__child-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(198, 167, 94, 0.2);
+    flex-shrink: 0;
+}
+
+.eh-categories__child-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(198, 167, 94, 0.1);
+    color: var(--eh-gold);
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.eh-categories__child-name {
+    font-family: var(--eh-font-body);
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.75);
+    letter-spacing: 0.02em;
+    transition: color 0.25s var(--eh-ease);
+}
+
+.eh-categories__child:hover .eh-categories__child-name {
+    color: var(--eh-gold);
+}
+
+/* Category section button override for dark bg */
+.eh-section--categories .eh-btn--outline {
+    color: var(--eh-gold);
+    border-color: var(--eh-gold);
+}
+
+.eh-section--categories .eh-btn--outline:hover {
+    background: var(--eh-gold);
+    color: var(--eh-black);
+}
+
+
+/* ============================================================
+   13. GIFT BAG  –  Split layout
+   ============================================================ */
+
+.eh-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.eh-split__img-wrap {
+    border-radius: var(--eh-radius-lg);
+    overflow: hidden;
+    /* aspect-ratio: 4 / 5; */
+    background: var(--eh-beige-light);
+}
+
+.eh-split__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: var(--eh-gold);
+    font-family: var(--eh-font-display);
+    font-size: 28px;
+    letter-spacing: 0.05em;
+}
+
+.eh-split__placeholder svg {
+    opacity: 0.4;
+}
+
+.eh-split__content .eh-section-header__eyebrow {
+    text-align: left;
+}
+
+.eh-split__content .eh-section-header__title {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.eh-split__text {
+    font-family: var(--eh-font-body);
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--eh-gray-700);
+    line-height: 1.8;
+    margin: 0 0 28px;
+}
+
+.eh-split__highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.eh-highlight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.eh-highlight__icon {
+    color: var(--eh-gold);
+    font-size: 14px;
+}
+
+.eh-highlight__text {
+    font-family: var(--eh-font-body);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--eh-gray-700);
+}
+
+
+/* ============================================================
+   14. GIFT CARDS
+   ============================================================ */
+
+.eh-gift-card {
+    display: block;
+    text-decoration: none;
+    border-radius: var(--eh-radius);
+    overflow: hidden;
+    transition:
+        transform var(--eh-duration) var(--eh-ease-out),
+        box-shadow var(--eh-duration) var(--eh-ease-out);
+}
+
+.eh-gift-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--eh-shadow-lg);
+}
+
+.eh-gift-card__inner {
+    position: relative;
+    padding: 40px 30px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(
+        135deg,
+        var(--eh-black) 0%,
+        var(--eh-dark) 100%
+    );
+    border-radius: var(--eh-radius);
+    overflow: hidden;
+}
+
+.eh-gift-card__brand {
+    font-family: var(--eh-font-display);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--eh-gold);
+    letter-spacing: 0.1em;
+}
+
+.eh-gift-card__amount {
+    font-family: var(--eh-font-heading);
+    font-size: clamp(28px, 3vw, 36px);
+    font-weight: 500;
+    color: var(--eh-white);
+    margin: 16px 0;
+}
+
+.eh-gift-card__label {
+    font-family: var(--eh-font-body);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* Subtle gold shimmer line */
+.eh-gift-card__shimmer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: 100%;
+    background: linear-gradient(
+        135deg,
+        transparent 0%,
+        rgba(198, 167, 94, 0.08) 50%,
+        transparent 100%
+    );
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   15. TESTIMONIALS
+   ============================================================ */
+
+.eh-testimonials {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.eh-testimonials__track {
+    display: flex;
+    transition: transform 0.6s var(--eh-ease);
+}
+
+.eh-testimonials__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+}
+
+.eh-quote {
+    text-align: center;
+    padding: 0 20px;
+    margin: 0;
+    border: none;
+}
+
+.eh-quote__mark {
+    display: block;
+    margin: 0 auto 24px;
+    color: var(--eh-gold);
+}
+
+.eh-quote__text {
+    font-family: var(--eh-font-heading);
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    margin: 0 0 32px;
+}
+
+.eh-quote__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.eh-quote__author {
+    font-family: var(--eh-font-body);
+    font-size: 15px;
+    font-weight: 500;
+    font-style: normal;
+    color: var(--eh-white);
+    letter-spacing: 0.02em;
+}
+
+.eh-quote__role {
+    font-family: var(--eh-font-body);
+    font-size: 12px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+/* Dots */
+.eh-testimonials__dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+.eh-testimonials__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.eh-testimonials__dot.is-active {
+    background: var(--eh-gold);
+    border-color: var(--eh-gold);
+}
+
+
+/* ============================================================
+   16. BLOG CARDS
+   ============================================================ */
+
+.eh-blog-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    border-radius: var(--eh-radius);
+    overflow: hidden;
+    background: var(--eh-white);
+    box-shadow: var(--eh-shadow-sm);
+    transition:
+        box-shadow var(--eh-duration) var(--eh-ease-out),
+        transform var(--eh-duration) var(--eh-ease-out);
+}
+
+.eh-blog-card:hover {
+    box-shadow: var(--eh-shadow-md);
+    transform: translateY(-4px);
+}
+
+.eh-blog-card__img {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--eh-gray-100);
+}
+
+.eh-blog-card__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--eh-ease-out);
+}
+
+.eh-blog-card:hover .eh-blog-card__img img {
+    transform: scale(1.05);
+}
+
+.eh-blog-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--eh-font-display);
+    font-size: 18px;
+    color: var(--eh-gray-300);
+}
+
+.eh-blog-card__body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.eh-blog-card__date {
+    font-family: var(--eh-font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--eh-gold);
+    margin-bottom: 10px;
+}
+
+.eh-blog-card__title {
+    font-family: var(--eh-font-heading);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--eh-gray-900);
+    line-height: 1.3;
+    margin: 0 0 10px;
+}
+
+.eh-blog-card__excerpt {
+    font-family: var(--eh-font-body);
+    font-size: 13px;
+    color: var(--eh-gray-500);
+    line-height: 1.7;
+    margin: 0;
+    flex: 1;
+}
+
+.eh-blog-card__link {
+    display: inline-block;
+    margin-top: 16px;
+    font-family: var(--eh-font-body);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--eh-gold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
+
+.eh-blog-card:hover .eh-blog-card__link {
+    color: var(--eh-gold-dark);
+}
+
+
+/* ============================================================
+   17. CONTACT SECTION
+   ============================================================ */
+
+.eh-contact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+}
+
+.eh-contact__info .eh-section-header__eyebrow,
+.eh-contact__info .eh-section-header__title {
+    text-align: left;
+}
+
+.eh-contact__info .eh-section-header__title {
+    margin-bottom: 16px;
+}
+
+.eh-contact__desc {
+    font-family: var(--eh-font-body);
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--eh-gray-700);
+    line-height: 1.8;
+    margin: 0 0 32px;
+}
+
+.eh-contact__details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.eh-contact__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.eh-contact__item svg {
+    flex-shrink: 0;
+    color: var(--eh-gold);
+    margin-top: 2px;
+}
+
+.eh-contact__label {
+    display: block;
+    font-family: var(--eh-font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--eh-gray-500);
+    margin-bottom: 4px;
+}
+
+.eh-contact__item a {
+    color: var(--eh-gray-900);
+    text-decoration: none;
+    font-family: var(--eh-font-body);
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+.eh-contact__item a:hover {
+    color: var(--eh-gold);
+}
+
+.eh-contact__item span:not(.eh-contact__label) {
+    font-family: var(--eh-font-body);
+    font-size: 14px;
+    color: var(--eh-gray-700);
+}
+
+
+/* ============================================================
+   18. FORM ELEMENTS
+   ============================================================ */
+
+.eh-contact__form-wrap {
+    background: var(--eh-white);
+    border-radius: var(--eh-radius);
+    padding: 40px;
+    box-shadow: var(--eh-shadow-sm);
+}
+
+.eh-form-row {
+    display: grid;
+    gap: 16px;
+}
+
+.eh-form-row--2 {
+    grid-template-columns: 1fr 1fr;
+}
+
+.eh-form-group {
+    margin-bottom: 20px;
+}
+
+.eh-label {
+    display: block;
+    font-family: var(--eh-font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--eh-gray-700);
+    margin-bottom: 8px;
+}
+
+.eh-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: var(--eh-font-body);
+    font-size: 14px;
+    color: var(--eh-gray-900);
+    background: var(--eh-beige-pale);
+    border: 1.5px solid var(--eh-gray-200);
+    border-radius: var(--eh-radius-sm);
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+    outline: none;
+    min-height: 48px;
+}
+
+.eh-input:focus {
+    border-color: var(--eh-gold);
+    box-shadow: 0 0 0 3px rgba(198, 167, 94, 0.15);
+}
+
+.eh-input--textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.eh-form-feedback {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-radius: var(--eh-radius-sm);
+    font-family: var(--eh-font-body);
+    font-size: 13px;
+    text-align: center;
+}
+
+.eh-form-feedback.is-success {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.eh-form-feedback.is-error {
+    background: #fce4ec;
+    color: #c62828;
+}
+
+
+/* ============================================================
+   19. TABLET  (≤ 1199px)
+   ============================================================ */
+
+@media (max-width: 1199px) {
+    :root {
+        --eh-section-py: 80px;
+    }
+
+    /* Slider: 2 visible */
+    .eh-slider__slide {
+        flex: 0 0 calc(50% - 12px);
+    }
+
+    /* Grids: 2 columns */
+    .eh-grid--3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Gift bag split */
+    .eh-split {
+        gap: 40px;
+    }
+
+    /* Brands: 3 columns on tablet */
+    .eh-brands {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    /* Categories: 2 columns */
+    .eh-categories {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+
+    /* Contact */
+    .eh-contact {
+        gap: 40px;
+    }
+}
+
+
+/* ============================================================
+   20. MOBILE  (≤ 767px)
+   ============================================================ */
+
+@media (max-width: 767px) {
+    :root {
+        --eh-section-py: 60px;
+    }
+
+    /* Hero */
+    .eh-hero {
+        height: 70vh;
+        min-height: 500px;
+    }
+
+    .eh-hero__subtitle {
+        margin-bottom: 28px;
+    }
+
+    .eh-hero__cta {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .eh-hero__cta .eh-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .eh-hero__scroll {
+        bottom: 20px;
+    }
+
+    /* Section headers */
+    .eh-section-header {
+        margin-bottom: 36px;
+    }
+
+    .eh-section-footer {
+        margin-top: 36px;
+    }
+
+    /* Slider: 1 visible */
+    .eh-slider__slide {
+        flex: 0 0 100%;
+    }
+
+    /* Grids: 1 column */
+    .eh-grid--3 {
+        grid-template-columns: 1fr;
+    }
+
+    /* Gift bag: stack */
+    .eh-split {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .eh-split__media {
+        order: -1;
+    }
+
+    .eh-split__img-wrap {
+        aspect-ratio: 16 / 10;
+    }
+
+    .eh-split__content .eh-section-header__eyebrow,
+    .eh-split__content .eh-section-header__title {
+        text-align: center;
+    }
+
+    .eh-split__text {
+        text-align: center;
+    }
+
+    .eh-split__highlights {
+        align-items: center;
+    }
+
+    .eh-split__content .eh-btn {
+        display: block;
+        text-align: center;
+    }
+
+    /* Brands: 2 columns on mobile */
+    .eh-brands {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .eh-brands__item {
+        padding: 20px 16px;
+    }
+
+    .eh-brands__logo-wrap {
+        width: 80px;
+        height: 60px;
+    }
+
+    /* Categories: single column */
+    .eh-categories {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .eh-categories__parent-name {
+        font-size: 18px;
+    }
+
+    /* Gift cards */
+    .eh-gift-card__inner {
+        min-height: 180px;
+        padding: 28px 24px;
+    }
+
+    /* Testimonials */
+    .eh-quote {
+        padding: 0;
+    }
+
+    /* Contact: stack */
+    .eh-contact {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .eh-contact__info .eh-section-header__eyebrow,
+    .eh-contact__info .eh-section-header__title {
+        text-align: center;
+    }
+
+    .eh-contact__desc {
+        text-align: center;
+    }
+
+    .eh-contact__form-wrap {
+        padding: 24px;
+    }
+
+    /* Form */
+    .eh-form-row--2 {
+        grid-template-columns: 1fr;
+    }
+
+    .eh-btn--full {
+        min-height: 52px;
+    }
+
+    /* Card refinement */
+    .eh-card__body {
+        padding: 16px 16px 20px;
+    }
+
+    .eh-card__actions {
+        flex-direction: column;
+    }
+
+    .eh-card__add-btn {
+        width: 100%;
+        min-height: 48px;
+    }
+}
+
+
+/* ============================================================
+   21. SMALL MOBILE  (≤ 479px)
+   ============================================================ */
+
+@media (max-width: 479px) {
+    .eh-hero {
+        min-height: 440px;
+    }
+
+    .eh-hero__eyebrow {
+        font-size: 10px;
+    }
+
+    .eh-hero__subtitle {
+        font-size: 14px;
+    }
+
+    .eh-section-header__title {
+        font-size: 26px;
+    }
+
+    .eh-card__name {
+        font-size: 18px;
+    }
+
+    .eh-stepper {
+        width: 100%;
+    }
+
+    .eh-stepper__input {
+        flex: 1;
+    }
+
+    .eh-contact__form-wrap {
+        padding: 20px;
+    }
+
+    /* Brands: small cards */
+    .eh-brands__item {
+        padding: 16px 12px;
+        gap: 8px;
+    }
+
+    .eh-brands__logo-wrap {
+        width: 64px;
+        height: 48px;
+    }
+
+    .eh-brands__label {
+        font-size: 11px;
+    }
+
+    .eh-categories__parent-name {
+        font-size: 16px;
+    }
+
+    .eh-categories__child {
+        padding: 10px 16px;
+    }
+
+    .eh-slider__nav {
+        gap: 10px;
+    }
+
+    .eh-slider__arrow {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+
+/* ============================================================
+   22. REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    [data-reveal] {
+        opacity: 1;
+        transform: none;
+    }
+
+    .eh-testimonials__track {
+        transition: none;
+    }
+
+    .eh-slider__track {
+        scroll-behavior: auto;
+    }
+}

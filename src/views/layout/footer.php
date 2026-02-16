@@ -61,7 +61,13 @@
         </div>
     </footer>
 
+    <script src="<?= asset('/js/header.js') ?>"></script>
     <script src="<?= asset('/js/main.js') ?>"></script>
+    <?php if (!empty($pageScripts)): ?>
+    <?php foreach ($pageScripts as $__pjs): ?>
+    <script src="<?= asset($__pjs) ?>"></script>
+    <?php endforeach; ?>
+    <?php endif; ?>
     <script src="/pwa.js"></script>
 </body>
 </html>

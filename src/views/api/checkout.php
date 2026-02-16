@@ -46,24 +46,26 @@ if (!empty($errors)) {
 $orderData = [
     'email'           => $email,
     'customer_name'   => $firstName . ' ' . $lastName,
+    'phone'           => $phone,
+    'customer_note'   => $note,
     'payment_method'  => $paymentMethod,
     'gift_card_code'  => $giftCardCode ?: null,
     'use_loyalty'     => $useLoyalty,
     'loyalty_points'  => $loyaltyPoints,
-    'address'         => [
-        'first_name'  => $firstName,
-        'last_name'   => $lastName,
-        'phone'       => $phone,
-        'address'     => $address,
-        'city'        => $city,
-        'postal_code' => $postalCode,
-        'country'     => $country,
-        'note'        => $note,
-    ],
+];
+
+$addressData = [
+    'first_name'  => $firstName,
+    'last_name'   => $lastName,
+    'phone'       => $phone,
+    'address'     => $address,
+    'city'        => $city,
+    'postal_code' => $postalCode,
+    'country'     => $country,
 ];
 
 try {
-    $result = createOrder($orderData);
+    $result = createOrder($orderData, $cartItems, $addressData);
     if ($result['success']) {
         redirect('/order-confirmation?order=' . urlencode($result['order_number']));
     } else {

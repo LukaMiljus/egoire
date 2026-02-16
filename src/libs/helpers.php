@@ -279,3 +279,18 @@ function asset(string $path): string
     $version = file_exists($fullPath) ? filemtime($fullPath) : time();
     return $path . '?v=' . $version;
 }
+
+/**
+ * Remove a query parameter from the current URL and return the resulting URL.
+ */
+function removeQueryParam(string $key): string
+{
+    $params = $_GET;
+    unset($params[$key]);
+    // For price, remove both price_min and price_max
+    if ($key === 'price') {
+        unset($params['price_min'], $params['price_max']);
+    }
+    $qs = http_build_query($params);
+    return '/products' . ($qs ? '?' . $qs : '');
+}

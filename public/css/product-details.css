@@ -1,0 +1,1042 @@
+/* ============================================================
+   Egoire – Luxury Product Detail
+   Namespace: pd-
+   Tokens:  Gold #C6A75E · Beige #EAD8CF · Black #0a0a0a
+   Fonts:   Playfair Display · Cormorant Garamond · Inter
+   ============================================================ */
+
+/* ==========================================================
+   0. CONTAINER
+   ========================================================== */
+.pd-container {
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 48px);
+}
+
+
+/* ==========================================================
+   1. BREADCRUMB
+   ========================================================== */
+.pd-breadcrumb {
+    padding: 24px 0 0;
+}
+
+.pd-breadcrumb__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: #999;
+}
+
+.pd-breadcrumb__list li {
+    display: flex;
+    align-items: center;
+}
+
+.pd-breadcrumb__list li + li::before {
+    content: '/';
+    margin: 0 10px;
+    color: #ccc;
+    font-weight: 300;
+}
+
+.pd-breadcrumb__list a {
+    color: #888;
+    text-decoration: none;
+    transition: color 0.25s ease;
+}
+
+.pd-breadcrumb__list a:hover {
+    color: #C6A75E;
+}
+
+.pd-breadcrumb__list [aria-current="page"] {
+    color: #555;
+}
+
+
+/* ==========================================================
+   2. TWO-COLUMN PRODUCT GRID
+   ========================================================== */
+.pd-product {
+    padding: 48px 0 80px;
+}
+
+.pd-product__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(40px, 5vw, 80px);
+    align-items: start;
+}
+
+
+/* ==========================================================
+   3. IMAGE GALLERY
+   ========================================================== */
+.pd-gallery {
+    position: relative;
+}
+
+/* --- Stage (aspect 4:5 for portrait product shots) --- */
+.pd-gallery__stage {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: #f8f5f1;
+    border-radius: 4px;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.pd-gallery__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.pd-gallery__image.is-active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Placeholder when no images */
+.pd-gallery__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #d4c5b5;
+}
+
+/* --- Navigation Arrows --- */
+.pd-gallery__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #0a0a0a;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease, background 0.3s ease, transform 0.3s ease;
+}
+
+.pd-gallery__stage:hover .pd-gallery__arrow {
+    opacity: 1;
+}
+
+.pd-gallery__arrow:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.06);
+}
+
+.pd-gallery__arrow--prev {
+    left: 16px;
+}
+
+.pd-gallery__arrow--next {
+    right: 16px;
+}
+
+/* --- Counter --- */
+.pd-gallery__counter {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    z-index: 3;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(10, 10, 10, 0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 5px 12px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.pd-gallery__stage:hover .pd-gallery__counter {
+    opacity: 1;
+}
+
+/* --- Badges inside gallery --- */
+.pd-gallery__badges {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.pd-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 2px;
+}
+
+.pd-badge--sale {
+    background: #0a0a0a;
+    color: #C6A75E;
+}
+
+.pd-badge--best_seller {
+    background: #C6A75E;
+    color: #fff;
+}
+
+.pd-badge--new {
+    background: #fff;
+    color: #0a0a0a;
+    border: 1px solid rgba(10, 10, 10, 0.1);
+}
+
+
+/* --- Thumbnails (desktop) --- */
+.pd-gallery__thumbs {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 2px;
+}
+
+.pd-gallery__thumbs::-webkit-scrollbar {
+    display: none;
+}
+
+.pd-gallery__thumb {
+    flex: 0 0 auto;
+    width: 72px;
+    height: 90px;
+    border: none;
+    border-radius: 3px;
+    overflow: hidden;
+    padding: 0;
+    cursor: pointer;
+    background: #f8f5f1;
+    position: relative;
+    opacity: 0.55;
+    transition: opacity 0.3s ease;
+}
+
+.pd-gallery__thumb::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #C6A75E;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.pd-gallery__thumb.is-active {
+    opacity: 1;
+}
+
+.pd-gallery__thumb.is-active::after {
+    transform: scaleX(1);
+}
+
+.pd-gallery__thumb:hover {
+    opacity: 0.9;
+}
+
+.pd-gallery__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
+/* --- Mobile Dots (hidden on desktop) --- */
+.pd-gallery__dots {
+    display: none;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.pd-gallery__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid rgba(10, 10, 10, 0.25);
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.pd-gallery__dot.is-active {
+    background: #C6A75E;
+    border-color: #C6A75E;
+    transform: scale(1.2);
+}
+
+
+/* ==========================================================
+   4. PRODUCT INFO — RIGHT COLUMN
+   ========================================================== */
+.pd-info {
+    padding-top: 8px;
+}
+
+/* Brand */
+.pd-info__brand {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #999;
+    text-decoration: none;
+    margin-bottom: 12px;
+    transition: color 0.25s ease;
+}
+
+.pd-info__brand:hover {
+    color: #C6A75E;
+}
+
+/* Title */
+.pd-info__title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 3vw, 36px);
+    font-weight: 500;
+    line-height: 1.2;
+    color: #0a0a0a;
+    margin: 0 0 14px;
+    letter-spacing: -0.01em;
+}
+
+/* Categories */
+.pd-info__categories {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 24px;
+}
+
+.pd-info__cat-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #C6A75E;
+    text-decoration: none;
+    transition: color 0.25s ease;
+}
+
+.pd-info__cat-link:hover {
+    color: #b0903e;
+}
+
+.pd-info__cat-sep {
+    margin: 0 8px;
+    color: #ccc;
+    font-size: 10px;
+}
+
+/* Price */
+.pd-info__price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.pd-info__price-current {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: #0a0a0a;
+    letter-spacing: -0.01em;
+}
+
+.pd-info__price-old {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #aaa;
+    text-decoration: line-through;
+}
+
+.pd-info__price-sale {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: #0a0a0a;
+    letter-spacing: -0.01em;
+}
+
+.pd-info__price-badge {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #C6A75E;
+    background: rgba(198, 167, 94, 0.1);
+    padding: 3px 10px;
+    border-radius: 2px;
+}
+
+/* Excerpt */
+.pd-info__excerpt {
+    font-family: 'Inter', sans-serif;
+    font-size: 14.5px;
+    font-weight: 400;
+    line-height: 1.75;
+    color: #666;
+    margin: 0 0 28px;
+    max-width: 520px;
+}
+
+/* Divider */
+.pd-info__divider {
+    border: none;
+    height: 1px;
+    background: rgba(10, 10, 10, 0.07);
+    margin: 24px 0;
+}
+
+/* Stock */
+.pd-info__stock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    margin-bottom: 24px;
+}
+
+.pd-info__stock--in {
+    color: #5a8a5a;
+}
+
+.pd-info__stock--in svg {
+    stroke: #5a8a5a;
+}
+
+.pd-info__stock--out {
+    color: #b06060;
+}
+
+.pd-info__stock--out svg {
+    stroke: #b06060;
+}
+
+
+/* ==========================================================
+   5. QUANTITY STEPPER + ADD-TO-CART
+   ========================================================== */
+.pd-info__cart {
+    margin-bottom: 8px;
+}
+
+.pd-info__qty-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.pd-info__qty-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #666;
+}
+
+.pd-stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(10, 10, 10, 0.12);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.pd-stepper__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: none;
+    background: transparent;
+    color: #0a0a0a;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.pd-stepper__btn:hover:not(:disabled) {
+    background: rgba(10, 10, 10, 0.04);
+}
+
+.pd-stepper__btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.pd-stepper__input {
+    width: 48px;
+    height: 42px;
+    border: none;
+    border-left: 1px solid rgba(10, 10, 10, 0.08);
+    border-right: 1px solid rgba(10, 10, 10, 0.08);
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #0a0a0a;
+    background: transparent;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.pd-stepper__input::-webkit-inner-spin-button,
+.pd-stepper__input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Add to Cart Button */
+.pd-btn--cart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 54px;
+    border: none;
+    border-radius: 3px;
+    background: #0a0a0a;
+    color: #C6A75E;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.pd-btn--cart:hover:not(:disabled) {
+    background: #1a1a1a;
+    color: #d4b96a;
+    transform: translateY(-1px);
+}
+
+.pd-btn--cart:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.pd-btn--cart:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.pd-btn--cart svg {
+    flex-shrink: 0;
+}
+
+/* Feedback */
+.pd-info__feedback {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    padding-top: 12px;
+    min-height: 32px;
+    transition: opacity 0.3s ease;
+    opacity: 0;
+}
+
+.pd-info__feedback.is-visible {
+    opacity: 1;
+}
+
+.pd-info__feedback.is-success {
+    color: #5a8a5a;
+}
+
+.pd-info__feedback.is-error {
+    color: #b06060;
+}
+
+
+/* ==========================================================
+   6. ACCORDION (Description / How to Use)
+   ========================================================== */
+.pd-accordion {
+    border-bottom: 1px solid rgba(10, 10, 10, 0.07);
+}
+
+.pd-accordion:first-of-type {
+    border-top: 1px solid rgba(10, 10, 10, 0.07);
+}
+
+.pd-accordion__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    transition: color 0.25s ease;
+}
+
+.pd-accordion__trigger:hover {
+    color: #C6A75E;
+}
+
+.pd-accordion__icon {
+    flex-shrink: 0;
+    transition: transform 0.35s ease;
+}
+
+/* When open: rotate + to × (45deg) */
+.pd-accordion__trigger[aria-expanded="true"] .pd-accordion__icon {
+    transform: rotate(45deg);
+}
+
+.pd-accordion__panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    opacity: 0;
+}
+
+.pd-accordion__panel.is-open {
+    opacity: 1;
+    /* max-height set by JS */
+}
+
+.pd-accordion__content {
+    padding-bottom: 24px;
+}
+
+/* Prose styling for rich description */
+.pd-prose {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.8;
+    color: #555;
+}
+
+.pd-prose p {
+    margin: 0 0 14px;
+}
+
+.pd-prose p:last-child {
+    margin-bottom: 0;
+}
+
+.pd-prose ul,
+.pd-prose ol {
+    padding-left: 20px;
+    margin: 0 0 14px;
+}
+
+.pd-prose li {
+    margin-bottom: 6px;
+}
+
+.pd-prose strong {
+    font-weight: 600;
+    color: #333;
+}
+
+
+/* ==========================================================
+   7. SKU / META
+   ========================================================== */
+.pd-info__meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+}
+
+.pd-info__meta-label {
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #999;
+}
+
+.pd-info__meta-value {
+    font-weight: 400;
+    color: #666;
+}
+
+
+/* ==========================================================
+   8. RELATED PRODUCTS
+   ========================================================== */
+.pd-related {
+    padding: 80px 0 100px;
+    background: #faf8f5;
+}
+
+.pd-related__header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.pd-related__label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #C6A75E;
+    margin-bottom: 10px;
+}
+
+.pd-related__title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 500;
+    color: #0a0a0a;
+    margin: 0;
+}
+
+.pd-related__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+/* --- Related Product Card --- */
+.pd-rcard {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.pd-rcard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(10, 10, 10, 0.06);
+}
+
+.pd-rcard__visual {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: #f0ebe5;
+    overflow: hidden;
+}
+
+.pd-rcard__visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.pd-rcard:hover .pd-rcard__visual img {
+    transform: scale(1.04);
+}
+
+.pd-rcard__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: #d4c5b5;
+}
+
+.pd-rcard__badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+}
+
+.pd-rcard__body {
+    padding: 18px 4px 8px;
+}
+
+.pd-rcard__brand {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 6px;
+}
+
+.pd-rcard__name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #0a0a0a;
+    margin: 0 0 10px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.pd-rcard__price {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.pd-rcard__price-current {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0a0a0a;
+}
+
+.pd-rcard__price-old {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #aaa;
+    text-decoration: line-through;
+}
+
+.pd-rcard__price-sale {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0a0a0a;
+}
+
+
+/* ==========================================================
+   9. RESPONSIVE — TABLET (≤1023px)
+   ========================================================== */
+@media (max-width: 1023px) {
+    .pd-product__grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+    }
+
+    .pd-related__grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .pd-gallery__thumb {
+        width: 60px;
+        height: 75px;
+    }
+}
+
+
+/* ==========================================================
+   10. RESPONSIVE — MOBILE (≤767px)
+   ========================================================== */
+@media (max-width: 767px) {
+    .pd-breadcrumb {
+        padding: 16px 0 0;
+    }
+
+    .pd-breadcrumb__list {
+        font-size: 11px;
+    }
+
+    .pd-product {
+        padding: 24px 0 56px;
+    }
+
+    .pd-product__grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .pd-gallery__stage {
+        aspect-ratio: 3 / 4;
+        border-radius: 0;
+        margin: 0 calc(-1 * clamp(20px, 4vw, 48px));
+    }
+
+    /* Show arrows always on mobile (semi-transparent) */
+    .pd-gallery__arrow {
+        opacity: 1;
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.7);
+    }
+
+    .pd-gallery__arrow--prev { left: 10px; }
+    .pd-gallery__arrow--next { right: 10px; }
+
+    /* Show counter always */
+    .pd-gallery__counter {
+        opacity: 1;
+    }
+
+    /* Hide thumbnails, show dots */
+    .pd-gallery__thumbs {
+        display: none;
+    }
+
+    .pd-gallery__dots {
+        display: flex;
+    }
+
+    /* Info column */
+    .pd-info {
+        padding-top: 0;
+    }
+
+    .pd-info__title {
+        font-size: 24px;
+    }
+
+    .pd-info__price-current,
+    .pd-info__price-sale {
+        font-size: 26px;
+    }
+
+    .pd-info__price-old {
+        font-size: 18px;
+    }
+
+    /* Cart button full width */
+    .pd-btn--cart {
+        height: 50px;
+        font-size: 12px;
+    }
+
+    /* Related products */
+    .pd-related {
+        padding: 56px 0 64px;
+    }
+
+    .pd-related__grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .pd-rcard__name {
+        font-size: 14px;
+    }
+
+    .pd-rcard__body {
+        padding: 12px 2px 6px;
+    }
+}
+
+
+/* ==========================================================
+   11. RESPONSIVE — SMALL MOBILE (≤479px)
+   ========================================================== */
+@media (max-width: 479px) {
+    .pd-gallery__stage {
+        aspect-ratio: 1 / 1.15;
+    }
+
+    .pd-info__qty-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .pd-stepper {
+        width: 100%;
+    }
+
+    .pd-stepper__btn {
+        flex: 1;
+        height: 44px;
+    }
+
+    .pd-stepper__input {
+        flex: 1;
+        height: 44px;
+    }
+
+    .pd-related__grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .pd-rcard__brand {
+        font-size: 9px;
+    }
+
+    .pd-rcard__name {
+        font-size: 13px;
+    }
+
+    .pd-rcard__price-current,
+    .pd-rcard__price-sale {
+        font-size: 15px;
+    }
+}

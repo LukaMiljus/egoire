@@ -1,0 +1,810 @@
+/* ============================================================
+   Egoire – Luxury Cart Page
+   Namespace: ct-
+   Tokens:  Gold #C6A75E · Beige #EAD8CF · Black #0a0a0a
+   Fonts:   Playfair Display · Cormorant Garamond · Inter
+   ============================================================ */
+
+/* ==========================================================
+   0. CONTAINER
+   ========================================================== */
+.ct-container {
+    width: 100%;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 48px);
+}
+
+
+/* ==========================================================
+   1. PAGE HEADER
+   ========================================================== */
+.ct-page {
+    padding: 40px 0 100px;
+    min-height: 60vh;
+}
+
+.ct-header {
+    text-align: center;
+    margin-bottom: 48px;
+}
+
+.ct-header__label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #C6A75E;
+    margin-bottom: 10px;
+}
+
+.ct-header__title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 3.5vw, 40px);
+    font-weight: 500;
+    color: #0a0a0a;
+    margin: 0 0 8px;
+}
+
+.ct-header__count {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #999;
+    margin: 0;
+}
+
+
+/* ==========================================================
+   2. EMPTY STATE
+   ========================================================== */
+.ct-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 20px 60px;
+}
+
+.ct-empty__icon {
+    margin-bottom: 28px;
+}
+
+.ct-empty__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #0a0a0a;
+    margin: 0 0 10px;
+}
+
+.ct-empty__text {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #888;
+    margin: 0 0 32px;
+    max-width: 380px;
+}
+
+
+/* ==========================================================
+   3. BUTTONS (shared)
+   ========================================================== */
+.ct-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease, border-color 0.3s ease;
+}
+
+.ct-btn--primary {
+    padding: 16px 40px;
+    background: #0a0a0a;
+    color: #C6A75E;
+}
+
+.ct-btn--primary:hover {
+    background: #1a1a1a;
+    color: #d4b96a;
+    transform: translateY(-1px);
+}
+
+.ct-btn--cart {
+    width: 100%;
+    height: 54px;
+    background: #0a0a0a;
+    color: #C6A75E;
+    margin-bottom: 12px;
+}
+
+.ct-btn--cart:hover {
+    background: #1a1a1a;
+    color: #d4b96a;
+    transform: translateY(-1px);
+}
+
+.ct-btn--ghost {
+    width: 100%;
+    height: 46px;
+    background: transparent;
+    border: 1px solid rgba(10, 10, 10, 0.12);
+    color: #555;
+}
+
+.ct-btn--ghost:hover {
+    border-color: rgba(10, 10, 10, 0.3);
+    color: #0a0a0a;
+}
+
+
+/* ==========================================================
+   4. FREE SHIPPING BAR
+   ========================================================== */
+.ct-shipping-bar {
+    max-width: 680px;
+    margin: 0 auto 48px;
+    text-align: center;
+}
+
+.ct-shipping-bar__track {
+    width: 100%;
+    height: 4px;
+    background: rgba(10, 10, 10, 0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.ct-shipping-bar__fill {
+    height: 100%;
+    background: linear-gradient(90deg, #C6A75E, #d4b96a);
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 0;
+    max-width: 100%;
+}
+
+.ct-shipping-bar__msg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #666;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.ct-shipping-bar__msg svg {
+    flex-shrink: 0;
+    stroke: #C6A75E;
+}
+
+.ct-shipping-bar__msg strong {
+    font-weight: 600;
+    color: #0a0a0a;
+}
+
+/* Achieved state */
+.ct-shipping-bar--achieved .ct-shipping-bar__msg {
+    color: #5a8a5a;
+}
+
+.ct-shipping-bar--achieved .ct-shipping-bar__msg svg {
+    stroke: #5a8a5a;
+}
+
+.ct-shipping-bar--achieved .ct-shipping-bar__msg strong {
+    color: #5a8a5a;
+}
+
+.ct-shipping-bar--achieved .ct-shipping-bar__fill {
+    background: linear-gradient(90deg, #5a8a5a, #6d9f6d);
+}
+
+
+/* ==========================================================
+   5. TWO-COLUMN LAYOUT
+   ========================================================== */
+.ct-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: clamp(32px, 4vw, 56px);
+    align-items: start;
+}
+
+
+/* ==========================================================
+   6. CART ITEMS — LEFT COLUMN
+   ========================================================== */
+
+/* Column headers */
+.ct-items__head {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+    gap: 16px;
+    align-items: center;
+    padding: 0 0 16px;
+    border-bottom: 1px solid rgba(10, 10, 10, 0.08);
+    margin-bottom: 0;
+}
+
+.ct-items__head span {
+    font-family: 'Inter', sans-serif;
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #999;
+}
+
+.ct-items__head-price,
+.ct-items__head-qty,
+.ct-items__head-total {
+    text-align: center;
+}
+
+/* --- Individual Cart Item --- */
+.ct-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+    gap: 16px;
+    align-items: center;
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(10, 10, 10, 0.06);
+    transition: opacity 0.3s ease;
+}
+
+.ct-item.is-removing {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Product cell (image + info) */
+.ct-item__product {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+}
+
+.ct-item__image-link {
+    flex-shrink: 0;
+    width: 88px;
+    height: 110px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: #f8f5f1;
+    display: block;
+}
+
+.ct-item__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.ct-item__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: #d4c5b5;
+}
+
+.ct-item__details {
+    min-width: 0;
+}
+
+.ct-item__brand {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 5px;
+}
+
+.ct-item__name {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: #0a0a0a;
+    text-decoration: none;
+    line-height: 1.35;
+    transition: color 0.25s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.ct-item__name:hover {
+    color: #C6A75E;
+}
+
+.ct-item__sku {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    color: #bbb;
+    margin-top: 4px;
+}
+
+/* Price cell */
+.ct-item__price {
+    text-align: center;
+}
+
+.ct-item__price-current {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #0a0a0a;
+}
+
+.ct-item__price-old {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #aaa;
+    text-decoration: line-through;
+    margin-bottom: 2px;
+}
+
+.ct-item__price-sale {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #0a0a0a;
+}
+
+/* Quantity stepper */
+.ct-item__qty {
+    display: flex;
+    justify-content: center;
+}
+
+.ct-stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(10, 10, 10, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.ct-stepper__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    color: #0a0a0a;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.ct-stepper__btn:hover {
+    background: rgba(10, 10, 10, 0.04);
+}
+
+.ct-stepper__input {
+    width: 40px;
+    height: 36px;
+    border: none;
+    border-left: 1px solid rgba(10, 10, 10, 0.06);
+    border-right: 1px solid rgba(10, 10, 10, 0.06);
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #0a0a0a;
+    background: transparent;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.ct-stepper__input::-webkit-inner-spin-button,
+.ct-stepper__input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Line total */
+.ct-item__total {
+    text-align: center;
+}
+
+.ct-item__total-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #0a0a0a;
+}
+
+/* Remove button */
+.ct-item__remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #bbb;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease;
+}
+
+.ct-item__remove:hover {
+    background: rgba(176, 96, 96, 0.08);
+    color: #b06060;
+}
+
+
+/* ==========================================================
+   7. SUMMARY SIDEBAR — RIGHT COLUMN
+   ========================================================== */
+.ct-summary {
+    position: sticky;
+    top: 120px;
+}
+
+.ct-summary__card {
+    background: #faf8f5;
+    border-radius: 6px;
+    padding: 36px 32px 32px;
+}
+
+.ct-summary__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: #0a0a0a;
+    margin: 0 0 28px;
+}
+
+.ct-summary__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: #555;
+}
+
+.ct-summary__row--gift {
+    color: #C6A75E;
+    font-weight: 500;
+}
+
+.ct-summary__row--total {
+    padding: 16px 0 0;
+}
+
+.ct-summary__row--total span:first-child {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+}
+
+.ct-summary__row--total span:last-child {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #0a0a0a;
+}
+
+.ct-summary__free {
+    color: #5a8a5a;
+    font-weight: 500;
+}
+
+.ct-summary__divider {
+    border: none;
+    height: 1px;
+    background: rgba(10, 10, 10, 0.08);
+    margin: 8px 0;
+}
+
+/* Gift Wrap Toggle */
+.ct-summary__gift {
+    padding: 14px 0;
+    border-top: 1px solid rgba(10, 10, 10, 0.06);
+    border-bottom: 1px solid rgba(10, 10, 10, 0.06);
+    margin: 4px 0;
+}
+
+.ct-gift-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.ct-gift-toggle input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ct-gift-toggle__mark {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid rgba(10, 10, 10, 0.18);
+    border-radius: 4px;
+    background: #fff;
+    transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.ct-gift-toggle__mark svg {
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    stroke: #fff;
+}
+
+.ct-gift-toggle input:checked ~ .ct-gift-toggle__mark {
+    background: #C6A75E;
+    border-color: #C6A75E;
+}
+
+.ct-gift-toggle input:checked ~ .ct-gift-toggle__mark svg {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.ct-gift-toggle__text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 0;
+}
+
+.ct-gift-toggle__label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #333;
+}
+
+.ct-gift-toggle__label svg {
+    stroke: #C6A75E;
+    flex-shrink: 0;
+}
+
+.ct-gift-toggle__price {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: #999;
+}
+
+
+/* ==========================================================
+   8. TRUST SIGNALS
+   ========================================================== */
+.ct-summary__trust {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(10, 10, 10, 0.06);
+}
+
+.ct-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px;
+    font-weight: 400;
+    color: #888;
+}
+
+.ct-trust-item svg {
+    flex-shrink: 0;
+    stroke: #C6A75E;
+}
+
+
+/* ==========================================================
+   9. LOADING OVERLAY (for AJAX updates)
+   ========================================================== */
+.ct-stepper.is-loading {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+
+/* ==========================================================
+   10. RESPONSIVE — TABLET (≤1023px)
+   ========================================================== */
+@media (max-width: 1023px) {
+    .ct-layout {
+        grid-template-columns: 1fr 320px;
+        gap: 28px;
+    }
+
+    .ct-item {
+        grid-template-columns: 2.5fr 1fr 1fr 1fr 36px;
+        gap: 12px;
+    }
+
+    .ct-items__head {
+        grid-template-columns: 2.5fr 1fr 1fr 1fr 36px;
+        gap: 12px;
+    }
+
+    .ct-item__image-link {
+        width: 72px;
+        height: 90px;
+    }
+}
+
+
+/* ==========================================================
+   11. RESPONSIVE — MOBILE (≤767px)
+   ========================================================== */
+@media (max-width: 767px) {
+    .ct-page {
+        padding: 24px 0 64px;
+    }
+
+    .ct-header {
+        margin-bottom: 28px;
+    }
+
+    .ct-shipping-bar {
+        margin-bottom: 32px;
+    }
+
+    .ct-layout {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+
+    /* Hide column headers on mobile */
+    .ct-items__head {
+        display: none;
+    }
+
+    /* Stack cart item into card-like layout */
+    .ct-item {
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+            "image details"
+            "image price-row"
+            "actions actions";
+        gap: 0;
+        padding: 20px 0;
+        position: relative;
+    }
+
+    .ct-item__product {
+        grid-area: image / image / price-row / details;
+        display: contents;
+    }
+
+    .ct-item__image-link {
+        grid-area: image;
+        width: 80px;
+        height: 100px;
+        margin-right: 16px;
+        grid-row: 1 / 3;
+    }
+
+    .ct-item__details {
+        grid-area: details;
+        padding-right: 32px;
+    }
+
+    .ct-item__price {
+        grid-area: price-row;
+        text-align: left;
+        padding-top: 6px;
+    }
+
+    .ct-item__qty {
+        grid-area: actions;
+        justify-content: flex-start;
+        padding-top: 14px;
+    }
+
+    .ct-item__total {
+        display: none;
+    }
+
+    .ct-item__remove {
+        position: absolute;
+        top: 20px;
+        right: 0;
+    }
+
+    .ct-summary {
+        position: static;
+    }
+
+    .ct-summary__card {
+        padding: 28px 24px 24px;
+    }
+
+    .ct-btn--cart {
+        height: 50px;
+    }
+}
+
+
+/* ==========================================================
+   12. RESPONSIVE — SMALL MOBILE (≤479px)
+   ========================================================== */
+@media (max-width: 479px) {
+    .ct-item {
+        grid-template-columns: 68px 1fr;
+    }
+
+    .ct-item__image-link {
+        width: 68px;
+        height: 85px;
+    }
+
+    .ct-item__name {
+        font-size: 14px;
+    }
+
+    .ct-summary__card {
+        padding: 24px 20px 20px;
+    }
+
+    .ct-summary__row--total span:last-child {
+        font-size: 22px;
+    }
+}
