@@ -113,7 +113,7 @@ require __DIR__ . '/../layout/header.php';
                         <div class="eh-card__visual">
                             <a href="/product/<?= htmlspecialchars($p['slug']) ?>" class="eh-card__img-link" tabindex="-1">
                                 <?php if (!empty($imgs)): ?>
-                                <img src="<?= htmlspecialchars($imgs[0]['image_path']) ?>"
+                                <img src="../../<?= htmlspecialchars($imgs[0]['image_path']) ?>"
                                      alt="<?= htmlspecialchars($p['name']) ?>" loading="lazy">
                                 <?php else: ?>
                                 <div class="eh-card__placeholder">Egoire</div>

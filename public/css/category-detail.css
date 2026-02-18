@@ -1,0 +1,422 @@
+/* ============================================================
+   Egoire – Luxury Category Detail Page
+   File:  public/css/category-detail.css
+   Namespace: cd-
+   ============================================================
+
+   Design:  Immersive hero, editorial product browsing
+   Palette: Gold #C6A75E · Beige #FAF6F3 · Black #0a0a0a
+   Fonts:   Playfair Display · Cormorant Garamond · Inter
+
+   Table of Contents:
+   1.  Hero Section
+   2.  Hero — Overlay
+   3.  Hero — Content
+   4.  Hero — No Image Fallback
+   5.  Container & Section
+   6.  Subcategory Chips
+   7.  Toolbar / Sort
+   8.  Empty State
+   9.  Pagination Overrides
+   10. Tablet  (≤ 1199px)
+   11. Mobile  (≤ 767px)
+   12. Small Mobile (≤ 479px)
+   13. Reduced Motion
+   ============================================================ */
+
+
+/* ============================================================
+   1. HERO SECTION
+   ============================================================ */
+.cd-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: clamp(340px, 60vh, 560px);
+    background-color: #1a1a1a;
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   2. HERO — OVERLAY
+   ============================================================ */
+.cd-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(10, 10, 10, 0.65) 0%,
+        rgba(10, 10, 10, 0.30) 40%,
+        rgba(10, 10, 10, 0.08) 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+}
+
+
+/* ============================================================
+   3. HERO — CONTENT
+   ============================================================ */
+.cd-hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 680px;
+    padding: 0 clamp(20px, 4vw, 48px) clamp(48px, 8vh, 80px);
+}
+
+.cd-hero__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: 0.03em;
+    margin: 0 0 16px;
+    line-height: 1.1;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cd-hero__desc {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: clamp(14px, 1.5vw, 16px);
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.7;
+    margin: 0 0 18px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cd-hero__count {
+    display: inline-block;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+
+/* ============================================================
+   4. HERO — NO IMAGE FALLBACK
+   ============================================================ */
+.cd-hero--no-image {
+    min-height: auto;
+    padding: 72px 0 56px;
+    background: linear-gradient(180deg, #FAF6F3 0%, #ffffff 100%);
+    align-items: center;
+}
+
+.cd-hero--no-image .cd-hero__overlay {
+    display: none;
+}
+
+.cd-hero--no-image .cd-hero__content {
+    padding-bottom: 0;
+}
+
+.cd-hero--no-image .cd-hero__title {
+    color: #0a0a0a;
+    text-shadow: none;
+}
+
+.cd-hero--no-image .cd-hero__desc {
+    color: #777;
+}
+
+.cd-hero--no-image .cd-hero__count {
+    color: #999;
+}
+
+
+/* ============================================================
+   5. CONTAINER & SECTION
+   ============================================================ */
+.cd-container {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding-left: clamp(20px, 4vw, 48px);
+    padding-right: clamp(20px, 4vw, 48px);
+}
+
+.cd-section {
+    padding: 56px 0 120px;
+}
+
+
+/* ============================================================
+   6. SUBCATEGORY CHIPS
+   ============================================================ */
+.cd-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 36px;
+}
+
+.cd-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 20px;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #555;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 50px;
+    text-decoration: none;
+    transition:
+        border-color 0.25s ease,
+        color 0.25s ease,
+        background 0.25s ease;
+    white-space: nowrap;
+}
+
+.cd-chip:hover {
+    border-color: #C6A75E;
+    color: #C6A75E;
+}
+
+.cd-chip--active {
+    background: #0a0a0a;
+    border-color: #0a0a0a;
+    color: #ffffff;
+}
+
+.cd-chip--active:hover {
+    background: #222;
+    border-color: #222;
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   7. TOOLBAR / SORT
+   ============================================================ */
+.cd-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 36px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.cd-toolbar__sort {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cd-toolbar__label {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.cd-toolbar__select {
+    appearance: none;
+    -webkit-appearance: none;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #222;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 10px 36px 10px 14px;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s ease;
+    min-width: 200px;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' fill='none' stroke='%23888' stroke-width='1.5' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+
+.cd-toolbar__select:focus {
+    border-color: #C6A75E;
+}
+
+
+/* ============================================================
+   8. EMPTY STATE
+   ============================================================ */
+.cd-empty {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.cd-empty__icon {
+    margin-bottom: 20px;
+}
+
+.cd-empty__title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: #222;
+    margin: 0 0 8px;
+}
+
+.cd-empty__text {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 15px;
+    color: #888;
+    margin: 0 0 28px;
+}
+
+.cd-empty__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 36px;
+    background: transparent;
+    color: #C6A75E;
+    border: 1.5px solid #C6A75E;
+    border-radius: 6px;
+    transition:
+        background 0.3s ease,
+        color 0.3s ease;
+}
+
+.cd-empty__link:hover {
+    background: #C6A75E;
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   9. PAGINATION OVERRIDES
+   ============================================================ */
+.cd-section .pagination {
+    margin-top: 56px;
+}
+
+
+/* ============================================================
+   10. TABLET  (≤ 1199px)
+   ============================================================ */
+@media (max-width: 1199px) {
+    .cd-hero {
+        min-height: clamp(280px, 50vh, 440px);
+    }
+
+    .cd-section {
+        padding: 48px 0 96px;
+    }
+
+    .cd-chips {
+        margin-bottom: 28px;
+    }
+}
+
+
+/* ============================================================
+   11. MOBILE  (≤ 767px)
+   ============================================================ */
+@media (max-width: 767px) {
+    .cd-hero {
+        min-height: clamp(240px, 45vh, 360px);
+        background-position: center center;
+    }
+
+    .cd-hero__content {
+        padding-bottom: clamp(32px, 6vh, 56px);
+    }
+
+    .cd-hero__desc {
+        margin-bottom: 12px;
+    }
+
+    .cd-hero--no-image {
+        padding: 48px 0 40px;
+    }
+
+    .cd-section {
+        padding: 36px 0 64px;
+    }
+
+    /* Horizontal scroll chips on narrow screens */
+    .cd-chips {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        margin-bottom: 24px;
+        padding-bottom: 4px;
+    }
+
+    .cd-chips::-webkit-scrollbar {
+        display: none;
+    }
+
+    .cd-toolbar {
+        margin-bottom: 24px;
+    }
+
+    .cd-toolbar__select {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .cd-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cd-section .pagination {
+        margin-top: 40px;
+    }
+}
+
+
+/* ============================================================
+   12. SMALL MOBILE  (≤ 479px)
+   ============================================================ */
+@media (max-width: 479px) {
+    .cd-hero {
+        min-height: clamp(200px, 40vh, 300px);
+    }
+
+    .cd-hero--no-image {
+        padding: 36px 0 28px;
+    }
+
+    .cd-chip {
+        padding: 8px 16px;
+        font-size: 11px;
+    }
+}
+
+
+/* ============================================================
+   13. REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .cd-chip,
+    .cd-toolbar__select,
+    .cd-empty__link {
+        transition-duration: 0.01ms !important;
+    }
+}

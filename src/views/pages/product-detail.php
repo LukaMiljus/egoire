@@ -37,8 +37,8 @@ $related = fetchProducts([
 ]);
 
 /* Page-specific assets */
-$pageStyles  = ['/css/product-details.css'];
-$pageScripts = ['/js/product-details.js'];
+$pageStyles  = ['/css/product-card.css', '/css/product-details.css'];
+$pageScripts = ['/js/product-card.js', '/js/product-details.js'];
 
 require __DIR__ . '/../layout/header.php';
 ?>
@@ -278,52 +278,24 @@ require __DIR__ . '/../layout/header.php';
 </section>
 
 <!-- ============================================================
-     RELATED PRODUCTS
+     RECOMMENDED PRODUCTS
      ============================================================ -->
 <?php if ($related): ?>
 <section class="pd-related">
     <div class="pd-container">
         <div class="pd-related__header">
             <span class="pd-related__label">Pogledajte i</span>
-            <h2 class="pd-related__title">Slični proizvodi</h2>
+            <h2 class="pd-related__title">Preporučeni proizvodi</h2>
         </div>
 
-        <div class="pd-related__grid">
+        <div class="pc-grid">
             <?php foreach ($related as $rp):
-                $rImgs  = fetchProductImages((int) $rp['id']);
-                $rFlags = fetchProductFlags((int) $rp['id']);
-                $rSale  = ($rp['sale_price'] && (float) $rp['price'] > 0)
-                    ? round((1 - (float) $rp['sale_price'] / (float) $rp['price']) * 100)
-                    : 0;
-            ?>
-            <a href="/product/<?= htmlspecialchars($rp['slug']) ?>" class="pd-rcard">
-                <div class="pd-rcard__visual">
-                    <?php if (!empty($rImgs)): ?>
-                    <img src="<?= htmlspecialchars($rImgs[0]['image_path']) ?>"
-                         alt="<?= htmlspecialchars($rp['name']) ?>"
-                         loading="lazy">
-                    <?php else: ?>
-                    <div class="pd-rcard__placeholder"><span>Egoire</span></div>
-                    <?php endif; ?>
-
-                    <?php if ($rSale): ?>
-                    <span class="pd-badge pd-badge--sale pd-rcard__badge">-<?= $rSale ?>%</span>
-                    <?php endif; ?>
-                </div>
-                <div class="pd-rcard__body">
-                    <span class="pd-rcard__brand"><?= htmlspecialchars($rp['brand_name'] ?? '') ?></span>
-                    <h3 class="pd-rcard__name"><?= htmlspecialchars($rp['name']) ?></h3>
-                    <div class="pd-rcard__price">
-                        <?php if ($rp['sale_price']): ?>
-                        <span class="pd-rcard__price-old"><?= formatPrice((float) $rp['price']) ?></span>
-                        <span class="pd-rcard__price-sale"><?= formatPrice((float) $rp['sale_price']) ?></span>
-                        <?php else: ?>
-                        <span class="pd-rcard__price-current"><?= formatPrice((float) $rp['price']) ?></span>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </a>
-            <?php endforeach; ?>
+                $cardProduct = $rp;
+                $cardImages  = fetchProductImages((int) $rp['id']);
+                $cardFlags   = fetchProductFlags((int) $rp['id']);
+                $cardVariant = 'compact';
+                include __DIR__ . '/../components/product-card.php';
+            endforeach; ?>
         </div>
     </div>
 </section>

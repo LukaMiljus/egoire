@@ -1,74 +1,114 @@
 <?php
+/* ============================================================
+   Egoire – Brand Product Listing
+   View:  src/views/pages/brand.php
+   CSS:   public/css/brand.css + public/css/product-card.css
+   JS:    public/js/product-card.js
+   ============================================================ */
 declare(strict_types=1);
-$slug = $routeParams['slug'] ?? '';
+
+$slug  = $routeParams['slug'] ?? '';
 $brand = fetchBrandBySlug($slug);
 if (!$brand) { http_response_code(404); require __DIR__ . '/404.php'; return; }
 
 $title = ($brand['meta_title'] ?: $brand['name']) . ' | Egoire';
-$page = inputInt('page', 1);
-$filters = ['brand_id' => $brand['id'], 'active' => true, 'sort' => inputString('sort')];
-$total = countProducts($filters);
+
+/* --- Page-specific assets --- */
+$pageStyles  = ['/css/product-card.css', '/css/brand.css'];
+$pageScripts = ['/js/product-card.js'];
+
+/* --- Data --- */
+$page    = inputInt('page', 1);
+$filters = [
+    'brand_id' => $brand['id'],
+    'active'   => true,
+    'sort'     => inputString('sort'),
+];
+$total      = countProducts($filters);
 $pagination = paginate($total, 12, $page);
-$filters['limit'] = $pagination['per_page'];
+$filters['limit']  = $pagination['per_page'];
 $filters['offset'] = $pagination['offset'];
-$products = fetchProducts($filters);
+$products   = fetchProducts($filters);
+
+/* Sort labels */
+$sortLabels = [
+    ''           => 'Preporučeno',
+    'price_asc'  => 'Cena: niska → visoka',
+    'price_desc' => 'Cena: visoka → niska',
+    'newest'     => 'Najnovije',
+    'name_asc'   => 'Naziv A – Ž',
+];
+$currentSort = inputString('sort');
 
 require __DIR__ . '/../layout/header.php';
 ?>
 
-<section class="page-hero">
-    <div class="container">
+<!-- ============================================================
+     BRAND HERO
+     ============================================================ -->
+<section class="brand-hero">
+    <div class="brand-hero__inner">
         <?php if ($brand['logo']): ?>
-        <img src="<?= htmlspecialchars($brand['logo']) ?>" alt="<?= htmlspecialchars($brand['name']) ?>" class="brand-hero-logo">
+        <img src="<?= htmlspecialchars($brand['logo']) ?>"
+             alt="<?= htmlspecialchars($brand['name']) ?>"
+             class="brand-hero__logo">
         <?php endif; ?>
-        <h1><?= htmlspecialchars($brand['name']) ?></h1>
-    </div>
-</section>
 
-<section class="section">
-    <div class="container">
+        <h1 class="brand-hero__title"><?= htmlspecialchars($brand['name']) ?></h1>
+
         <?php if ($brand['description']): ?>
-        <div class="content-block mb-4">
+        <div class="brand-hero__desc">
             <?= $brand['description'] ?>
         </div>
         <?php endif; ?>
 
-        <div class="shop-toolbar">
-            <span><?= $total ?> proizvoda</span>
+        <span class="brand-hero__count">
+            <?= $total ?> <?= $total === 1 ? 'proizvod' : 'proizvoda' ?>
+        </span>
+    </div>
+</section>
+
+<!-- ============================================================
+     BRAND PRODUCTS GRID
+     ============================================================ -->
+<section class="brand-products">
+    <div class="brand-products__container">
+
+        <!-- Toolbar -->
+        <div class="brand-toolbar">
+            <div class="brand-toolbar__sort">
+                <label class="brand-toolbar__label" for="brandSort">Sortiraj:</label>
+                <select class="brand-toolbar__select" id="brandSort" name="sort">
+                    <?php foreach ($sortLabels as $val => $label): ?>
+                    <option value="<?= htmlspecialchars($val) ?>" <?= $currentSort === $val ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($label) ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
         </div>
 
-        <div class="product-grid">
+        <?php if ($products): ?>
+        <div class="pc-grid">
             <?php foreach ($products as $p):
-                $imgs = fetchProductImages((int) $p['id']);
-            ?>
-            <a href="/product/<?= htmlspecialchars($p['slug']) ?>" class="product-card">
-                <div class="product-image">
-                    <?php if (!empty($imgs)): ?>
-                    <img src="<?= htmlspecialchars($imgs[0]['image_path']) ?>" alt="" loading="lazy">
-                    <?php else: ?>
-                    <div class="no-image-placeholder">Egoire</div>
-                    <?php endif; ?>
-                </div>
-                <div class="product-info">
-                    <h3 class="product-name"><?= htmlspecialchars($p['name']) ?></h3>
-                    <div class="product-price">
-                        <?php if ($p['sale_price']): ?>
-                        <span class="price-old"><?= formatPrice((float) $p['price']) ?></span>
-                        <span class="price-sale"><?= formatPrice((float) $p['sale_price']) ?></span>
-                        <?php else: ?>
-                        <span class="price-current"><?= formatPrice((float) $p['price']) ?></span>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </a>
-            <?php endforeach; ?>
+                $cardProduct = $p;
+                $cardImages  = fetchProductImages((int) $p['id']);
+                $cardFlags   = fetchProductFlags((int) $p['id']);
+                $cardVariant = 'default';
+                include __DIR__ . '/../components/product-card.php';
+            endforeach; ?>
         </div>
 
-        <?php if (empty($products)): ?>
-        <div class="empty-state"><p>Nema proizvoda za ovaj brend.</p></div>
+        <!-- Pagination -->
+        <?= renderPagination($pagination, '/brand/' . $slug) ?>
+
+        <?php else: ?>
+        <div class="brand-empty">
+            <h3 class="brand-empty__title">Nema proizvoda</h3>
+            <p class="brand-empty__text">Trenutno nema proizvoda za ovaj brend.</p>
+        </div>
         <?php endif; ?>
 
-        <?= renderPagination($pagination, '/brand/' . $slug) ?>
     </div>
 </section>
 

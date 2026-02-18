@@ -1,0 +1,559 @@
+/* ============================================================
+   Egoire – Luxury Categories Page
+   File:  public/css/categories.css
+   Namespace: ct-
+   ============================================================
+
+   Design:  Editorial luxury, alternating feature blocks
+   Palette: Gold #C6A75E · Beige #FAF6F3 · Black #0a0a0a
+   Fonts:   Playfair Display · Cormorant Garamond · Inter
+
+   Table of Contents:
+   1.  Hero Section
+   2.  Container & Section
+   3.  Feature Block (Main Category)
+   4.  Feature — Visual / Image
+   5.  Feature — Content
+   6.  Feature — CTA
+   7.  Feature — Reversed Layout
+   8.  Divider
+   9.  Subcategories Section
+   10. Subcategory Card
+   11. Empty State
+   12. Tablet  (≤ 1199px)
+   13. Mobile  (≤ 767px)
+   14. Small Mobile (≤ 479px)
+   15. Reduced Motion
+   ============================================================ */
+
+
+/* ============================================================
+   1. HERO SECTION
+   ============================================================ */
+.ct-hero {
+    padding: 80px 0 64px;
+    text-align: center;
+    background: linear-gradient(
+        180deg,
+        #FAF6F3 0%,
+        #ffffff 100%
+    );
+    border-bottom: 1px solid rgba(198, 167, 94, 0.06);
+}
+
+.ct-hero__inner {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 48px);
+}
+
+.ct-hero__label {
+    display: block;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #C6A75E;
+    margin-bottom: 16px;
+}
+
+.ct-hero__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 500;
+    color: #0a0a0a;
+    letter-spacing: 0.02em;
+    margin: 0 0 18px;
+    line-height: 1.15;
+}
+
+.ct-hero__text {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: #777;
+    line-height: 1.8;
+    margin: 0;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* ============================================================
+   2. CONTAINER & SECTION
+   ============================================================ */
+.ct-container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding-left: clamp(20px, 4vw, 48px);
+    padding-right: clamp(20px, 4vw, 48px);
+}
+
+.ct-section {
+    padding: 80px 0 120px;
+}
+
+
+/* ============================================================
+   3. FEATURE BLOCK (MAIN CATEGORY)
+   ============================================================ */
+.ct-feature {
+    display: flex;
+    align-items: center;
+    gap: clamp(40px, 5vw, 80px);
+}
+
+
+/* ============================================================
+   4. FEATURE — VISUAL / IMAGE
+   ============================================================ */
+.ct-feature__visual {
+    flex: 1 1 50%;
+    min-width: 0;
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #F5EDE8;
+}
+
+.ct-feature__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.ct-feature:hover .ct-feature__img {
+    transform: scale(1.03);
+}
+
+.ct-feature__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: #C6A75E;
+    opacity: 0.3;
+    letter-spacing: 0.06em;
+}
+
+
+/* ============================================================
+   5. FEATURE — CONTENT
+   ============================================================ */
+.ct-feature__content {
+    flex: 1 1 50%;
+    min-width: 0;
+}
+
+.ct-feature__index {
+    display: block;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #C6A75E;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+    opacity: 0.7;
+}
+
+.ct-feature__name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(28px, 3.5vw, 40px);
+    font-weight: 500;
+    color: #0a0a0a;
+    margin: 0 0 20px;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+}
+
+.ct-feature__desc {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 32px;
+    max-width: 460px;
+}
+
+.ct-feature__desc p {
+    margin: 0 0 12px;
+}
+
+.ct-feature__desc p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ============================================================
+   6. FEATURE — CTA
+   ============================================================ */
+.ct-feature__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #C6A75E;
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 4px;
+    transition: color 0.3s ease;
+}
+
+.ct-feature__cta:hover {
+    color: #A8893E;
+}
+
+.ct-feature__cta svg {
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.ct-feature__cta:hover svg {
+    transform: translateX(4px);
+}
+
+/* Gold underline animation */
+.ct-feature__cta::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #C6A75E;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ct-feature__cta:hover::after {
+    width: 100%;
+}
+
+
+/* ============================================================
+   7. FEATURE — REVERSED LAYOUT
+   ============================================================ */
+.ct-feature--reverse {
+    flex-direction: row-reverse;
+}
+
+.ct-feature--reverse .ct-feature__desc {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+
+/* ============================================================
+   8. DIVIDER
+   ============================================================ */
+.ct-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(198, 167, 94, 0.15) 30%,
+        rgba(198, 167, 94, 0.15) 70%,
+        transparent 100%
+    );
+    margin: 72px 0;
+}
+
+
+/* ============================================================
+   9. SUBCATEGORIES SECTION
+   ============================================================ */
+.ct-subs {
+    margin-top: 48px;
+}
+
+.ct-subs__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+
+/* ============================================================
+   10. SUBCATEGORY CARD
+   ============================================================ */
+.ct-sub {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition:
+        transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        box-shadow 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.ct-sub:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.06),
+        0 4px 14px rgba(0, 0, 0, 0.02);
+}
+
+/* Subcategory image */
+.ct-sub__visual {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #FAF6F3;
+}
+
+.ct-sub__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.ct-sub:hover .ct-sub__img {
+    transform: scale(1.04);
+}
+
+.ct-sub__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: #C6A75E;
+    opacity: 0.25;
+}
+
+/* Subcategory body */
+.ct-sub__body {
+    padding: 18px 20px;
+}
+
+.ct-sub__name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #222;
+    margin: 0;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    transition: color 0.25s ease;
+}
+
+.ct-sub:hover .ct-sub__name {
+    color: #C6A75E;
+}
+
+
+/* ============================================================
+   11. EMPTY STATE
+   ============================================================ */
+.ct-empty {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.ct-empty__text {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 15px;
+    color: #999;
+    margin: 0;
+}
+
+
+/* ============================================================
+   12. TABLET  (≤ 1199px)
+   ============================================================ */
+@media (max-width: 1199px) {
+    .ct-hero {
+        padding: 64px 0 52px;
+    }
+
+    .ct-section {
+        padding: 64px 0 96px;
+    }
+
+    .ct-feature {
+        gap: 40px;
+    }
+
+    .ct-feature__name {
+        margin-bottom: 16px;
+    }
+
+    .ct-feature__desc {
+        font-size: 14px;
+        margin-bottom: 28px;
+    }
+
+    .ct-subs__grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .ct-divider {
+        margin: 56px 0;
+    }
+}
+
+
+/* ============================================================
+   13. MOBILE  (≤ 767px)
+   ============================================================ */
+@media (max-width: 767px) {
+    .ct-hero {
+        padding: 48px 0 40px;
+    }
+
+    .ct-hero__text {
+        font-size: 14px;
+    }
+
+    .ct-section {
+        padding: 48px 0 72px;
+    }
+
+    /* Stack feature blocks vertically */
+    .ct-feature,
+    .ct-feature--reverse {
+        flex-direction: column;
+        gap: 28px;
+    }
+
+    .ct-feature__visual {
+        aspect-ratio: 16 / 10;
+        border-radius: 8px;
+    }
+
+    .ct-feature__content {
+        text-align: center;
+    }
+
+    .ct-feature__desc,
+    .ct-feature--reverse .ct-feature__desc {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: none;
+    }
+
+    /* Disable hover effects on touch */
+    .ct-sub {
+        transform: none !important;
+    }
+
+    .ct-sub:hover {
+        box-shadow: none;
+    }
+
+    .ct-feature:hover .ct-feature__img {
+        transform: none;
+    }
+
+    .ct-feature__cta::after {
+        display: none;
+    }
+
+    .ct-subs {
+        margin-top: 36px;
+    }
+
+    .ct-subs__grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .ct-sub__body {
+        padding: 14px 16px;
+    }
+
+    .ct-sub__name {
+        font-size: 15px;
+    }
+
+    .ct-divider {
+        margin: 44px 0;
+    }
+}
+
+
+/* ============================================================
+   14. SMALL MOBILE  (≤ 479px)
+   ============================================================ */
+@media (max-width: 479px) {
+    .ct-hero {
+        padding: 36px 0 32px;
+    }
+
+    .ct-hero__label {
+        font-size: 10px;
+        margin-bottom: 12px;
+    }
+
+    .ct-section {
+        padding: 36px 0 56px;
+    }
+
+    .ct-feature__visual {
+        aspect-ratio: 3 / 4;
+    }
+
+    .ct-subs__grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .ct-sub__visual {
+        aspect-ratio: 16 / 9;
+    }
+
+    .ct-sub__body {
+        padding: 16px 20px;
+    }
+
+    .ct-sub__name {
+        font-size: 17px;
+    }
+
+    .ct-divider {
+        margin: 36px 0;
+    }
+}
+
+
+/* ============================================================
+   15. REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .ct-feature__img,
+    .ct-sub,
+    .ct-sub__img,
+    .ct-sub__name,
+    .ct-feature__cta,
+    .ct-feature__cta svg,
+    .ct-feature__cta::after {
+        transition-duration: 0.01ms !important;
+    }
+
+    .ct-sub {
+        transform: none !important;
+    }
+}

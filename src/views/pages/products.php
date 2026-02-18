@@ -8,8 +8,8 @@ declare(strict_types=1);
 $title = 'Proizvodi | Egoire';
 
 /* --- Page-specific assets --- */
-$pageStyles  = ['/css/products.css'];
-$pageScripts = ['/js/products.js'];
+$pageStyles  = ['/css/product-card.css', '/css/products.css'];
+$pageScripts = ['/js/product-card.js', '/js/products.js'];
 
 /* --- Collect filters from query string --- */
 $page = inputInt('page', 1);
@@ -267,78 +267,14 @@ require __DIR__ . '/../layout/header.php';
     <div class="ep-container">
 
         <?php if ($products): ?>
-        <div class="ep-grid">
+        <div class="pc-grid">
             <?php foreach ($products as $index => $p):
-                $imgs  = fetchProductImages((int) $p['id']);
-                $flags = fetchProductFlags((int) $p['id']);
-                $salePercent = ($p['sale_price'] && $p['price'] > 0)
-                    ? round((1 - (float)$p['sale_price'] / (float)$p['price']) * 100)
-                    : 0;
-            ?>
-            <article class="ep-card" data-href="/product/<?= htmlspecialchars($p['slug']) ?>" data-product-id="<?= (int) $p['id'] ?>">
-                <!-- Visual -->
-                <div class="ep-card__visual">
-                    <?php if (!empty($imgs)): ?>
-                    <img src="<?= htmlspecialchars($imgs[0]['image_path']) ?>"
-                         alt="<?= htmlspecialchars($p['name']) ?>"
-                         class="ep-card__img"
-                         loading="lazy">
-                    <?php else: ?>
-                    <div class="ep-card__placeholder">
-                        <span>Egoire</span>
-                    </div>
-                    <?php endif; ?>
-
-                    <?php if ($flags || $salePercent): ?>
-                    <div class="ep-card__badges">
-                        <?php if ($salePercent): ?>
-                        <span class="ep-badge ep-badge--sale">-<?= $salePercent ?>%</span>
-                        <?php endif; ?>
-                        <?php if ($flags): foreach ($flags as $f): ?>
-                        <span class="ep-badge ep-badge--<?= $f ?>"><?= ucfirst(str_replace('_', ' ', $f)) ?></span>
-                        <?php endforeach; endif; ?>
-                    </div>
-                    <?php endif; ?>
-
-                    <!-- Quick view hover overlay (desktop) -->
-                    <div class="ep-card__hover-action">
-                        <span>Pogledaj</span>
-                    </div>
-                </div>
-
-                <!-- Body -->
-                <div class="ep-card__body">
-                    <span class="ep-card__brand"><?= htmlspecialchars($p['brand_name'] ?? '') ?></span>
-                    <h3 class="ep-card__name"><?= htmlspecialchars($p['name']) ?></h3>
-
-                    <?php if (!empty($p['short_description'])): ?>
-                    <p class="ep-card__desc"><?= htmlspecialchars(truncate($p['short_description'], 75)) ?></p>
-                    <?php endif; ?>
-
-                    <div class="ep-card__price">
-                        <?php if ($p['sale_price']): ?>
-                        <span class="ep-card__price-old"><?= formatPrice((float) $p['price']) ?></span>
-                        <span class="ep-card__price-sale"><?= formatPrice((float) $p['sale_price']) ?></span>
-                        <?php else: ?>
-                        <span class="ep-card__price-current"><?= formatPrice((float) $p['price']) ?></span>
-                        <?php endif; ?>
-                    </div>
-
-                    <!-- Actions (stop propagation zone) -->
-                    <div class="ep-card__actions" data-stop-propagation>
-                        <div class="ep-stepper">
-                            <button class="ep-stepper__btn" type="button" data-action="minus" aria-label="Smanji količinu">−</button>
-                            <input  class="ep-stepper__input" type="number" value="1" min="1" max="99" aria-label="Količina">
-                            <button class="ep-stepper__btn" type="button" data-action="plus" aria-label="Povećaj količinu">+</button>
-                        </div>
-                        <button class="ep-card__add-btn" type="button" data-add-to-cart>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-                            <span>Dodaj u korpu</span>
-                        </button>
-                    </div>
-                </div>
-            </article>
-            <?php endforeach; ?>
+                $cardProduct = $p;
+                $cardImages  = fetchProductImages((int) $p['id']);
+                $cardFlags   = fetchProductFlags((int) $p['id']);
+                $cardVariant = 'default';
+                include __DIR__ . '/../components/product-card.php';
+            endforeach; ?>
         </div>
 
         <!-- Pagination -->

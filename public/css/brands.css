@@ -1,0 +1,460 @@
+/* ============================================================
+   Egoire – Luxury Brands Directory
+   File:  public/css/brands.css
+   Namespace: br-
+   ============================================================
+
+   Design:  Editorial luxury, soft feminine premium
+   Palette: Gold #C6A75E · Beige #FAF6F3 · Black #0a0a0a
+   Fonts:   Playfair Display · Cormorant Garamond · Inter
+
+   Table of Contents:
+   1.  Hero Section
+   2.  Container & Section
+   3.  Brand Grid
+   4.  Brand Card — Shell
+   5.  Brand Card — Visual / Logo
+   6.  Brand Card — Body
+   7.  Brand Card — CTA Link
+   8.  Gold Underline Animation
+   9.  Empty State
+   10. Tablet  (≤ 1199px)
+   11. Mobile  (≤ 767px)
+   12. Small Mobile (≤ 479px)
+   13. Reduced Motion
+   ============================================================ */
+
+
+/* ============================================================
+   1. HERO SECTION
+   ============================================================ */
+.br-hero {
+    padding: 80px 0 64px;
+    text-align: center;
+    background: linear-gradient(
+        180deg,
+        #FAF6F3 0%,
+        #ffffff 100%
+    );
+    border-bottom: 1px solid rgba(198, 167, 94, 0.06);
+}
+
+.br-hero__inner {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 48px);
+}
+
+.br-hero__label {
+    display: block;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #C6A75E;
+    margin-bottom: 16px;
+}
+
+.br-hero__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 500;
+    color: #0a0a0a;
+    letter-spacing: 0.02em;
+    margin: 0 0 18px;
+    line-height: 1.15;
+}
+
+.br-hero__text {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: #777;
+    line-height: 1.8;
+    margin: 0;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* ============================================================
+   2. CONTAINER & SECTION
+   ============================================================ */
+.br-container {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding-left: clamp(20px, 4vw, 48px);
+    padding-right: clamp(20px, 4vw, 48px);
+}
+
+.br-section {
+    padding: 80px 0 120px;
+}
+
+
+/* ============================================================
+   3. BRAND GRID
+   ============================================================ */
+.br-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 36px;
+}
+
+
+/* ============================================================
+   4. BRAND CARD — SHELL
+   ============================================================ */
+.br-card {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition:
+        transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        box-shadow 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.br-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 20px 56px rgba(0, 0, 0, 0.06),
+        0 6px 18px rgba(0, 0, 0, 0.03);
+}
+
+
+/* ============================================================
+   5. BRAND CARD — VISUAL / LOGO
+   ============================================================ */
+.br-card__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 10;
+    padding: 40px 48px;
+    background: #FAF6F3;
+    overflow: hidden;
+    transition: background 0.35s ease;
+}
+
+.br-card:hover .br-card__visual {
+    background: #F5EDE8;
+}
+
+.br-card__logo {
+    max-width: 180px;
+    max-height: 72px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: grayscale(30%) brightness(1.0);
+    transition:
+        filter 0.4s ease,
+        transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.br-card:hover .br-card__logo {
+    filter: grayscale(0%) brightness(1.0);
+    transform: scale(1.04);
+}
+
+/* Fallback: text when no logo */
+.br-card__fallback {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: #C6A75E;
+    letter-spacing: 0.06em;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.br-card:hover .br-card__fallback {
+    opacity: 1;
+}
+
+
+/* ============================================================
+   6. BRAND CARD — BODY
+   ============================================================ */
+.br-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 28px 28px 24px;
+}
+
+.br-card__name {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 8px;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+}
+
+.br-card__desc {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    color: #888;
+    line-height: 1.7;
+    margin: 0 0 auto;
+    padding-bottom: 18px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   7. BRAND CARD — CTA LINK
+   ============================================================ */
+.br-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #C6A75E;
+    position: relative;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    transition: color 0.3s ease;
+}
+
+.br-card:hover .br-card__link {
+    color: #A8893E;
+}
+
+.br-card__link svg {
+    flex-shrink: 0;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.br-card:hover .br-card__link svg {
+    transform: translateX(4px);
+}
+
+
+/* ============================================================
+   8. GOLD UNDERLINE ANIMATION
+   ============================================================ */
+.br-card__link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: #C6A75E;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.br-card:hover .br-card__link::after {
+    width: 100%;
+}
+
+
+/* ============================================================
+   9. EMPTY STATE
+   ============================================================ */
+.br-empty {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.br-empty__text {
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 15px;
+    color: #999;
+    margin: 0;
+}
+
+
+/* ============================================================
+   10. TABLET  (≤ 1199px)
+   ============================================================ */
+@media (max-width: 1199px) {
+    .br-hero {
+        padding: 64px 0 52px;
+    }
+
+    .br-section {
+        padding: 64px 0 96px;
+    }
+
+    .br-grid {
+        gap: 28px;
+    }
+
+    .br-card__visual {
+        padding: 32px 40px;
+    }
+
+    .br-card__logo {
+        max-width: 160px;
+        max-height: 64px;
+    }
+
+    .br-card__body {
+        padding: 24px 24px 20px;
+    }
+
+    .br-card__name {
+        font-size: 20px;
+    }
+}
+
+
+/* ============================================================
+   11. MOBILE  (≤ 767px)
+   ============================================================ */
+@media (max-width: 767px) {
+    .br-hero {
+        padding: 48px 0 40px;
+    }
+
+    .br-hero__text {
+        font-size: 14px;
+    }
+
+    .br-section {
+        padding: 48px 0 72px;
+    }
+
+    .br-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    /* Disable hover effects on touch */
+    .br-card {
+        transform: none !important;
+    }
+
+    .br-card:hover {
+        box-shadow: none;
+    }
+
+    .br-card__visual {
+        aspect-ratio: 16 / 9;
+        padding: 28px 32px;
+    }
+
+    .br-card__logo {
+        max-width: 140px;
+        max-height: 56px;
+        filter: grayscale(0%);
+    }
+
+    .br-card__body {
+        padding: 20px 20px 18px;
+    }
+
+    .br-card__name {
+        font-size: 18px;
+        margin-bottom: 6px;
+    }
+
+    .br-card__desc {
+        font-size: 12px;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        padding-bottom: 14px;
+    }
+
+    .br-card__link {
+        font-size: 11px;
+        padding-top: 14px;
+    }
+
+    .br-card__link::after {
+        display: none;
+    }
+}
+
+
+/* ============================================================
+   12. SMALL MOBILE  (≤ 479px)
+   ============================================================ */
+@media (max-width: 479px) {
+    .br-hero {
+        padding: 36px 0 32px;
+    }
+
+    .br-hero__label {
+        font-size: 10px;
+        margin-bottom: 12px;
+    }
+
+    .br-section {
+        padding: 36px 0 56px;
+    }
+
+    .br-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .br-card__visual {
+        aspect-ratio: 16 / 10;
+        padding: 36px 40px;
+    }
+
+    .br-card__logo {
+        max-width: 160px;
+        max-height: 64px;
+    }
+
+    .br-card__fallback {
+        font-size: 24px;
+    }
+
+    .br-card__body {
+        padding: 24px 24px 20px;
+    }
+
+    .br-card__name {
+        font-size: 20px;
+    }
+
+    .br-card__desc {
+        font-size: 13px;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        padding-bottom: 16px;
+    }
+}
+
+
+/* ============================================================
+   13. REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .br-card,
+    .br-card__logo,
+    .br-card__visual,
+    .br-card__link,
+    .br-card__link svg,
+    .br-card__link::after,
+    .br-card__fallback {
+        transition-duration: 0.01ms !important;
+    }
+
+    .br-card {
+        transform: none !important;
+    }
+}

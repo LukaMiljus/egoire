@@ -1,0 +1,564 @@
+/* ============================================================
+   Egoire – Unified Luxury Product Card
+   File:  public/css/product-card.css
+   Namespace: pc-
+   ============================================================
+
+   Table of Contents:
+   1.  Design Tokens (shared references)
+   2.  Grid Wrapper
+   3.  Card Shell
+   4.  Card Visual / Image
+   5.  Hover Overlay
+   6.  Badges
+   7.  Card Body
+   8.  Brand Label
+   9.  Product Name
+   10. Short Description
+   11. Price Block
+   12. Actions (Stepper + Cart Button)
+   13. Compact Variant
+   14. Tablet  (≤ 1199px)
+   15. Mobile  (≤ 767px)
+   16. Small Mobile (≤ 479px)
+   17. Reduced Motion
+   ============================================================ */
+
+
+/* ============================================================
+   1. DESIGN TOKENS (inherits from products.css / :root)
+   ============================================================ */
+:root {
+    --pc-gold:        #C6A75E;
+    --pc-gold-light:  #D4BA7A;
+    --pc-gold-dark:   #A8893E;
+    --pc-beige-light: #F5EDE8;
+    --pc-beige-pale:  #FAF6F3;
+    --pc-black:       #0a0a0a;
+    --pc-dark:        #1a1a1a;
+
+    --pc-gray-900: #222222;
+    --pc-gray-700: #555555;
+    --pc-gray-500: #888888;
+    --pc-gray-300: #cccccc;
+    --pc-gray-200: #e0e0e0;
+    --pc-gray-100: #f0f0f0;
+    --pc-white:    #ffffff;
+
+    --pc-font-display: 'Playfair Display', Georgia, serif;
+    --pc-font-heading: 'Cormorant Garamond', Georgia, serif;
+    --pc-font-body:    'Inter', -apple-system, sans-serif;
+
+    --pc-radius-sm: 6px;
+    --pc-radius:    10px;
+    --pc-radius-lg: 14px;
+
+    --pc-ease:     cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --pc-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* ============================================================
+   2. GRID WRAPPER
+   ============================================================ */
+.pc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+}
+
+
+/* ============================================================
+   3. CARD SHELL
+   ============================================================ */
+.pc-card {
+    position: relative;
+    background: var(--pc-white);
+    border-radius: var(--pc-radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition:
+        transform 0.35s var(--pc-ease),
+        box-shadow 0.35s var(--pc-ease);
+}
+
+.pc-card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 16px 48px rgba(0, 0, 0, 0.06),
+        0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+
+/* ============================================================
+   4. CARD VISUAL / IMAGE
+   ============================================================ */
+.pc-card__visual {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--pc-beige-light);
+}
+
+.pc-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--pc-ease);
+}
+
+.pc-card:hover .pc-card__img {
+    transform: scale(1.04);
+}
+
+.pc-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--pc-font-display);
+    font-size: 24px;
+    color: var(--pc-gold);
+    opacity: 0.3;
+    letter-spacing: 0.1em;
+}
+
+
+/* ============================================================
+   5. HOVER OVERLAY
+   ============================================================ */
+.pc-card__hover-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 10, 10, 0.22);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.35s var(--pc-ease);
+    pointer-events: none;
+}
+
+.pc-card:hover .pc-card__hover-overlay {
+    opacity: 1;
+}
+
+.pc-card__hover-overlay span {
+    font-family: var(--pc-font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--pc-white);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 10px 26px;
+    border-radius: 50px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+
+/* ============================================================
+   6. BADGES
+   ============================================================ */
+.pc-card__badges {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 2;
+}
+
+.pc-badge {
+    display: inline-block;
+    font-family: var(--pc-font-body);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 4px;
+    line-height: 1;
+}
+
+.pc-badge--sale {
+    background: #c62828;
+    color: var(--pc-white);
+}
+
+.pc-badge--best_seller {
+    background: var(--pc-gold);
+    color: var(--pc-white);
+}
+
+.pc-badge--new {
+    background: var(--pc-black);
+    color: var(--pc-white);
+}
+
+
+/* ============================================================
+   7. CARD BODY
+   ============================================================ */
+.pc-card__body {
+    padding: 20px 20px 24px;
+}
+
+
+/* ============================================================
+   8. BRAND LABEL
+   ============================================================ */
+.pc-card__brand {
+    display: block;
+    font-family: var(--pc-font-body);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--pc-gray-500);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+
+/* ============================================================
+   9. PRODUCT NAME
+   ============================================================ */
+.pc-card__name {
+    font-family: var(--pc-font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--pc-gray-900);
+    margin: 0 0 8px;
+    line-height: 1.3;
+    letter-spacing: 0.01em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   10. SHORT DESCRIPTION
+   ============================================================ */
+.pc-card__desc {
+    font-family: var(--pc-font-body);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--pc-gray-700);
+    line-height: 1.6;
+    margin: 0 0 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+/* ============================================================
+   11. PRICE BLOCK
+   ============================================================ */
+.pc-card__price {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.pc-card__price-current {
+    font-family: var(--pc-font-body);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--pc-black);
+}
+
+.pc-card__price-old {
+    font-family: var(--pc-font-body);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--pc-gray-500);
+    text-decoration: line-through;
+}
+
+.pc-card__price-sale {
+    font-family: var(--pc-font-body);
+    font-size: 18px;
+    font-weight: 700;
+    color: #c62828;
+}
+
+
+/* ============================================================
+   12. ACTIONS (STEPPER + CART BUTTON)
+   ============================================================ */
+.pc-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Stepper */
+.pc-stepper {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--pc-gray-200);
+    border-radius: var(--pc-radius-sm);
+    overflow: hidden;
+    height: 42px;
+}
+
+.pc-stepper__btn {
+    width: 36px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: var(--pc-gray-700);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.pc-stepper__btn:hover {
+    background: var(--pc-beige-light);
+    color: var(--pc-gold);
+}
+
+.pc-stepper__input {
+    width: 40px;
+    height: 100%;
+    text-align: center;
+    font-family: var(--pc-font-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--pc-gray-900);
+    border: none;
+    border-left: 1px solid var(--pc-gray-200);
+    border-right: 1px solid var(--pc-gray-200);
+    background: var(--pc-white);
+    outline: none;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.pc-stepper__input::-webkit-inner-spin-button,
+.pc-stepper__input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Cart button */
+.pc-card__cart-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 42px;
+    padding: 17px 16px;
+    font-family: var(--pc-font-body);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--pc-white);
+    background: var(--pc-black);
+    border: none;
+    border-radius: var(--pc-radius-sm);
+    cursor: pointer;
+    transition: background 0.3s var(--pc-ease);
+    white-space: nowrap;
+}
+
+.pc-card__cart-btn:hover {
+    background: var(--pc-gold-dark);
+}
+
+.pc-card__cart-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pc-card__cart-btn svg {
+    flex-shrink: 0;
+    stroke: currentColor;
+}
+
+
+/* ============================================================
+   13. COMPACT VARIANT  (used in related / recommended)
+   ============================================================ */
+.pc-card--compact .pc-card__body {
+    padding: 16px 16px 20px;
+}
+
+.pc-card--compact .pc-card__name {
+    font-size: 17px;
+    margin-bottom: 6px;
+}
+
+.pc-card--compact .pc-card__price {
+    margin-bottom: 12px;
+}
+
+/* .pc-card--compact .pc-card__actions {
+    flex-direction: column;
+} */
+
+.pc-card--compact .pc-card__cart-btn {
+    width: 100%;
+}
+
+
+/* ============================================================
+   14. TABLET  (≤ 1199px)
+   ============================================================ */
+@media (max-width: 1199px) {
+    .pc-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+
+    .pc-card__name {
+        font-size: 18px;
+    }
+
+    .pc-card__actions {
+        flex-direction: column;
+    }
+
+    .pc-card__cart-btn {
+        width: 100%;
+    }
+}
+
+
+/* ============================================================
+   15. MOBILE  (≤ 767px)
+   ============================================================ */
+@media (max-width: 767px) {
+    .pc-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    /* Disable hover effects on touch */
+    .pc-card {
+        transform: none !important;
+    }
+
+    .pc-card:hover {
+        box-shadow: none;
+    }
+
+    .pc-card__hover-overlay {
+        display: none;
+    }
+
+    .pc-card__body {
+        padding: 14px 14px 18px;
+    }
+
+    .pc-card__brand {
+        font-size: 9px;
+    }
+
+    .pc-card__name {
+        font-size: 16px;
+    }
+
+    .pc-card__desc {
+        display: none;
+    }
+
+    .pc-card__price {
+        margin-bottom: 12px;
+    }
+
+    .pc-card__price-current,
+    .pc-card__price-sale {
+        font-size: 16px;
+    }
+
+    .pc-card__actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .pc-card__cart-btn {
+        width: 100%;
+        height: 48px;
+        font-size: 11px;
+        padding: 0 16px;
+        min-height: 44px;
+    }
+
+    .pc-stepper {
+        width: 100%;
+        height: 44px;
+        justify-content: center;
+    }
+
+    .pc-stepper__btn {
+        width: 44px;
+        min-height: 44px;
+    }
+
+    .pc-stepper__input {
+        flex: 1;
+    }
+}
+
+
+/* ============================================================
+   16. SMALL MOBILE  (≤ 479px)
+   ============================================================ */
+@media (max-width: 479px) {
+    .pc-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .pc-card__visual {
+        aspect-ratio: 4 / 5;
+    }
+
+    .pc-card__name {
+        font-size: 18px;
+    }
+
+    .pc-card__desc {
+        display: block;
+    }
+}
+
+
+/* ============================================================
+   17. REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .pc-card,
+    .pc-card__img,
+    .pc-card__hover-overlay,
+    .pc-card__cart-btn,
+    .pc-stepper__btn {
+        transition-duration: 0.01ms !important;
+    }
+
+    .pc-card {
+        transform: none !important;
+    }
+}
