@@ -20,6 +20,7 @@
     <!-- Styles -->
     <link rel="stylesheet" href="<?= asset('/css/style.css') ?>">
     <link rel="stylesheet" href="<?= asset('/css/header/header.css') ?>">
+    <link rel="stylesheet" href="<?= asset('/css/footer/footer.css') ?>">
     <?php if (!empty($pageStyles)): ?>
     <?php foreach ($pageStyles as $__ps): ?>
     <link rel="stylesheet" href="<?= asset($__ps) ?>">
@@ -184,7 +185,7 @@
                     </div>
                 </li>
 
-                <!-- 6. Loyalty — text + CTA gold button -->
+                <!-- 6. Loyalty — luxury mini panel with progress -->
                 <li class="eg-nav__item eg-nav__item--has-dd">
                     <a href="/account/loyalty" class="eg-nav__link <?= isActivePath('/loyalty') || isActivePath('/account/loyalty') ? 'is-active' : '' ?>">
                         Loyalty
@@ -192,10 +193,77 @@
                     </a>
                     <div class="eg-dropdown">
                         <div class="eg-dropdown__panel">
-                            <div class="eg-dropdown__inner eg-dropdown__inner--narrow">
+                            <div class="eg-dropdown__inner eg-dropdown__inner--narrow eg-loyalty-panel">
+
+                                <?php if (isUserAuthenticated()):
+                                    $loyaltyUser     = fetchUserLoyalty(currentUserId());
+                                    $loyaltySettings = fetchLoyaltySettings();
+                                    $points          = (int) ($loyaltyUser['points_balance'] ?? 0);
+                                    $totalEarned     = (int) ($loyaltyUser['total_earned'] ?? 0);
+                                    $rsdPerPoint     = (float) ($loyaltySettings['rsd_per_point'] ?? 1);
+                                    $pointsValue     = $points * $rsdPerPoint;
+
+                                    // Tier logic
+                                    $tiers = [
+                                        ['name' => 'Bronze',   'min' => 0,    'max' => 500],
+                                        ['name' => 'Silver',   'min' => 500,  'max' => 2000],
+                                        ['name' => 'Gold',     'min' => 2000, 'max' => 5000],
+                                        ['name' => 'Platinum', 'min' => 5000, 'max' => 10000],
+                                    ];
+                                    $currentTier = $tiers[0];
+                                    $nextTier = $tiers[1] ?? null;
+                                    foreach ($tiers as $i => $t) {
+                                        if ($totalEarned >= $t['min']) {
+                                            $currentTier = $t;
+                                            $nextTier = $tiers[$i + 1] ?? null;
+                                        }
+                                    }
+                                    $progressPercent = $nextTier
+                                        ? min(100, (int)(($totalEarned - $currentTier['min']) / max(1, $nextTier['min'] - $currentTier['min']) * 100))
+                                        : 100;
+                                ?>
+
+                                <!-- Authenticated loyalty view -->
+                                <div class="eg-loyalty__badge"><?= htmlspecialchars($currentTier['name']) ?></div>
+                                <h3 class="eg-loyalty__points"><?= number_format($points, 0, ',', '.') ?></h3>
+                                <p class="eg-loyalty__points-label">loyalty poena</p>
+                                <p class="eg-loyalty__value"><?= formatPrice($pointsValue) ?> vrednosti</p>
+
+                                <!-- Progress bar -->
+                                <div class="eg-loyalty__progress-wrap">
+                                    <div class="eg-loyalty__progress-track">
+                                        <div class="eg-loyalty__progress-fill" style="width: <?= $progressPercent ?>%"></div>
+                                    </div>
+                                    <div class="eg-loyalty__progress-labels">
+                                        <span><?= htmlspecialchars($currentTier['name']) ?></span>
+                                        <?php if ($nextTier): ?>
+                                        <span><?= htmlspecialchars($nextTier['name']) ?></span>
+                                        <?php else: ?>
+                                        <span>Max</span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <?php if ($nextTier): ?>
+                                <p class="eg-loyalty__next-info">
+                                    Još <strong><?= number_format($nextTier['min'] - $totalEarned, 0, ',', '.') ?></strong> poena do <?= htmlspecialchars($nextTier['name']) ?> nivoa
+                                </p>
+                                <?php endif; ?>
+
+                                <a href="/account/loyalty" class="eg-btn-gold">Pogledaj detalje</a>
+
+                                <?php else: ?>
+
+                                <!-- Guest view -->
+                                <div class="eg-loyalty__icon-wrap">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                </div>
                                 <h3 class="eg-dropdown__title">Loyalty Program</h3>
                                 <p class="eg-dropdown__desc">Skupljajte poene sa svakom kupovinom i uživajte u ekskluzivnim pogodnostima. Pridružite se našoj zajednici ljubitelja premium nege kose.</p>
                                 <a href="/register" class="eg-btn-gold">Registruj se</a>
+
+                                <?php endif; ?>
+
                             </div>
                         </div>
                     </div>

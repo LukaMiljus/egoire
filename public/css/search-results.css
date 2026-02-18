@@ -1,0 +1,347 @@
+/* ==========================================================================
+   Egoire — Luxury Search Results Page
+   ──────────────────────────────────────────────────────────────────────────
+   Layout: Hero with inline search + product grid + empty state
+   Palette: Gold #b68e57, Dark #1a1a1a, Off-white #faf9f6
+   ========================================================================== */
+
+
+/* ─── Hero Section ───────────────────────────────────────────────────── */
+
+.lx-search-hero {
+    background:
+        linear-gradient(165deg, #1a1a1a 0%, #111 50%, #0d0d0d 100%);
+    padding: 70px 24px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Ambient gold glow */
+.lx-search-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 120px;
+    background: radial-gradient(ellipse, rgba(182,142,87,.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.lx-search-hero__container {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.lx-search-hero__eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #b68e57;
+    margin-bottom: 14px;
+}
+
+.lx-search-hero__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 14px;
+    line-height: 1.2;
+}
+
+.lx-search-hero__meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(255,255,255,.5);
+    margin-bottom: 36px;
+    letter-spacing: .3px;
+}
+
+.lx-search-hero__count {
+    font-weight: 600;
+    color: rgba(255,255,255,.8);
+}
+
+.lx-search-hero__query {
+    font-style: italic;
+    color: #b68e57;
+}
+
+
+/* ─── Inline Search Form ─────────────────────────────────────────────── */
+
+.lx-search-hero__form {
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+.lx-search-hero__input-wrap {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 4px;
+    overflow: hidden;
+    transition:
+        border-color .3s ease,
+        background .3s ease;
+}
+
+.lx-search-hero__input-wrap:focus-within {
+    border-color: rgba(182,142,87,.4);
+    background: rgba(255,255,255,.08);
+}
+
+.lx-search-hero__icon {
+    flex-shrink: 0;
+    margin-left: 18px;
+    color: rgba(255,255,255,.3);
+}
+
+.lx-search-hero__input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 16px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255,255,255,.85);
+    outline: none;
+    letter-spacing: .3px;
+}
+
+.lx-search-hero__input::placeholder {
+    color: rgba(255,255,255,.25);
+    font-weight: 300;
+}
+
+.lx-search-hero__submit {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    background: #b68e57;
+    border: none;
+    padding: 16px 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff;
+    cursor: pointer;
+    transition:
+        background .3s ease;
+}
+
+.lx-search-hero__submit:hover {
+    background: #a07a4a;
+}
+
+
+/* ─── Results Section ────────────────────────────────────────────────── */
+
+.lx-search-results {
+    background: #faf9f6;
+    padding: 60px 24px 90px;
+    min-height: 400px;
+}
+
+.lx-search-results__container {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+
+/* ─── Product Grid ───────────────────────────────────────────────────── */
+
+.lx-search-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+}
+
+
+/* ─── Empty State ────────────────────────────────────────────────────── */
+
+.lx-search-empty {
+    max-width: 480px;
+    margin: 40px auto 0;
+    text-align: center;
+    padding: 40px 0;
+}
+
+.lx-search-empty__icon {
+    color: rgba(0,0,0,.12);
+    margin-bottom: 24px;
+}
+
+.lx-search-empty__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    line-height: 1.3;
+}
+
+.lx-search-empty__desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #6b6b6b;
+    line-height: 1.75;
+    margin-bottom: 32px;
+    letter-spacing: .2px;
+}
+
+.lx-search-empty__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+
+/* ─── Buttons ────────────────────────────────────────────────────────── */
+
+.lx-search-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition:
+        background .3s ease,
+        color .3s ease,
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.lx-search-btn--primary {
+    background: #b68e57;
+    color: #fff;
+    border: 2px solid #b68e57;
+}
+
+.lx-search-btn--primary:hover {
+    background: #a07a4a;
+    border-color: #a07a4a;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(182,142,87,.2);
+}
+
+.lx-search-btn--outline {
+    background: transparent;
+    color: #b68e57;
+    border: 1.5px solid rgba(182,142,87,.4);
+}
+
+.lx-search-btn--outline:hover {
+    background: #b68e57;
+    color: #fff;
+    border-color: #b68e57;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE — Laptop (≤ 1199px)
+   ========================================================================== */
+
+@media (max-width: 1199px) {
+    .lx-search-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+    }
+}
+
+
+/* ==========================================================================
+   RESPONSIVE — Tablet (≤ 768px)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .lx-search-hero {
+        padding: 50px 20px 44px;
+    }
+
+    .lx-search-hero__title {
+        font-size: 26px;
+    }
+
+    .lx-search-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .lx-search-results {
+        padding: 40px 16px 60px;
+    }
+
+    .lx-search-hero__submit span {
+        display: none;
+    }
+
+    .lx-search-hero__submit {
+        padding: 16px 18px;
+    }
+}
+
+
+/* ==========================================================================
+   RESPONSIVE — Mobile (≤ 480px)
+   ========================================================================== */
+
+@media (max-width: 480px) {
+    .lx-search-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .lx-search-hero {
+        padding: 40px 16px 36px;
+    }
+
+    .lx-search-hero__meta {
+        font-size: 13px;
+        margin-bottom: 28px;
+    }
+
+    .lx-search-empty__actions {
+        flex-direction: column;
+    }
+
+    .lx-search-btn {
+        width: 100%;
+    }
+}
+
+
+/* ─── Accessibility ──────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    .lx-search-hero__input-wrap,
+    .lx-search-hero__submit,
+    .lx-search-btn {
+        transition: none;
+    }
+}

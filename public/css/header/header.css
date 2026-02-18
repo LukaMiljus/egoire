@@ -608,6 +608,115 @@
 }
 
 
+/* ---------- Loyalty Panel — Luxury Mini Dashboard ---------- */
+
+.eg-loyalty-panel {
+    /* background: #faf8f3; */
+    text-align: center;
+    padding: 40px 36px 36px;
+}
+
+.eg-loyalty__badge {
+    display: inline-block;
+    font-family: var(--eg-font-sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--eg-gold);
+    background: rgba(182,142,87,.1);
+    border: 1px solid rgba(182,142,87,.2);
+    padding: 5px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.eg-loyalty__points {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.eg-loyalty__points-label {
+    font-family: var(--eg-font-sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 6px;
+}
+
+.eg-loyalty__value {
+    font-family: var(--eg-font-sans);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--eg-gold);
+    margin-bottom: 28px;
+}
+
+/* Progress bar */
+.eg-loyalty__progress-wrap {
+    margin-bottom: 20px;
+}
+
+.eg-loyalty__progress-track {
+    width: 100%;
+    height: 4px;
+    background: rgba(0,0,0,.06);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.eg-loyalty__progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #b68e57, #c9a66c);
+    border-radius: 4px;
+    transition: width 0.6s cubic-bezier(.25,.1,.25,1);
+}
+
+.eg-loyalty__progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--eg-font-sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #aaa;
+}
+
+.eg-loyalty__next-info {
+    font-family: var(--eg-font-sans);
+    font-size: 12px;
+    font-weight: 400;
+    color: #888;
+    margin-bottom: 24px;
+    letter-spacing: .2px;
+}
+
+.eg-loyalty__next-info strong {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.eg-loyalty__icon-wrap {
+    color: var(--eg-gold);
+    margin-bottom: 16px;
+}
+
+.eg-loyalty-panel .eg-btn-gold {
+    margin-top: 8px;
+    width: 100%;
+    text-align: center;
+    padding: 14px 32px;
+}
+
+
 /* ==========================================================
    IMAGE PLACEHOLDERS
    ========================================================== */

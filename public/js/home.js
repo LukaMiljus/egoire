@@ -427,6 +427,226 @@
 
 
     /* ==========================================================
+       7. VIDEO TESTIMONIALS – Modal + Swipe + Autoplay
+       ========================================================== */
+
+    function initVideoTestimonials() {
+        var modal     = document.getElementById('ehVrModal');
+        var wrapper   = modal ? modal.querySelector('.eh-vr-modal__wrapper') : null;
+        var cards     = document.querySelectorAll('.eh-vr-card');
+        var closeBtn  = modal ? modal.querySelector('.eh-vr-modal__close') : null;
+        var backdrop  = modal ? modal.querySelector('.eh-vr-modal__backdrop') : null;
+        var progFill  = modal ? modal.querySelector('.eh-vr-modal__progress-fill') : null;
+        var hint      = modal ? modal.querySelector('.eh-vr-modal__hint') : null;
+        var container = modal ? modal.querySelector('.eh-vr-modal__container') : null;
+
+        if (!modal || !wrapper || !cards.length) return;
+
+        var videos       = [];
+        var current      = 0;
+        var total        = cards.length;
+        var rafId        = null;
+        var hintTimer    = null;
+        var isOpen       = false;
+
+        /* ---- helpers ---- */
+
+        function lockScroll()   { document.body.classList.add('eh-vr-modal-open'); }
+        function unlockScroll() { document.body.classList.remove('eh-vr-modal-open'); }
+
+        function buildSlides() {
+            if (videos.length) return;
+            var slides = wrapper.querySelectorAll('.eh-vr-modal__slide');
+            slides.forEach(function (slide) {
+                var vid = slide.querySelector('video');
+                if (vid) {
+                    var src = vid.getAttribute('data-src');
+                    if (src) {
+                        vid.src = src;
+                        vid.removeAttribute('data-src');
+                    }
+                    vid.load();
+                    videos.push(vid);
+                }
+            });
+        }
+
+        function goTo(index) {
+            if (index < 0 || index >= total) return;
+            current = index;
+            wrapper.style.transform = 'translateY(-' + (current * 100) + '%)';
+
+            videos.forEach(function (v, i) {
+                if (i === current) {
+                    v.currentTime = 0;
+                    v.play().catch(function () {});
+                } else {
+                    v.pause();
+                }
+            });
+
+            startProgress();
+        }
+
+        /* ---- progress bar ---- */
+
+        function startProgress() {
+            if (rafId) cancelAnimationFrame(rafId);
+
+            function tick() {
+                if (!isOpen) return;
+                var vid = videos[current];
+                if (vid && vid.duration && isFinite(vid.duration)) {
+                    var pct = (vid.currentTime / vid.duration) * 100;
+                    if (progFill) progFill.style.width = pct + '%';
+
+                    if (pct >= 99.5 && current < total - 1) {
+                        goTo(current + 1);
+                        return;
+                    }
+                }
+                rafId = requestAnimationFrame(tick);
+            }
+            rafId = requestAnimationFrame(tick);
+        }
+
+        /* ---- open / close ---- */
+
+        function openModal(index) {
+            buildSlides();
+            isOpen = true;
+            lockScroll();
+            modal.classList.add('is-active');
+            modal.setAttribute('aria-hidden', 'false');
+
+            setTimeout(function () {
+                goTo(index);
+            }, 80);
+
+            // Show swipe hint briefly
+            if (hint && total > 1) {
+                hint.style.opacity = '1';
+                clearTimeout(hintTimer);
+                hintTimer = setTimeout(function () {
+                    hint.style.opacity = '0';
+                }, 3000);
+            }
+        }
+
+        function closeModal() {
+            isOpen = false;
+            modal.classList.remove('is-active');
+            modal.setAttribute('aria-hidden', 'true');
+            unlockScroll();
+
+            if (rafId) cancelAnimationFrame(rafId);
+            rafId = null;
+            if (progFill) progFill.style.width = '0%';
+            if (hint) hint.style.opacity = '0';
+
+            videos.forEach(function (v) {
+                v.pause();
+                v.currentTime = 0;
+            });
+
+            // Reset wrapper position
+            wrapper.style.transition = 'none';
+            wrapper.style.transform = 'translateY(0)';
+            setTimeout(function () {
+                wrapper.style.transition = '';
+            }, 50);
+        }
+
+        /* ---- card click ---- */
+        cards.forEach(function (card, i) {
+            card.addEventListener('click', function () {
+                openModal(i);
+            });
+        });
+
+        /* ---- close handlers ---- */
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeModal();
+            });
+        }
+
+        // Backdrop click
+        if (backdrop) {
+            backdrop.addEventListener('click', function () {
+                closeModal();
+            });
+        }
+
+        // Also close if clicking the modal itself (gaps around container)
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) closeModal();
+        });
+
+        // ESC key — single keydown fires close
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && isOpen) {
+                e.preventDefault();
+                closeModal();
+            }
+        });
+
+        /* ---- swipe / drag navigation ---- */
+
+        var startY    = 0;
+        var deltaY    = 0;
+        var dragging   = false;
+        var threshold  = 60;
+
+        function onPointerDown(e) {
+            if (!isOpen) return;
+            dragging = true;
+            startY   = e.touches ? e.touches[0].clientY : e.clientY;
+            deltaY   = 0;
+            wrapper.style.transition = 'none';
+        }
+
+        function onPointerMove(e) {
+            if (!dragging) return;
+            var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            deltaY = clientY - startY;
+
+            var offset  = -(current * 100);
+            var dragPct = (deltaY / (container ? container.offsetHeight : window.innerHeight)) * 100;
+            dragPct = Math.max(-30, Math.min(30, dragPct));
+            wrapper.style.transform = 'translateY(' + (offset + dragPct) + '%)';
+        }
+
+        function onPointerUp() {
+            if (!dragging) return;
+            dragging = false;
+            wrapper.style.transition = '';
+
+            if (deltaY < -threshold && current < total - 1) {
+                goTo(current + 1);
+            } else if (deltaY > threshold && current > 0) {
+                goTo(current - 1);
+            } else {
+                wrapper.style.transform = 'translateY(-' + (current * 100) + '%)';
+            }
+        }
+
+        if (container) {
+            container.addEventListener('touchstart',  onPointerDown, { passive: true });
+            container.addEventListener('touchmove',   onPointerMove, { passive: true });
+            container.addEventListener('touchend',    onPointerUp);
+
+            container.addEventListener('mousedown', onPointerDown);
+            container.addEventListener('mousemove', onPointerMove);
+            container.addEventListener('mouseup',   onPointerUp);
+            container.addEventListener('mouseleave', onPointerUp);
+        }
+    }
+
+
+    /* ==========================================================
        INIT — DOM Ready
        ========================================================== */
 
@@ -437,6 +657,7 @@
         initSteppers();
         initAddToBag();
         initContactForm();
+        initVideoTestimonials();
     });
 
 })();

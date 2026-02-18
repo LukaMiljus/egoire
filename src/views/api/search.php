@@ -1,4 +1,8 @@
 <?php
+/* ============================================================
+   Egoire — Search API
+   Matches: product name, slug, brand, category, SKU, description
+   ============================================================ */
 declare(strict_types=1);
 
 header('Content-Type: application/json; charset=utf-8');
@@ -9,7 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
 
 $query = trim($_GET['q'] ?? '');
 
-if (strlen($query) < 2) {
+// Empty or too-short query
+if (mb_strlen($query) < 2) {
     jsonResponse(['success' => true, 'results' => [], 'count' => 0]);
 }
 
@@ -20,7 +25,7 @@ $products = fetchProducts([
 ]);
 
 $results = [];
-foreach ($products['items'] as $p) {
+foreach ($products as $p) {
     $results[] = [
         'id'         => (int)$p['id'],
         'name'       => htmlspecialchars($p['name'], ENT_QUOTES, 'UTF-8'),

@@ -581,6 +581,104 @@ require __DIR__ . '/../layout/header.php';
 <?php endif; ?>
 
 <!-- ============================================================
+     6b. VIDEO TESTIMONIALS  –  UGC swipeable stories
+     ============================================================ -->
+
+<section class="eh-section eh-section--video-reviews" data-reveal>
+    <div class="eh-container">
+        <header class="eh-section-header">
+            <span class="eh-section-header__eyebrow">Autentično</span>
+            <h2 class="eh-section-header__title">Iskustva u pokretu</h2>
+            <p class="eh-section-header__desc">
+                Stvarni rituali. Stvarni rezultati. Upoznajte priče žena koje su izabrale premium negu.
+            </p>
+        </header>
+
+        <!-- Card row -->
+        <div class="eh-vr-row">
+            <?php
+            $videoReviews = [
+                ['src' => '/videos/review1.mp4', 'thumb' => '/images/banner/review-thumb-1.jpg', 'user' => '@tamarak_hairstylist',   'avatar' => '/images/banner/avatar-1.jpg'],
+                ['src' => '/videos/review2.mp4', 'thumb' => '/images/banner/review-thumb-2.jpg', 'user' => '@tamarak_hairstylist', 'avatar' => '/images/banner/avatar-1.jpg'],
+                ['src' => '/videos/review3.mp4', 'thumb' => '/images/banner/review-thumb-3.jpg', 'user' => '@tamarak_hairstylist',     'avatar' => '/images/banner/avatar-1.jpg'],
+            ];
+            foreach ($videoReviews as $i => $vr):
+            ?>
+            <button class="eh-vr-card"
+                    data-vr-open="<?= $i ?>"
+                    aria-label="Pogledaj video recenziju od <?= htmlspecialchars($vr['user']) ?>"
+                    style="background-image: url('<?= htmlspecialchars($vr['thumb']) ?>')">
+
+                <!-- User badge (frosted glass) -->
+                <div class="eh-vr-card__user">
+                    <div class="eh-vr-card__avatar">
+                        <img src="<?= htmlspecialchars($vr['avatar']) ?>" alt="" loading="lazy" draggable="false">
+                    </div>
+                    <span class="eh-vr-card__username"><?= htmlspecialchars($vr['user']) ?></span>
+                </div>
+
+                <!-- Play icon -->
+                <div class="eh-vr-card__play">
+                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                        <circle cx="24" cy="24" r="23" stroke="currentColor" stroke-width="1.5" opacity=".6"/>
+                        <path d="M20 16l12 8-12 8V16z" fill="currentColor" opacity=".9"/>
+                    </svg>
+                </div>
+            </button>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</section>
+
+<!-- Video Modal -->
+<div class="eh-vr-modal" id="ehVrModal" aria-hidden="true" role="dialog" aria-label="Video recenzije">
+    <div class="eh-vr-modal__backdrop"></div>
+
+    <div class="eh-vr-modal__container">
+        <div class="eh-vr-modal__wrapper" id="ehVrWrapper">
+            <?php foreach ($videoReviews as $i => $vr): ?>
+            <div class="eh-vr-modal__slide" data-vr-slide="<?= $i ?>">
+                <video class="eh-vr-modal__video"
+                       data-vr-video="<?= $i ?>"
+                       data-src="<?= htmlspecialchars($vr['src']) ?>"
+                       playsinline
+                       preload="none"
+                       loop
+                       poster="<?= htmlspecialchars($vr['thumb']) ?>">
+                </video>
+
+                <!-- User overlay in modal -->
+                <div class="eh-vr-modal__user">
+                    <div class="eh-vr-card__avatar">
+                        <img src="<?= htmlspecialchars($vr['avatar']) ?>" alt="" loading="lazy">
+                    </div>
+                    <span class="eh-vr-card__username"><?= htmlspecialchars($vr['user']) ?></span>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="eh-vr-modal__progress">
+            <div class="eh-vr-modal__progress-fill" id="ehVrProgress"></div>
+        </div>
+
+        <!-- Close -->
+        <button class="eh-vr-modal__close" id="ehVrClose" aria-label="Zatvori video">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                <path d="M18 6L6 18"/><path d="M6 6l12 12"/>
+            </svg>
+        </button>
+
+        <!-- Navigation hint -->
+        <div class="eh-vr-modal__hint" id="ehVrHint">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+            <span>Prevucite za sledeći video</span>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
      7. TESTIMONIALS  –  Centered slider
      ============================================================ -->
 

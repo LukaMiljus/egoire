@@ -1,0 +1,365 @@
+/* ==========================================================================
+   Egoire — Luxury Register Page
+   ──────────────────────────────────────────────────────────────────────────
+   Layout: Centered editorial card
+   Palette: Gold #b68e57, Dark #1a1a1a, Off-white #faf9f6
+   ========================================================================== */
+
+
+/* ─── Section ────────────────────────────────────────────────────────── */
+
+.lx-register {
+    background: #faf9f6;
+    padding: 70px 24px 90px;
+    min-height: calc(100vh - 80px);
+}
+
+.lx-register__container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+
+/* ─── Hero Text ──────────────────────────────────────────────────────── */
+
+.lx-register__hero {
+    text-align: center;
+    margin-bottom: 44px;
+}
+
+.lx-register__eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #b68e57;
+    margin-bottom: 14px;
+}
+
+.lx-register__headline {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(28px, 4vw, 38px);
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 14px;
+    line-height: 1.2;
+}
+
+.lx-register__subline {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #6b6b6b;
+    line-height: 1.75;
+    max-width: 480px;
+    margin: 0 auto;
+    letter-spacing: .2px;
+}
+
+
+/* ─── Card ───────────────────────────────────────────────────────────── */
+
+.lx-register__card {
+    background: #fff;
+    border-radius: 6px;
+    padding: 44px 40px 40px;
+    box-shadow:
+        0 1px 3px rgba(0,0,0,.04),
+        0 8px 32px rgba(0,0,0,.06);
+}
+
+/* Elegant gold divider */
+.lx-register__divider-line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #b68e57, transparent);
+    margin: 0 auto 32px;
+}
+
+
+/* ─── Form Elements (shared with login) ──────────────────────────────── */
+
+.lx-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.lx-form-group {
+    margin-bottom: 22px;
+}
+
+.lx-form-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.lx-form-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #1a1a1a;
+    background: #faf9f6;
+    border: 1px solid rgba(0,0,0,.1);
+    border-radius: 4px;
+    transition:
+        border-color .3s ease,
+        box-shadow .3s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.lx-form-input::placeholder {
+    color: #b0aba3;
+    font-weight: 300;
+}
+
+.lx-form-input:focus {
+    border-color: #b68e57;
+    box-shadow: 0 0 0 3px rgba(182,142,87,.1);
+    outline: none;
+    background: #fff;
+}
+
+.lx-form-hint {
+    font-family: 'Inter', sans-serif;
+    font-size: 11.5px;
+    font-weight: 400;
+    color: #999;
+    margin-top: 6px;
+    letter-spacing: .2px;
+}
+
+/* Submit button */
+.lx-form-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 16px 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff;
+    background: #b68e57;
+    border: 2px solid #b68e57;
+    border-radius: 4px;
+    cursor: pointer;
+    transition:
+        background .3s ease,
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+.lx-form-btn:hover {
+    background: #a07a4a;
+    border-color: #a07a4a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(182,142,87,.25);
+}
+
+
+/* ─── Microcopy ──────────────────────────────────────────────────────── */
+
+.lx-register__microcopy {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 22px;
+    padding: 12px 16px;
+    background: rgba(182,142,87,.06);
+    border-radius: 4px;
+    border-left: 2px solid rgba(182,142,87,.3);
+}
+
+.lx-register__microcopy svg {
+    flex-shrink: 0;
+    color: #b68e57;
+}
+
+.lx-register__microcopy span {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #7a6e5e;
+    letter-spacing: .2px;
+    line-height: 1.5;
+}
+
+.lx-register__microcopy--center {
+    justify-content: center;
+    border-left: none;
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+
+
+/* ─── Checkbox ───────────────────────────────────────────────────────── */
+
+.lx-form-checkbox-group {
+    margin-bottom: 28px;
+}
+
+.lx-form-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    position: relative;
+}
+
+.lx-form-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.lx-form-checkbox__mark {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid rgba(0,0,0,.15);
+    border-radius: 3px;
+    background: #fff;
+    position: relative;
+    margin-top: 1px;
+    transition:
+        border-color .3s ease,
+        background .3s ease;
+}
+
+.lx-form-checkbox input:checked + .lx-form-checkbox__mark {
+    background: #b68e57;
+    border-color: #b68e57;
+}
+
+.lx-form-checkbox input:checked + .lx-form-checkbox__mark::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 6px;
+    width: 5px;
+    height: 9px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.lx-form-checkbox input:focus-visible + .lx-form-checkbox__mark {
+    box-shadow: 0 0 0 3px rgba(182,142,87,.15);
+}
+
+.lx-form-checkbox__text {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #6b6b6b;
+    line-height: 1.6;
+    letter-spacing: .2px;
+}
+
+
+/* ─── Login Link ─────────────────────────────────────────────────────── */
+
+.lx-register__login-link {
+    text-align: center;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(0,0,0,.06);
+}
+
+.lx-register__login-link span {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #6b6b6b;
+    margin-right: 4px;
+}
+
+.lx-register__login-link a {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #b68e57;
+    text-decoration: none;
+    transition: color .3s ease;
+}
+
+.lx-register__login-link a:hover {
+    color: #9a7545;
+}
+
+
+/* ─── Flash Messages ─────────────────────────────────────────────────── */
+
+.lx-register__card .alert {
+    margin-bottom: 24px;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+
+/* ==========================================================================
+   RESPONSIVE — Tablet (≤ 768px)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .lx-register {
+        padding: 48px 16px 60px;
+    }
+
+    .lx-register__card {
+        padding: 32px 24px 28px;
+    }
+
+    .lx-form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .lx-register__headline {
+        font-size: 26px;
+    }
+}
+
+
+/* ==========================================================================
+   RESPONSIVE — Small Mobile (≤ 380px)
+   ========================================================================== */
+
+@media (max-width: 380px) {
+    .lx-register__card {
+        padding: 24px 18px 22px;
+    }
+
+    .lx-form-btn {
+        padding: 14px 20px;
+    }
+
+    .lx-register__microcopy {
+        padding: 10px 12px;
+    }
+}
+
+
+/* ─── Accessibility ──────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    .lx-form-input,
+    .lx-form-btn,
+    .lx-form-checkbox__mark {
+        transition: none;
+    }
+}

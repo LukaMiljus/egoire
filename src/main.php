@@ -341,8 +341,22 @@ function fetchProducts(array $filters = []): array
     }
 
     if (!empty($filters['search'])) {
-        $sql .= ' AND (p.name LIKE ? OR p.sku LIKE ? OR p.short_description LIKE ?)';
-        $searchTerm = '%' . $filters['search'] . '%';
+        $searchTerm = '%' . trim($filters['search']) . '%';
+        $sql .= ' AND (
+            p.name LIKE ?
+            OR p.slug LIKE ?
+            OR p.sku LIKE ?
+            OR p.short_description LIKE ?
+            OR b.name LIKE ?
+            OR p.id IN (
+                SELECT pc.product_id FROM product_categories pc
+                JOIN categories c ON c.id = pc.category_id
+                WHERE c.name LIKE ?
+            )
+        )';
+        $params[] = $searchTerm;
+        $params[] = $searchTerm;
+        $params[] = $searchTerm;
         $params[] = $searchTerm;
         $params[] = $searchTerm;
         $params[] = $searchTerm;

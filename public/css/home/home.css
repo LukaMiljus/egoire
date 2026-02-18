@@ -1223,6 +1223,367 @@
 
 
 /* ============================================================
+   14b. VIDEO TESTIMONIALS — UGC Stories Section
+   ============================================================ */
+
+/* --- Section --- */
+.eh-section--video-reviews {
+    background: #0a0a0a;
+    position: relative;
+    overflow: hidden;
+}
+
+.eh-section--video-reviews::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(198,167,94,.2), transparent);
+}
+
+.eh-section--video-reviews .eh-section-header__eyebrow {
+    color: var(--eh-gold);
+}
+
+.eh-section--video-reviews .eh-section-header__title {
+    color: var(--eh-white);
+}
+
+.eh-section--video-reviews .eh-section-header__desc {
+    color: rgba(255,255,255,.45);
+}
+
+
+/* --- Card Row --- */
+.eh-vr-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+
+/* --- Card --- */
+.eh-vr-card {
+    position: relative;
+    aspect-ratio: 9 / 16;
+    border-radius: 18px;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    background-size: cover;
+    background-position: center;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    box-shadow: var(--eh-shadow-md);
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.eh-vr-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(0,0,0,.35) 0%,
+        transparent 40%,
+        transparent 60%,
+        rgba(0,0,0,.4) 100%
+    );
+    border-radius: 18px;
+    z-index: 1;
+    transition: background 0.3s ease;
+}
+
+.eh-vr-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 12px 48px rgba(0,0,0,.4);
+}
+
+.eh-vr-card:hover::before {
+    background: linear-gradient(
+        180deg,
+        rgba(0,0,0,.25) 0%,
+        transparent 40%,
+        transparent 60%,
+        rgba(0,0,0,.3) 100%
+    );
+}
+
+.eh-vr-card:active {
+    transform: scale(0.98);
+}
+
+
+/* --- Card: User Badge (frosted glass) --- */
+.eh-vr-card__user {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 6px;
+    background: rgba(255,255,255,.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 40px;
+    border: 1px solid rgba(255,255,255,.08);
+}
+
+.eh-vr-card__avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(255,255,255,.1);
+}
+
+.eh-vr-card__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.eh-vr-card__username {
+    font-family: var(--eh-font-body);
+    font-size: 11.5px;
+    font-weight: 500;
+    color: rgba(255,255,255,.85);
+    letter-spacing: .3px;
+    white-space: nowrap;
+}
+
+
+/* --- Card: Play Icon --- */
+.eh-vr-card__play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    color: var(--eh-gold);
+    opacity: .85;
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+}
+
+.eh-vr-card:hover .eh-vr-card__play {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+
+/* ============================================================
+   14b-M. VIDEO MODAL
+   ============================================================ */
+
+.eh-vr-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        opacity 0.35s ease,
+        visibility 0.35s ease;
+}
+
+.eh-vr-modal.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Backdrop */
+.eh-vr-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+/* Container — constrains to phone-like viewport */
+.eh-vr-modal__container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 90vh;
+    max-height: 800px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #000;
+    box-shadow:
+        0 24px 80px rgba(0,0,0,.6),
+        0 0 0 1px rgba(198,167,94,.12);
+    z-index: 1;
+}
+
+/* Wrapper — slides vertically */
+.eh-vr-modal__wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    touch-action: none;
+    user-select: none;
+}
+
+/* Each slide */
+.eh-vr-modal__slide {
+    flex: 0 0 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background: #000;
+}
+
+.eh-vr-modal__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* User overlay in modal */
+.eh-vr-modal__user {
+    position: absolute;
+    bottom: 60px;
+    left: 20px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 6px;
+    background: rgba(0,0,0,.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 40px;
+    border: 1px solid rgba(255,255,255,.08);
+}
+
+
+/* --- Progress Bar --- */
+.eh-vr-modal__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255,255,255,.1);
+    z-index: 4;
+}
+
+.eh-vr-modal__progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--eh-gold), #d4b76a);
+    border-radius: 0 2px 2px 0;
+    will-change: width;
+    transition: width 0.15s linear;
+}
+
+
+/* --- Close Button --- */
+.eh-vr-modal__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 50%;
+    color: #fff;
+    cursor: pointer;
+    padding: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease;
+}
+
+.eh-vr-modal__close:hover {
+    background: rgba(255,255,255,.2);
+    transform: scale(1.08);
+}
+
+.eh-vr-modal__close:active {
+    transform: scale(0.92);
+}
+
+
+/* --- Navigation Hint --- */
+.eh-vr-modal__hint {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(0,0,0,.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,.06);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.eh-vr-modal__hint svg {
+    color: var(--eh-gold);
+    animation: ehVrHintBounce 1.5s ease infinite;
+}
+
+.eh-vr-modal__hint span {
+    font-family: var(--eh-font-body);
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(255,255,255,.6);
+    letter-spacing: .4px;
+    white-space: nowrap;
+}
+
+@keyframes ehVrHintBounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+}
+
+/* Body scroll lock */
+body.eh-vr-modal-open {
+    overflow: hidden;
+}
+
+
+/* ============================================================
    15. TESTIMONIALS
    ============================================================ */
 
@@ -1736,6 +2097,59 @@
         padding: 28px 24px;
     }
 
+    /* Video testimonials: horizontal scroll */
+    .eh-vr-row {
+        display: flex;
+        gap: 16px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding: 0 4px 8px;
+        scrollbar-width: none;
+    }
+
+    .eh-vr-row::-webkit-scrollbar {
+        display: none;
+    }
+
+    .eh-vr-card {
+        flex: 0 0 65%;
+        scroll-snap-align: center;
+        border-radius: 14px;
+    }
+
+    .eh-vr-card::before {
+        border-radius: 14px;
+    }
+
+    /* Modal: full viewport on mobile */
+    .eh-vr-modal__container {
+        max-width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        max-height: 100vh;
+        max-height: 100dvh;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .eh-vr-modal__close {
+        width: 52px;
+        height: 52px;
+        top: env(safe-area-inset-top, 12px);
+        right: 12px;
+        background: rgba(0,0,0,.65);
+    }
+
+    .eh-vr-modal__close svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .eh-vr-modal__user {
+        bottom: 48px;
+    }
+
     /* Testimonials */
     .eh-quote {
         padding: 0;
@@ -1853,6 +2267,11 @@
         width: 36px;
         height: 36px;
     }
+
+    /* Video cards: wider on small screens */
+    .eh-vr-card {
+        flex: 0 0 78%;
+    }
 }
 
 
@@ -1880,5 +2299,19 @@
 
     .eh-slider__track {
         scroll-behavior: auto;
+    }
+
+    .eh-vr-card,
+    .eh-vr-card::before,
+    .eh-vr-card__play,
+    .eh-vr-modal,
+    .eh-vr-modal__wrapper,
+    .eh-vr-modal__close,
+    .eh-vr-modal__progress-fill {
+        transition: none;
+    }
+
+    .eh-vr-modal__hint svg {
+        animation: none;
     }
 }
