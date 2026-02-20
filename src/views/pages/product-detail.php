@@ -23,6 +23,8 @@ $inStock    = !$stock || (int) ($stock['quantity'] ?? 0) > 0;
 
 $title           = (($product['meta_title'] ?? '') ?: $product['name']) . ' | Egoire';
 $metaDescription = $product['meta_description'] ?? $product['short_description'] ?? '';
+$ogImage         = !empty($images) ? (baseUrl() . $images[0]['image_path']) : '';
+$productVariants = fetchProductVariants((int) $product['id']);
 
 $salePercent = ($product['sale_price'] && (float) $product['price'] > 0)
     ? round((1 - (float) $product['sale_price'] / (float) $product['price']) * 100)
@@ -201,6 +203,37 @@ require __DIR__ . '/../layout/header.php';
                 </div>
                 <?php endif; ?>
 
+                <!-- Variant Selector -->
+                <?php if ($productVariants): ?>
+                <div class="pd-info__variants">
+                    <label class="pd-info__variants-label">Izaberite varijantu</label>
+                    <div class="pd-info__variants-list">
+                        <?php foreach ($productVariants as $vi => $variant): ?>
+                        <label class="pd-variant <?= $vi === 0 ? 'pd-variant--active' : '' ?>">
+                            <input type="radio" name="variant_id" value="<?= $variant['id'] ?>"
+                                   data-price="<?= (float) $variant['price'] ?>"
+                                   data-sale-price="<?= (float) ($variant['sale_price'] ?? 0) ?>"
+                                   <?= $vi === 0 ? 'checked' : '' ?>>
+                            <span class="pd-variant__info">
+                                <span class="pd-variant__ml"><?= (int) $variant['volume_ml'] ?> ml</span>
+                                <?php if ($variant['label']): ?>
+                                <span class="pd-variant__label"><?= htmlspecialchars($variant['label']) ?></span>
+                                <?php endif; ?>
+                            </span>
+                            <span class="pd-variant__price">
+                                <?php if ($variant['sale_price']): ?>
+                                <span class="pd-variant__price-old"><?= formatPrice((float) $variant['price']) ?></span>
+                                <span class="pd-variant__price-sale"><?= formatPrice((float) $variant['sale_price']) ?></span>
+                                <?php else: ?>
+                                <?= formatPrice((float) $variant['price']) ?>
+                                <?php endif; ?>
+                            </span>
+                        </label>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
                 <!-- Quantity + Add to Cart -->
                 <form class="pd-info__cart" id="pdCartForm">
                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
@@ -259,6 +292,40 @@ require __DIR__ . '/../layout/header.php';
                     <div class="pd-accordion__panel">
                         <div class="pd-accordion__content pd-prose">
                             <?= $product['how_to_use'] ?>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <!-- Composition / Ingredients -->
+                <?php if (!empty($product['ingredients'])): ?>
+                <div class="pd-accordion" data-pd-accordion>
+                    <button class="pd-accordion__trigger" type="button" aria-expanded="false">
+                        <span>Sastav</span>
+                        <svg class="pd-accordion__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </button>
+                    <div class="pd-accordion__panel">
+                        <div class="pd-accordion__content pd-prose">
+                            <?= nl2br(htmlspecialchars($product['ingredients'])) ?>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <!-- Fragrance Notes -->
+                <?php if (!empty($product['fragrance_notes'])): ?>
+                <div class="pd-accordion" data-pd-accordion>
+                    <button class="pd-accordion__trigger" type="button" aria-expanded="false">
+                        <span>Mirisne note</span>
+                        <svg class="pd-accordion__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                    </button>
+                    <div class="pd-accordion__panel">
+                        <div class="pd-accordion__content pd-prose">
+                            <?= nl2br(htmlspecialchars($product['fragrance_notes'])) ?>
                         </div>
                     </div>
                 </div>

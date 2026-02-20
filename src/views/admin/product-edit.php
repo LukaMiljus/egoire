@@ -13,6 +13,7 @@ $productImages = $isEdit ? fetchProductImages($id) : [];
 $productCategories = $isEdit ? array_column(fetchProductCategories($id), 'id') : [];
 $productFlags = $isEdit ? fetchProductFlags($id) : [];
 $stock = $isEdit ? fetchProductStock($id) : null;
+$variants = $isEdit ? fetchProductVariants($id) : [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     requireCsrf();
@@ -27,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'sale_price'       => inputFloat('sale_price', 0, $_POST) ?: null,
         'meta_title'       => inputString('meta_title', '', $_POST),
         'meta_description' => inputString('meta_description', '', $_POST),
+        'ingredients'      => trim($_POST['ingredients'] ?? ''),
+        'fragrance_notes'  => trim($_POST['fragrance_notes'] ?? ''),
         'is_active'        => isset($_POST['is_active']) ? 1 : 0,
         'on_sale'          => (inputFloat('sale_price', 0, $_POST) > 0) ? 1 : 0,
     ];
@@ -50,6 +53,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stockQty = inputInt('stock_qty', 0, $_POST);
         $stockThreshold = inputInt('stock_threshold', 5, $_POST);
         updateProductStock($savedId, $stockQty, $stockThreshold);
+
+        // Product variants (ml sizes)
+        $variantData = [];
+        if (!empty($_POST['variant_ml'])) {
+            foreach ($_POST['variant_ml'] as $vi => $ml) {
+                $variantData[] = [
+                    'volume_ml'  => (int)$ml,
+                    'label'      => $_POST['variant_label'][$vi] ?? '',
+                    'price'      => (float)($_POST['variant_price'][$vi] ?? 0),
+                    'sale_price' => (float)($_POST['variant_sale_price'][$vi] ?? 0) ?: null,
+                    'sku'        => $_POST['variant_sku'][$vi] ?? null,
+                ];
+            }
+        }
+        syncProductVariants($savedId, $variantData);
 
         // Image upload
         if (!empty($_FILES['images']['name'][0])) {
@@ -130,6 +148,53 @@ require __DIR__ . '/../layout/admin-header.php';
                         <label>Akcijska cena (RSD)</label>
                         <input type="number" name="sale_price" class="form-control" step="0.01" value="<?= $product['sale_price'] ?? '' ?>">
                     </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <h3>Varijante (Zapremine / ml)</h3>
+                <p class="text-muted" style="font-size:0.85rem;margin-bottom:10px;">Dodajte različite veličine proizvoda sa zasebnim cenama.</p>
+                <div id="variants-container">
+                    <?php if ($variants): ?>
+                        <?php foreach ($variants as $vi => $v): ?>
+                        <div class="variant-row" style="display:flex;gap:8px;margin-bottom:8px;align-items:end;flex-wrap:wrap;">
+                            <div style="flex:0 0 80px;">
+                                <label style="font-size:0.8rem;">ML *</label>
+                                <input type="number" name="variant_ml[]" class="form-control" value="<?= (int)$v['volume_ml'] ?>" min="1" placeholder="ml">
+                            </div>
+                            <div style="flex:0 0 120px;">
+                                <label style="font-size:0.8rem;">Naziv</label>
+                                <input type="text" name="variant_label[]" class="form-control" value="<?= htmlspecialchars($v['label'] ?? '') ?>" placeholder="npr. 250 ml">
+                            </div>
+                            <div style="flex:0 0 110px;">
+                                <label style="font-size:0.8rem;">Cena (RSD) *</label>
+                                <input type="number" name="variant_price[]" class="form-control" step="0.01" value="<?= $v['price'] ?>" placeholder="Cena">
+                            </div>
+                            <div style="flex:0 0 110px;">
+                                <label style="font-size:0.8rem;">Akcijska cena</label>
+                                <input type="number" name="variant_sale_price[]" class="form-control" step="0.01" value="<?= $v['sale_price'] ?? '' ?>" placeholder="Akcijska">
+                            </div>
+                            <div style="flex:0 0 100px;">
+                                <label style="font-size:0.8rem;">SKU</label>
+                                <input type="text" name="variant_sku[]" class="form-control" value="<?= htmlspecialchars($v['sku'] ?? '') ?>" placeholder="SKU">
+                            </div>
+                            <button type="button" class="btn btn-sm btn-danger remove-variant" style="height:36px;">&times;</button>
+                        </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+                <button type="button" class="btn btn-sm btn-secondary mt-2" id="add-variant-row">+ Dodaj varijantu</button>
+            </div>
+
+            <div class="card mb-4">
+                <h3>Sastav i mirisne note</h3>
+                <div class="form-group">
+                    <label>Sastav (ingredients)</label>
+                    <textarea name="ingredients" rows="4" class="form-control"><?= htmlspecialchars($product['ingredients'] ?? '') ?></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Mirisna nota</label>
+                    <textarea name="fragrance_notes" rows="3" class="form-control"><?= htmlspecialchars($product['fragrance_notes'] ?? '') ?></textarea>
                 </div>
             </div>
 
@@ -218,5 +283,24 @@ require __DIR__ . '/../layout/admin-header.php';
         <a href="/admin/products" class="btn btn-secondary">Otkaži</a>
     </div>
 </form>
+
+<script>
+document.getElementById('add-variant-row').addEventListener('click', function() {
+    const c = document.getElementById('variants-container');
+    const row = document.createElement('div');
+    row.className = 'variant-row';
+    row.style = 'display:flex;gap:8px;margin-bottom:8px;align-items:end;flex-wrap:wrap;';
+    row.innerHTML = '<div style="flex:0 0 80px;"><label style="font-size:0.8rem;">ML *</label><input type="number" name="variant_ml[]" class="form-control" min="1" placeholder="ml"></div>'
+        + '<div style="flex:0 0 120px;"><label style="font-size:0.8rem;">Naziv</label><input type="text" name="variant_label[]" class="form-control" placeholder="npr. 250 ml"></div>'
+        + '<div style="flex:0 0 110px;"><label style="font-size:0.8rem;">Cena (RSD) *</label><input type="number" name="variant_price[]" class="form-control" step="0.01" placeholder="Cena"></div>'
+        + '<div style="flex:0 0 110px;"><label style="font-size:0.8rem;">Akcijska cena</label><input type="number" name="variant_sale_price[]" class="form-control" step="0.01" placeholder="Akcijska"></div>'
+        + '<div style="flex:0 0 100px;"><label style="font-size:0.8rem;">SKU</label><input type="text" name="variant_sku[]" class="form-control" placeholder="SKU"></div>'
+        + '<button type="button" class="btn btn-sm btn-danger remove-variant" style="height:36px;">&times;</button>';
+    c.appendChild(row);
+});
+document.getElementById('variants-container').addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-variant')) e.target.closest('.variant-row').remove();
+});
+</script>
 
 <?php require __DIR__ . '/../layout/admin-footer.php'; ?>

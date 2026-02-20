@@ -10,7 +10,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?= csrfMetaTag() ?>
-    <title><?= htmlspecialchars($title ?? 'Egoire') ?> – Egoire</title>
+    <title><?= htmlspecialchars($title ?? 'Egoire – Luxury Hair Care') ?></title>
+    <?php if (!empty($metaDescription)): ?>
+    <meta name="description" content="<?= htmlspecialchars($metaDescription) ?>">
+    <?php else: ?>
+    <meta name="description" content="Egoire – Premium proizvodi za negu kose. Ekskluzivni brendovi, luxury hair care.">
+    <?php endif; ?>
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="<?= htmlspecialchars($title ?? 'Egoire – Luxury Hair Care') ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($metaDescription ?? 'Egoire – Premium proizvodi za negu kose.') ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?= htmlspecialchars(baseUrl() . ($_SERVER['REQUEST_URI'] ?? '/')) ?>">
+    <meta property="og:site_name" content="Egoire">
+    <?php if (!empty($ogImage)): ?>
+    <meta property="og:image" content="<?= htmlspecialchars($ogImage) ?>">
+    <?php endif; ?>
+    <link rel="canonical" href="<?= htmlspecialchars(baseUrl() . parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH)) ?>">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

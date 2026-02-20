@@ -28,13 +28,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$data['first_name']) $errors[] = 'Ime je obavezno.';
     if (!$data['last_name'])  $errors[] = 'Prezime je obavezno.';
     if (!isValidEmail($data['email'])) $errors[] = 'Neispravan email.';
-    $pwdCheck = validatePassword($data['password']);
-    if (!$pwdCheck['valid']) $errors = array_merge($errors, $pwdCheck['errors']);
+    $pwdErrors = validatePassword($data['password']);
+    if (!empty($pwdErrors)) $errors = array_merge($errors, $pwdErrors);
     if ($data['password'] !== $confirm) $errors[] = 'Lozinke se ne poklapaju.';
 
     if (empty($errors)) {
-        $result = registerUser($data);
+        $result = registerUser($data['first_name'], $data['last_name'], $data['email'], $data['password'], $data['marketing_optin']);
         if ($result['success']) {
+            // Auto-login after registration
+            $userId = $result['user_id'];
+            session_regenerate_id(true);
+            $_SESSION['user_authenticated'] = true;
+            $_SESSION['user_id'] = $userId;
+
             rateLimitReset('user_register');
             flash('success', 'Registracija uspešna! Dobrodošli u Egoire.');
             redirect('/account');

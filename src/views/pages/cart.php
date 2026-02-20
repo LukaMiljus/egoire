@@ -27,6 +27,7 @@ $hasFreeShipping = $subtotal >= $shippingThreshold;
 
 /* Gift wrap cost (client-side toggle, but define the amount here) */
 $giftWrapCost = 300;
+$giftWrappingOptions = fetchGiftWrappingOptions(true);
 
 /* Page-specific assets */
 $pageStyles  = ['/css/cart.css'];
@@ -192,7 +193,37 @@ require __DIR__ . '/../layout/header.php';
                         <span id="ctSubtotal"><?= formatPrice($subtotal) ?></span>
                     </div>
 
-                    <!-- Gift Wrap Toggle -->
+                    <!-- Gift Wrapping Options -->
+                    <?php if (!empty($giftWrappingOptions)): ?>
+                    <div class="ct-summary__gift" id="ctGiftWrap">
+                        <p style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+                            Poklon pakovanje
+                        </p>
+                        <?php foreach ($giftWrappingOptions as $gwo): ?>
+                        <label class="ct-gift-toggle" style="display:block;margin-bottom:6px;">
+                            <input type="radio" name="gift_wrapping_id" value="<?= $gwo['id'] ?>" data-gift-cost="<?= $gwo['price'] ?>" class="ct-gift-radio">
+                            <span class="ct-gift-toggle__text">
+                                <span class="ct-gift-toggle__label">
+                                    <?php if (!empty($gwo['image'])): ?>
+                                    <img src="<?= htmlspecialchars($gwo['image']) ?>" alt="" style="width:24px;height:24px;object-fit:cover;border-radius:4px;vertical-align:middle;margin-right:4px;">
+                                    <?php endif; ?>
+                                    <?= htmlspecialchars($gwo['name']) ?>
+                                </span>
+                                <span class="ct-gift-toggle__price">+<?= formatPrice((float)$gwo['price']) ?></span>
+                            </span>
+                        </label>
+                        <?php endforeach; ?>
+                        <label class="ct-gift-toggle" style="display:block;margin-bottom:6px;">
+                            <input type="radio" name="gift_wrapping_id" value="0" data-gift-cost="0" class="ct-gift-radio" checked>
+                            <span class="ct-gift-toggle__text">
+                                <span class="ct-gift-toggle__label">Bez pakovanja</span>
+                                <span class="ct-gift-toggle__price">Besplatno</span>
+                            </span>
+                        </label>
+                    </div>
+                    <?php else: ?>
+                    <!-- Fallback: simple gift wrap toggle -->
                     <div class="ct-summary__gift" id="ctGiftWrap">
                         <label class="ct-gift-toggle">
                             <input type="checkbox" id="ctGiftCheck" data-gift-cost="<?= $giftWrapCost ?>">
@@ -208,6 +239,7 @@ require __DIR__ . '/../layout/header.php';
                             </span>
                         </label>
                     </div>
+                    <?php endif; ?>
 
                     <!-- Gift Wrap Cost (hidden until checked) -->
                     <div class="ct-summary__row ct-summary__row--gift" id="ctGiftRow" style="display: none;">

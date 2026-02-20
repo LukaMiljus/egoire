@@ -474,6 +474,101 @@
 
 
 /* ==========================================================
+   4b. VARIANT SELECTOR
+   ========================================================== */
+.pd-info__variants {
+    margin-bottom: 12px;
+}
+
+.pd-info__variants-label {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.pd-info__variants-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.pd-variant {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border: 1px solid #e0d6cf;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.pd-variant:hover {
+    border-color: #C6A75E;
+}
+
+.pd-variant--active,
+.pd-variant:has(input:checked) {
+    border-color: #C6A75E;
+    background: rgba(198, 167, 94, 0.04);
+}
+
+.pd-variant input[type="radio"] {
+    accent-color: #C6A75E;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.pd-variant__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.pd-variant__ml {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0a0a0a;
+}
+
+.pd-variant__label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #888;
+}
+
+.pd-variant__price {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #0a0a0a;
+    text-align: right;
+}
+
+.pd-variant__price-old {
+    text-decoration: line-through;
+    color: #999;
+    font-weight: 400;
+    margin-right: 6px;
+    font-size: 12px;
+}
+
+.pd-variant__price-sale {
+    color: #b06060;
+    font-weight: 600;
+}
+
+
+/* ==========================================================
    5. QUANTITY STEPPER + ADD-TO-CART
    ========================================================== */
 .pd-info__cart {

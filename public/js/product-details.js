@@ -287,4 +287,19 @@
         });
     }
 
+    /* ==========================================================
+       7. VARIANT SELECTOR — toggle active class & update price
+       ========================================================== */
+    var variantInputs = document.querySelectorAll('.pd-variant input[type="radio"]');
+    if (variantInputs.length) {
+        variantInputs.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                document.querySelectorAll('.pd-variant').forEach(function (el) {
+                    el.classList.remove('pd-variant--active');
+                });
+                radio.closest('.pd-variant').classList.add('pd-variant--active');
+            });
+        });
+    }
+
 })();

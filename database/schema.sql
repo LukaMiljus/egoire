@@ -595,4 +595,67 @@ CREATE TABLE `faq` (
     INDEX `idx_faq_active` (`is_active`, `sort_order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- ============================================================
+-- 18. PRODUCT VARIANTS  (ml / volume-based pricing)
+-- ============================================================
+
+CREATE TABLE `product_variants` (
+    `id`          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `product_id`  INT UNSIGNED NOT NULL,
+    `volume_ml`   INT UNSIGNED NOT NULL COMMENT 'Volume in millilitres',
+    `label`       VARCHAR(100) DEFAULT NULL COMMENT 'Optional display label, e.g. "Travel size"',
+    `price`       DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    `sale_price`  DECIMAL(12,2) DEFAULT NULL,
+    `sku`         VARCHAR(50) DEFAULT NULL,
+    `sort_order`  INT NOT NULL DEFAULT 0,
+    `created_at`  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    INDEX `idx_pvar_product` (`product_id`, `sort_order`),
+    CONSTRAINT `fk_pvar_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- 19. STOCK ADJUSTMENTS  (inventory audit log)
+-- ============================================================
+
+CREATE TABLE `stock_adjustments` (
+    `id`            INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `product_id`    INT UNSIGNED NOT NULL,
+    `adjustment`    INT NOT NULL COMMENT 'Positive = increase, negative = decrease',
+    `new_quantity`  INT NOT NULL,
+    `reason`        VARCHAR(500) DEFAULT NULL,
+    `created_at`    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    INDEX `idx_sadj_product` (`product_id`, `created_at`),
+    CONSTRAINT `fk_sadj_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- 20. GIFT WRAPPING OPTIONS
+-- ============================================================
+
+CREATE TABLE `gift_wrapping_options` (
+    `id`          INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `name`        VARCHAR(255) NOT NULL,
+    `description` TEXT DEFAULT NULL,
+    `price`       DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+    `image`       VARCHAR(500) DEFAULT NULL,
+    `is_active`   TINYINT(1) NOT NULL DEFAULT 1,
+    `sort_order`  INT NOT NULL DEFAULT 0,
+    `created_at`  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    INDEX `idx_gwo_active` (`is_active`, `sort_order`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================================
+-- 21. ALTER products – add composition, fragrance & SEO fields
+-- ============================================================
+
+ALTER TABLE `products`
+    ADD COLUMN `ingredients`       TEXT DEFAULT NULL AFTER `how_to_use`,
+    ADD COLUMN `fragrance_notes`   TEXT DEFAULT NULL AFTER `ingredients`,
+    ADD COLUMN `meta_title`        VARCHAR(255) DEFAULT NULL AFTER `main_image`,
+    ADD COLUMN `meta_description`  TEXT DEFAULT NULL AFTER `meta_title`;
+
 SET FOREIGN_KEY_CHECKS = 1;

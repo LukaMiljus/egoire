@@ -500,7 +500,9 @@ function saveProduct(array $data, ?int $id = null): int
         $stmt = $conn->prepare('
             UPDATE products SET brand_id = ?, name = ?, slug = ?, short_description = ?,
             description = ?, how_to_use = ?, sku = ?, price = ?, sale_price = ?,
-            on_sale = ?, is_active = ?, main_image = COALESCE(?, main_image), updated_at = NOW()
+            on_sale = ?, is_active = ?, main_image = COALESCE(?, main_image),
+            ingredients = ?, fragrance_notes = ?,
+            meta_title = ?, meta_description = ?, updated_at = NOW()
             WHERE id = ?
         ');
         $stmt->execute([
@@ -509,14 +511,16 @@ function saveProduct(array $data, ?int $id = null): int
             $data['how_to_use'] ?? null, $data['sku'] ?? null,
             $data['price'], $data['sale_price'] ?? null,
             $data['on_sale'] ?? 0, $data['is_active'] ?? 1,
-            $data['main_image'] ?? null, $id
+            $data['main_image'] ?? null,
+            $data['ingredients'] ?? null, $data['fragrance_notes'] ?? null,
+            $data['meta_title'] ?? null, $data['meta_description'] ?? null, $id
         ]);
         return $id;
     }
 
     $stmt = $conn->prepare('
-        INSERT INTO products (brand_id, name, slug, short_description, description, how_to_use, sku, price, sale_price, on_sale, is_active, main_image)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO products (brand_id, name, slug, short_description, description, how_to_use, sku, price, sale_price, on_sale, is_active, main_image, ingredients, fragrance_notes, meta_title, meta_description)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ');
     $stmt->execute([
         $data['brand_id'] ?? null, $data['name'], $data['slug'],
@@ -524,7 +528,9 @@ function saveProduct(array $data, ?int $id = null): int
         $data['how_to_use'] ?? null, $data['sku'] ?? null,
         $data['price'], $data['sale_price'] ?? null,
         $data['on_sale'] ?? 0, $data['is_active'] ?? 1,
-        $data['main_image'] ?? null
+        $data['main_image'] ?? null,
+        $data['ingredients'] ?? null, $data['fragrance_notes'] ?? null,
+        $data['meta_title'] ?? null, $data['meta_description'] ?? null
     ]);
     $productId = (int) $conn->lastInsertId();
 
@@ -2078,5 +2084,169 @@ function saveUserAddress(int $userId, array $data, ?int $id = null): int
 function deleteUserAddress(int $addressId, int $userId): void
 {
     db()->prepare('DELETE FROM user_addresses WHERE id = ? AND user_id = ?')->execute([$addressId, $userId]);
+}
+
+// ============================================================
+// PRODUCT VARIANTS (ML / SIZE)
+// ============================================================
+
+function fetchProductVariants(int $productId): array
+{
+    $stmt = db()->prepare('SELECT * FROM product_variants WHERE product_id = ? ORDER BY sort_order ASC, volume_ml ASC');
+    $stmt->execute([$productId]);
+    return $stmt->fetchAll();
+}
+
+function syncProductVariants(int $productId, array $variants): void
+{
+    $conn = db();
+    $conn->prepare('DELETE FROM product_variants WHERE product_id = ?')->execute([$productId]);
+
+    $stmt = $conn->prepare('INSERT INTO product_variants (product_id, volume_ml, label, price, sale_price, sku, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    foreach ($variants as $i => $v) {
+        $volumeMl = (int)($v['volume_ml'] ?? 0);
+        $price = (float)($v['price'] ?? 0);
+        if ($volumeMl > 0 && $price > 0) {
+            $stmt->execute([
+                $productId,
+                $volumeMl,
+                $v['label'] ?? ($volumeMl . ' ml'),
+                $price,
+                !empty($v['sale_price']) ? (float)$v['sale_price'] : null,
+                $v['sku'] ?? null,
+                $i
+            ]);
+        }
+    }
+}
+
+// ============================================================
+// INVENTORY MANAGEMENT
+// ============================================================
+
+function fetchInventory(array $filters = []): array
+{
+    $sql = 'SELECT p.id, p.name, p.sku, p.is_active, b.name AS brand_name,
+                   ps.quantity, ps.low_stock_threshold, ps.track_stock
+            FROM products p
+            LEFT JOIN brands b ON b.id = p.brand_id
+            LEFT JOIN product_stock ps ON ps.product_id = p.id
+            WHERE 1=1';
+    $params = [];
+
+    if (!empty($filters['search'])) {
+        $sql .= ' AND (p.name LIKE ? OR p.sku LIKE ?)';
+        $term = '%' . $filters['search'] . '%';
+        $params[] = $term;
+        $params[] = $term;
+    }
+
+    if (!empty($filters['low_stock'])) {
+        $sql .= ' AND ps.quantity <= ps.low_stock_threshold';
+    }
+
+    if (!empty($filters['out_of_stock'])) {
+        $sql .= ' AND ps.quantity <= 0';
+    }
+
+    $sql .= ' ORDER BY ' . ($filters['order_by'] ?? 'p.name ASC');
+
+    if (!empty($filters['limit'])) {
+        $sql .= ' LIMIT ' . (int) $filters['limit'];
+    }
+    if (!empty($filters['offset'])) {
+        $sql .= ' OFFSET ' . (int) $filters['offset'];
+    }
+
+    $stmt = db()->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
+
+function adjustStock(int $productId, int $adjustment, string $reason = ''): void
+{
+    $conn = db();
+
+    // Get current stock
+    $stmt = $conn->prepare('SELECT quantity FROM product_stock WHERE product_id = ?');
+    $stmt->execute([$productId]);
+    $current = $stmt->fetch();
+
+    if ($current) {
+        $newQty = max(0, (int)$current['quantity'] + $adjustment);
+        $conn->prepare('UPDATE product_stock SET quantity = ?, updated_at = NOW() WHERE product_id = ?')
+             ->execute([$newQty, $productId]);
+    } else {
+        $newQty = max(0, $adjustment);
+        $conn->prepare('INSERT INTO product_stock (product_id, quantity) VALUES (?, ?)')
+             ->execute([$productId, $newQty]);
+    }
+
+    // Log the adjustment
+    $conn->prepare('INSERT INTO stock_adjustments (product_id, adjustment, new_quantity, reason) VALUES (?, ?, ?, ?)')
+         ->execute([$productId, $adjustment, $newQty, $reason]);
+}
+
+function fetchStockAdjustments(int $productId, int $limit = 20): array
+{
+    $stmt = db()->prepare('SELECT * FROM stock_adjustments WHERE product_id = ? ORDER BY created_at DESC LIMIT ?');
+    $stmt->execute([$productId, $limit]);
+    return $stmt->fetchAll();
+}
+
+// ============================================================
+// GIFT WRAPPING OPTIONS
+// ============================================================
+
+function fetchGiftWrappingOptions(bool $activeOnly = true): array
+{
+    $sql = 'SELECT * FROM gift_wrapping_options';
+    if ($activeOnly) {
+        $sql .= ' WHERE is_active = 1';
+    }
+    $sql .= ' ORDER BY sort_order ASC, price ASC';
+    $stmt = db()->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll();
+}
+
+function fetchGiftWrappingById(int $id): ?array
+{
+    $stmt = db()->prepare('SELECT * FROM gift_wrapping_options WHERE id = ?');
+    $stmt->execute([$id]);
+    return $stmt->fetch() ?: null;
+}
+
+function saveGiftWrapping(array $data, ?int $id = null): int
+{
+    $conn = db();
+
+    if ($id) {
+        $conn->prepare('
+            UPDATE gift_wrapping_options SET name = ?, description = ?, price = ?,
+            image = COALESCE(?, image), is_active = ?, sort_order = ?, updated_at = NOW()
+            WHERE id = ?
+        ')->execute([
+            $data['name'], $data['description'] ?? null, $data['price'],
+            $data['image'] ?? null, $data['is_active'] ?? 1,
+            $data['sort_order'] ?? 0, $id
+        ]);
+        return $id;
+    }
+
+    $conn->prepare('
+        INSERT INTO gift_wrapping_options (name, description, price, image, is_active, sort_order)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ')->execute([
+        $data['name'], $data['description'] ?? null, $data['price'],
+        $data['image'] ?? null, $data['is_active'] ?? 1,
+        $data['sort_order'] ?? 0
+    ]);
+    return (int) $conn->lastInsertId();
+}
+
+function deleteGiftWrapping(int $id): void
+{
+    db()->prepare('DELETE FROM gift_wrapping_options WHERE id = ?')->execute([$id]);
 }
 

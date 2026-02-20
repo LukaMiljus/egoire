@@ -20,17 +20,24 @@
             <a href="/admin/dashboard">Početna</a>
             <a href="/admin/orders">Porudžbine</a>
             <a href="/admin/products">Artikli</a>
+            <a href="/admin/inventory">Stanje</a>
             <a href="/admin/categories">Kategorije</a>
             <a href="/admin/brands">Brendovi</a>
             <a href="/admin/users">Korisnici</a>
+            <a href="/admin/blog">Blog</a>
+            <a href="/admin/gift-bag">Gift Bag</a>
+            <a href="/admin/gift-wrapping">Poklon pakovanja</a>
+            <a href="/admin/gift-cards">Gift Kartice</a>
             <a href="/admin/loyalty">Loyalty</a>
+            <a href="/admin/contacts">Poruke</a>
             <a href="/admin/analytics">Analitika</a>
             <a href="/admin/marketing">Email Marketing</a>
+            <a href="/admin/pages">Stranice</a>
             </div>
             
             <div class="user-links">
                 <p class="active-user">Name </p>
-                <a href="/admin-logout">Izloguj se</a>
+                <a href="/admin/logout">Izloguj se</a>
             </div>
         </div>
     </div>
@@ -61,17 +68,24 @@
             <a href="/admin/dashboard">Početna</a>
             <a href="/admin/orders">Porudžbine</a>
             <a href="/admin/products">Artikli</a>
+            <a href="/admin/inventory">Stanje</a>
             <a href="/admin/categories">Kategorije</a>
             <a href="/admin/brands">Brendovi</a>
             <a href="/admin/users">Korisnici</a>
+            <a href="/admin/blog">Blog</a>
+            <a href="/admin/gift-bag">Gift Bag</a>
+            <a href="/admin/gift-wrapping">Poklon pakovanja</a>
+            <a href="/admin/gift-cards">Gift Kartice</a>
             <a href="/admin/loyalty">Loyalty</a>
+            <a href="/admin/contacts">Poruke</a>
             <a href="/admin/analytics">Analitika</a>
             <a href="/admin/marketing">Email Marketing</a>
+            <a href="/admin/pages">Stranice</a>
         </nav>
 
         <div class="mobile-user-links">
             <p class="active-user">Name</p>
-            <a href="/admin-logout">Izloguj se</a>
+            <a href="/admin/logout">Izloguj se</a>
         </div>
     </div>
 </div>
