@@ -237,6 +237,9 @@ require __DIR__ . '/../layout/header.php';
                 <!-- Quantity + Add to Cart -->
                 <form class="pd-info__cart" id="pdCartForm">
                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+                    <?php if ($productVariants): ?>
+                    <input type="hidden" name="variant_id" id="pdVariantId" value="<?= $productVariants[0]['id'] ?>">
+                    <?php endif; ?>
 
                     <div class="pd-info__qty-row">
                         <label class="pd-info__qty-label">Količina</label>

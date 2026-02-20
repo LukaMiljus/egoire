@@ -658,4 +658,29 @@ ALTER TABLE `products`
     ADD COLUMN `meta_title`        VARCHAR(255) DEFAULT NULL AFTER `main_image`,
     ADD COLUMN `meta_description`  TEXT DEFAULT NULL AFTER `meta_title`;
 
+-- ============================================================
+-- 22. ALTER cart – add variant support
+-- ============================================================
+
+ALTER TABLE `cart`
+    ADD COLUMN `variant_id` INT UNSIGNED DEFAULT NULL AFTER `product_id`,
+    ADD INDEX `idx_cart_variant` (`variant_id`),
+    ADD CONSTRAINT `fk_cart_variant` FOREIGN KEY (`variant_id`) REFERENCES `product_variants` (`id`) ON DELETE SET NULL;
+
+-- ============================================================
+-- 23. ALTER product_variants – add stock tracking per variant
+-- ============================================================
+
+ALTER TABLE `product_variants`
+    ADD COLUMN `stock_quantity` INT NOT NULL DEFAULT 0 AFTER `sku`;
+
+-- ============================================================
+-- 24. ALTER stock_adjustments – add variant reference
+-- ============================================================
+
+ALTER TABLE `stock_adjustments`
+    ADD COLUMN `variant_id` INT UNSIGNED DEFAULT NULL AFTER `product_id`,
+    ADD INDEX `idx_sadj_variant` (`variant_id`),
+    ADD CONSTRAINT `fk_sadj_variant` FOREIGN KEY (`variant_id`) REFERENCES `product_variants` (`id`) ON DELETE SET NULL;
+
 SET FOREIGN_KEY_CHECKS = 1;

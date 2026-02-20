@@ -45,12 +45,12 @@ $routes = [
     'logout'            => ['pages/logout', false],
 
     // USER ACCOUNT
-    'account'           => ['pages/account/dashboard', true],
-    'account/orders'    => ['pages/account/orders', true],
-    'account/order'     => ['pages/account/order-detail', true],
-    'account/addresses' => ['pages/account/addresses', true],
-    'account/loyalty'   => ['pages/account/loyalty', true],
-    'account/settings'  => ['pages/account/settings', true],
+    'account'           => ['account/dashboard', true],
+    'account/orders'    => ['account/orders', true],
+    'account/order'     => ['account/order-detail', true],
+    'account/addresses' => ['account/addresses', true],
+    'account/loyalty'   => ['account/loyalty', true],
+    'account/settings'  => ['account/settings', true],
 
     // API ENDPOINTS
     'api/cart/add'       => ['api/cart-add', false],

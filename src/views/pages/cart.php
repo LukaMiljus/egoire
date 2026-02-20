@@ -138,6 +138,9 @@ require __DIR__ . '/../layout/header.php';
                             <a href="/product/<?= htmlspecialchars($item['slug'] ?? '') ?>" class="ct-item__name">
                                 <?= htmlspecialchars($item['name']) ?>
                             </a>
+                            <?php if (!empty($item['variant_ml'])): ?>
+                            <span class="ct-item__variant"><?= (int) $item['variant_ml'] ?> ml<?= !empty($item['variant_label']) ? ' – ' . htmlspecialchars($item['variant_label']) : '' ?></span>
+                            <?php endif; ?>
                             <?php if (!empty($item['sku'])): ?>
                             <span class="ct-item__sku">SKU: <?= htmlspecialchars($item['sku']) ?></span>
                             <?php endif; ?>
@@ -146,7 +149,14 @@ require __DIR__ . '/../layout/header.php';
 
                     <!-- Unit Price -->
                     <div class="ct-item__price">
-                        <?php if ($item['sale_price'] && $item['on_sale']): ?>
+                        <?php if (!empty($item['variant_id'])): ?>
+                            <?php if ($item['variant_sale_price'] && (float) $item['variant_sale_price'] > 0): ?>
+                            <span class="ct-item__price-old"><?= formatPrice((float) $item['variant_price']) ?></span>
+                            <span class="ct-item__price-sale"><?= formatPrice((float) $item['variant_sale_price']) ?></span>
+                            <?php else: ?>
+                            <span class="ct-item__price-current"><?= formatPrice((float) $item['variant_price']) ?></span>
+                            <?php endif; ?>
+                        <?php elseif ($item['sale_price'] && (float) $item['sale_price'] > 0): ?>
                         <span class="ct-item__price-old"><?= formatPrice((float) $item['price']) ?></span>
                         <span class="ct-item__price-sale"><?= formatPrice((float) $item['sale_price']) ?></span>
                         <?php else: ?>

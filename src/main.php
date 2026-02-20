@@ -486,7 +486,16 @@ function fetchProductStock(int $productId): ?array
 
 function productDisplayPrice(array $product): float
 {
-    if (!empty($product['on_sale']) && !empty($product['sale_price'])) {
+    // If variant data is present (from fetchCartItems join), use variant price
+    if (!empty($product['variant_id'])) {
+        if (!empty($product['variant_sale_price']) && (float) $product['variant_sale_price'] > 0) {
+            return (float) $product['variant_sale_price'];
+        }
+        if (!empty($product['variant_price']) && (float) $product['variant_price'] > 0) {
+            return (float) $product['variant_price'];
+        }
+    }
+    if (!empty($product['sale_price']) && (float) $product['sale_price'] > 0) {
         return (float) $product['sale_price'];
     }
     return (float) $product['price'];
@@ -626,6 +635,7 @@ function fetchCartItems(?string $sessionId = null): array
     $stmt = db()->prepare('
         SELECT c.id AS cart_id,
                c.product_id,
+               c.variant_id,
                c.quantity,
                c.created_at,
                p.name,
@@ -637,11 +647,17 @@ function fetchCartItems(?string $sessionId = null): array
                p.main_image,
                p.is_active,
                b.name AS brand_name,
-               ps.quantity AS stock_qty
+               ps.quantity AS stock_qty,
+               pv.volume_ml AS variant_ml,
+               pv.label AS variant_label,
+               pv.price AS variant_price,
+               pv.sale_price AS variant_sale_price,
+               pv.sku AS variant_sku
         FROM cart c
         LEFT JOIN products p ON p.id = c.product_id
         LEFT JOIN brands b ON b.id = p.brand_id
         LEFT JOIN product_stock ps ON ps.product_id = p.id
+        LEFT JOIN product_variants pv ON pv.id = c.variant_id
         WHERE c.session_id = ?
         ORDER BY c.created_at ASC
     ');
@@ -675,7 +691,7 @@ function calculateCartTotals(array $items): array
     ];
 }
 
-function addProductToCart(int $productId, int $quantity, ?string $sessionId = null): array
+function addProductToCart(int $productId, int $quantity, ?int $variantId = null, ?string $sessionId = null): array
 {
     $sessionId = $sessionId ?? cartSessionId();
     $quantity = max(1, $quantity);
@@ -692,8 +708,9 @@ function addProductToCart(int $productId, int $quantity, ?string $sessionId = nu
 
     $conn = db();
 
-    $check = $conn->prepare('SELECT id, quantity FROM cart WHERE session_id = ? AND product_id = ?');
-    $check->execute([$sessionId, $productId]);
+    // Check for existing cart entry with same product AND variant
+    $check = $conn->prepare('SELECT id, quantity FROM cart WHERE session_id = ? AND product_id = ? AND (variant_id = ? OR (variant_id IS NULL AND ? IS NULL))');
+    $check->execute([$sessionId, $productId, $variantId, $variantId]);
     $existing = $check->fetch();
 
     $requestedQty = $quantity;
@@ -711,8 +728,8 @@ function addProductToCart(int $productId, int $quantity, ?string $sessionId = nu
              ->execute([$requestedQty, $existing['id']]);
     } else {
         $userId = currentUserId();
-        $conn->prepare('INSERT INTO cart (session_id, user_id, product_id, quantity) VALUES (?, ?, ?, ?)')
-             ->execute([$sessionId, $userId, $productId, $quantity]);
+        $conn->prepare('INSERT INTO cart (session_id, user_id, product_id, variant_id, quantity) VALUES (?, ?, ?, ?, ?)')
+             ->execute([$sessionId, $userId, $productId, $variantId, $quantity]);
     }
 
     return fetchCartItems($sessionId);
@@ -1349,7 +1366,8 @@ function fetchLoyaltyTransactions(int $userId, int $limit = 50): array
 function topLoyaltyUsers(int $limit = 10): array
 {
     $stmt = db()->prepare('
-        SELECT u.id, u.first_name, u.last_name, u.email, ul.points_balance, ul.total_earned, ul.total_spent
+        SELECT u.id AS user_id, u.first_name, u.last_name, u.email,
+               ul.points_balance AS points, ul.total_earned, ul.total_spent
         FROM user_loyalty ul
         JOIN users u ON u.id = ul.user_id
         WHERE u.status = "active"
@@ -1357,7 +1375,29 @@ function topLoyaltyUsers(int $limit = 10): array
         LIMIT ?
     ');
     $stmt->execute([$limit]);
-    return $stmt->fetchAll();
+    $rows = $stmt->fetchAll();
+
+    // Compute tier from loyalty settings
+    $settings = fetchLoyaltySettings();
+    $platThresh  = (int)($settings['platinum_threshold'] ?? 15000);
+    $goldThresh  = (int)($settings['gold_threshold'] ?? 5000);
+    $silverThresh = (int)($settings['silver_threshold'] ?? 1000);
+
+    foreach ($rows as &$r) {
+        $earned = (int) $r['total_earned'];
+        if ($earned >= $platThresh) {
+            $r['tier'] = 'platinum';
+        } elseif ($earned >= $goldThresh) {
+            $r['tier'] = 'gold';
+        } elseif ($earned >= $silverThresh) {
+            $r['tier'] = 'silver';
+        } else {
+            $r['tier'] = 'bronze';
+        }
+    }
+    unset($r);
+
+    return $rows;
 }
 
 // ============================================================
@@ -2103,20 +2143,41 @@ function syncProductVariants(int $productId, array $variants): void
     $conn->prepare('DELETE FROM product_variants WHERE product_id = ?')->execute([$productId]);
 
     $stmt = $conn->prepare('INSERT INTO product_variants (product_id, volume_ml, label, price, sale_price, sku, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    $minPrice = null;
+    $minSalePrice = null;
+
     foreach ($variants as $i => $v) {
         $volumeMl = (int)($v['volume_ml'] ?? 0);
         $price = (float)($v['price'] ?? 0);
         if ($volumeMl > 0 && $price > 0) {
+            $salePrice = !empty($v['sale_price']) ? (float)$v['sale_price'] : null;
             $stmt->execute([
                 $productId,
                 $volumeMl,
                 $v['label'] ?? ($volumeMl . ' ml'),
                 $price,
-                !empty($v['sale_price']) ? (float)$v['sale_price'] : null,
+                $salePrice,
                 $v['sku'] ?? null,
                 $i
             ]);
+
+            // Track cheapest variant for card display
+            $effectivePrice = $salePrice && $salePrice > 0 ? $salePrice : $price;
+            if ($minPrice === null || $price < $minPrice) {
+                $minPrice = $price;
+            }
+            if ($salePrice && $salePrice > 0) {
+                if ($minSalePrice === null || $salePrice < $minSalePrice) {
+                    $minSalePrice = $salePrice;
+                }
+            }
         }
+    }
+
+    // Update main product price to reflect cheapest variant so cards display correctly
+    if ($minPrice !== null) {
+        $conn->prepare('UPDATE products SET price = ?, sale_price = ?, on_sale = ? WHERE id = ?')
+             ->execute([$minPrice, $minSalePrice, $minSalePrice ? 1 : 0, $productId]);
     }
 }
 
@@ -2126,6 +2187,7 @@ function syncProductVariants(int $productId, array $variants): void
 
 function fetchInventory(array $filters = []): array
 {
+    // Fetch products with their stock
     $sql = 'SELECT p.id, p.name, p.sku, p.is_active, b.name AS brand_name,
                    ps.quantity, ps.low_stock_threshold, ps.track_stock
             FROM products p
@@ -2160,31 +2222,60 @@ function fetchInventory(array $filters = []): array
 
     $stmt = db()->prepare($sql);
     $stmt->execute($params);
-    return $stmt->fetchAll();
+    $products = $stmt->fetchAll();
+
+    // Fetch variants for each product
+    foreach ($products as &$product) {
+        $vstmt = db()->prepare('SELECT id, volume_ml, label, sku, stock_quantity FROM product_variants WHERE product_id = ? ORDER BY sort_order ASC');
+        $vstmt->execute([$product['id']]);
+        $product['variants'] = $vstmt->fetchAll();
+    }
+    unset($product);
+
+    return $products;
 }
 
-function adjustStock(int $productId, int $adjustment, string $reason = ''): void
+function adjustStock(int $productId, int $adjustment, string $reason = '', ?int $variantId = null): void
 {
     $conn = db();
 
-    // Get current stock
-    $stmt = $conn->prepare('SELECT quantity FROM product_stock WHERE product_id = ?');
-    $stmt->execute([$productId]);
-    $current = $stmt->fetch();
+    if ($variantId) {
+        // Adjust variant stock
+        $stmt = $conn->prepare('SELECT stock_quantity FROM product_variants WHERE id = ? AND product_id = ?');
+        $stmt->execute([$variantId, $productId]);
+        $current = $stmt->fetch();
 
-    if ($current) {
-        $newQty = max(0, (int)$current['quantity'] + $adjustment);
-        $conn->prepare('UPDATE product_stock SET quantity = ?, updated_at = NOW() WHERE product_id = ?')
-             ->execute([$newQty, $productId]);
+        if ($current) {
+            $newQty = max(0, (int)$current['stock_quantity'] + $adjustment);
+            $conn->prepare('UPDATE product_variants SET stock_quantity = ? WHERE id = ?')
+                 ->execute([$newQty, $variantId]);
+        } else {
+            return; // variant not found
+        }
+
+        // Log the adjustment
+        $conn->prepare('INSERT INTO stock_adjustments (product_id, variant_id, adjustment, new_quantity, reason) VALUES (?, ?, ?, ?, ?)')
+             ->execute([$productId, $variantId, $adjustment, $newQty, $reason]);
     } else {
-        $newQty = max(0, $adjustment);
-        $conn->prepare('INSERT INTO product_stock (product_id, quantity) VALUES (?, ?)')
-             ->execute([$productId, $newQty]);
-    }
+        // Adjust product-level stock (original behavior)
+        $stmt = $conn->prepare('SELECT quantity FROM product_stock WHERE product_id = ?');
+        $stmt->execute([$productId]);
+        $current = $stmt->fetch();
 
-    // Log the adjustment
-    $conn->prepare('INSERT INTO stock_adjustments (product_id, adjustment, new_quantity, reason) VALUES (?, ?, ?, ?)')
-         ->execute([$productId, $adjustment, $newQty, $reason]);
+        if ($current) {
+            $newQty = max(0, (int)$current['quantity'] + $adjustment);
+            $conn->prepare('UPDATE product_stock SET quantity = ?, updated_at = NOW() WHERE product_id = ?')
+                 ->execute([$newQty, $productId]);
+        } else {
+            $newQty = max(0, $adjustment);
+            $conn->prepare('INSERT INTO product_stock (product_id, quantity) VALUES (?, ?)')
+                 ->execute([$productId, $newQty]);
+        }
+
+        // Log the adjustment
+        $conn->prepare('INSERT INTO stock_adjustments (product_id, variant_id, adjustment, new_quantity, reason) VALUES (?, ?, ?, ?, ?)')
+             ->execute([$productId, null, $adjustment, $newQty, $reason]);
+    }
 }
 
 function fetchStockAdjustments(int $productId, int $limit = 20): array

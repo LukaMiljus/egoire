@@ -11,7 +11,7 @@ if (!isAjaxRequest() || !verifyCsrfToken($_SERVER['HTTP_X_CSRF_TOKEN'] ?? '')) {
 }
 
 $productId = inputInt('product_id', 0, $_POST);
-$variantLabel = inputString('variant_label', '', $_POST);
+$variantId = inputInt('variant_id', 0, $_POST);
 $quantity = inputInt('quantity', 1, $_POST);
 
 if (!$productId || $quantity < 1) {
@@ -23,18 +23,22 @@ if (!$product || !$product['is_active']) {
     jsonResponse(['error' => 'Proizvod nije dostupan'], 404);
 }
 
-// Check stock
-if ($variantLabel) {
-    $stock = fetchProductStock($productId);
-    foreach ($stock as $s) {
-        if ($s['variant_label'] === $variantLabel && (int) $s['quantity'] < $quantity) {
-            jsonResponse(['error' => 'Nema dovoljno na stanju'], 400);
+// Validate variant exists if provided
+if ($variantId) {
+    $variants = fetchProductVariants($productId);
+    $validVariant = false;
+    foreach ($variants as $v) {
+        if ((int) $v['id'] === $variantId) {
+            $validVariant = true;
+            break;
         }
+    }
+    if (!$validVariant) {
+        jsonResponse(['error' => 'Varijanta nije pronađena'], 400);
     }
 }
 
-$price = productDisplayPrice($product);
-addProductToCart($productId, $quantity, $variantLabel ?: null, $price);
+addProductToCart($productId, $quantity, $variantId ?: null);
 
 jsonResponse([
     'success' => true,

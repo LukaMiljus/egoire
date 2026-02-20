@@ -288,9 +288,10 @@
     }
 
     /* ==========================================================
-       7. VARIANT SELECTOR — toggle active class & update price
+       7. VARIANT SELECTOR — toggle active class & sync hidden input
        ========================================================== */
     var variantInputs = document.querySelectorAll('.pd-variant input[type="radio"]');
+    var hiddenVariantId = document.getElementById('pdVariantId');
     if (variantInputs.length) {
         variantInputs.forEach(function (radio) {
             radio.addEventListener('change', function () {
@@ -298,6 +299,11 @@
                     el.classList.remove('pd-variant--active');
                 });
                 radio.closest('.pd-variant').classList.add('pd-variant--active');
+
+                // Update hidden form field
+                if (hiddenVariantId) {
+                    hiddenVariantId.value = radio.value;
+                }
             });
         });
     }

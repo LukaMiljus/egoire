@@ -32,8 +32,11 @@
     var EL_TOTAL     = document.getElementById('ctTotal');
     var EL_GIFT_ROW  = document.getElementById('ctGiftRow');
     var EL_GIFT_CHECK = document.getElementById('ctGiftCheck');
+    var EL_GIFT_PRICE = document.getElementById('ctGiftPrice');
 
-    var GIFT_COST = EL_GIFT_CHECK ? parseFloat(EL_GIFT_CHECK.dataset.giftCost) || 300 : 300;
+    // Gift wrapping: support both radio buttons (multiple options) and checkbox (fallback)
+    var GIFT_RADIOS = document.querySelectorAll('.ct-gift-radio');
+    var GIFT_COST = EL_GIFT_CHECK ? parseFloat(EL_GIFT_CHECK.dataset.giftCost) || 300 : 0;
 
 
     /* ==========================================================
@@ -91,7 +94,18 @@
        ========================================================== */
     function recalcAll() {
         var subtotal = calcSubtotal();
-        var giftWrap = (EL_GIFT_CHECK && EL_GIFT_CHECK.checked) ? GIFT_COST : 0;
+
+        // Gift wrap cost: check radio buttons first, then checkbox fallback
+        var giftWrap = 0;
+        if (GIFT_RADIOS.length > 0) {
+            GIFT_RADIOS.forEach(function (radio) {
+                if (radio.checked) {
+                    giftWrap = parseFloat(radio.dataset.giftCost) || 0;
+                }
+            });
+        } else if (EL_GIFT_CHECK && EL_GIFT_CHECK.checked) {
+            giftWrap = GIFT_COST;
+        }
 
         // Shipping uses subtotal WITHOUT gift wrap for threshold check
         var hasFree  = subtotal >= THRESHOLD;
@@ -111,6 +125,9 @@
         // Update gift row visibility
         if (EL_GIFT_ROW) {
             EL_GIFT_ROW.style.display = giftWrap > 0 ? 'flex' : 'none';
+            if (EL_GIFT_PRICE && giftWrap > 0) {
+                EL_GIFT_PRICE.textContent = '+' + formatPrice(giftWrap);
+            }
         }
 
         // Update total
@@ -263,6 +280,15 @@
     if (EL_GIFT_CHECK) {
         EL_GIFT_CHECK.addEventListener('change', function () {
             recalcAll();
+        });
+    }
+
+    // Radio button gift wrapping options
+    if (GIFT_RADIOS.length > 0) {
+        GIFT_RADIOS.forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                recalcAll();
+            });
         });
     }
 

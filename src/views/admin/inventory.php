@@ -6,11 +6,12 @@ $title = 'Stanje zaliha';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && inputString('action', '', $_POST) === 'adjust') {
     requireCsrf();
     $productId = inputInt('product_id', 0, $_POST);
+    $variantId = inputInt('variant_id', 0, $_POST);
     $adjustment = inputInt('adjustment', 0, $_POST);
     $reason = inputString('reason', '', $_POST);
 
     if ($productId && $adjustment !== 0) {
-        adjustStock($productId, $adjustment, $reason);
+        adjustStock($productId, $adjustment, $reason, $variantId ?: null);
         flash('success', 'Stanje ažurirano.');
     } else {
         flash('error', 'Nevažeći parametri.');
@@ -80,6 +81,7 @@ require __DIR__ . '/../layout/admin-header.php';
                 $threshold = (int)($item['low_stock_threshold'] ?? 5);
                 $statusClass = $qty <= 0 ? 'badge-danger' : ($qty <= $threshold ? 'badge-warning' : 'badge-success');
                 $statusLabel = $qty <= 0 ? 'Nema' : ($qty <= $threshold ? 'Niska' : 'OK');
+                $hasVariants = !empty($item['variants']);
             ?>
             <tr>
                 <td><a href="/admin/product/edit?id=<?= $item['id'] ?>"><?= htmlspecialchars($item['name']) ?></a></td>
@@ -93,12 +95,40 @@ require __DIR__ . '/../layout/admin-header.php';
                         <?= csrfField() ?>
                         <input type="hidden" name="action" value="adjust">
                         <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
+                        <input type="hidden" name="variant_id" value="0">
                         <input type="number" name="adjustment" class="form-control" style="width:80px;padding:4px 6px;" placeholder="+/-" required>
                         <input type="text" name="reason" class="form-control" style="width:120px;padding:4px 6px;" placeholder="Razlog">
                         <button type="submit" class="btn btn-sm btn-primary">Primeni</button>
                     </form>
                 </td>
             </tr>
+            <?php if ($hasVariants): ?>
+                <?php foreach ($item['variants'] as $variant):
+                    $vQty = (int)($variant['stock_quantity'] ?? 0);
+                    $vStatusClass = $vQty <= 0 ? 'badge-danger' : ($vQty <= 5 ? 'badge-warning' : 'badge-success');
+                    $vStatusLabel = $vQty <= 0 ? 'Nema' : ($vQty <= 5 ? 'Niska' : 'OK');
+                ?>
+                <tr style="background:#fafaf7;">
+                    <td style="padding-left:32px;">↳ <?= (int)$variant['volume_ml'] ?> ml <?= htmlspecialchars($variant['label'] ?? '') ?></td>
+                    <td><?= htmlspecialchars($variant['sku'] ?? '-') ?></td>
+                    <td></td>
+                    <td><strong><?= $vQty ?></strong></td>
+                    <td>-</td>
+                    <td><span class="badge <?= $vStatusClass ?>"><?= $vStatusLabel ?></span></td>
+                    <td>
+                        <form method="POST" class="inline-form" style="display:flex;gap:4px;align-items:center;">
+                            <?= csrfField() ?>
+                            <input type="hidden" name="action" value="adjust">
+                            <input type="hidden" name="product_id" value="<?= $item['id'] ?>">
+                            <input type="hidden" name="variant_id" value="<?= $variant['id'] ?>">
+                            <input type="number" name="adjustment" class="form-control" style="width:80px;padding:4px 6px;" placeholder="+/-" required>
+                            <input type="text" name="reason" class="form-control" style="width:120px;padding:4px 6px;" placeholder="Razlog">
+                            <button type="submit" class="btn btn-sm btn-primary">Primeni</button>
+                        </form>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
             <?php endforeach; ?>
             <?php if (empty($inventory)): ?>
             <tr><td colspan="7" class="text-muted text-center">Nema proizvoda.</td></tr>
