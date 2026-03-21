@@ -35,6 +35,12 @@ require __DIR__ . '/../layout/header.php';
                             <td><?= formatPrice((float) $item['unit_price'] * (int) $item['quantity']) ?></td>
                         </tr>
                         <?php endforeach; ?>
+                        <?php if (!empty($order['gift_wrapping_name'])): ?>
+                        <tr>
+                            <td colspan="3">🎁 <?= htmlspecialchars($order['gift_wrapping_name']) ?></td>
+                            <td><?= formatPrice((float) $order['gift_wrapping_price']) ?></td>
+                        </tr>
+                        <?php endif; ?>
                     </tbody>
                     <tfoot>
                         <tr>

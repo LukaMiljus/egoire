@@ -664,6 +664,193 @@
 
 
 /* ==========================================================
+   9b. ENHANCED GIFT BAG SELECTION CARDS
+   ========================================================== */
+.ct-gift-section {
+    margin: 16px 0;
+    padding: 16px;
+    background: #FAF6F3;
+    border-radius: 6px;
+    border: 1px solid rgba(198, 167, 94, 0.15);
+}
+
+.ct-gift-section__header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0a0a0a;
+    margin-bottom: 12px;
+}
+
+.ct-gift-section__header svg {
+    color: #C6A75E;
+    flex-shrink: 0;
+}
+
+.ct-gift-section__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    background: #fff3e0;
+    border: 1px solid #ffe0b2;
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: #8d6e00;
+    line-height: 1.5;
+}
+
+.ct-gift-section__note svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+    color: #c6a75e;
+}
+
+.ct-gift-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ct-gift-card {
+    display: block;
+    cursor: pointer;
+    position: relative;
+}
+
+.ct-gift-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ct-gift-card__inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #ffffff;
+    border: 2px solid #e8e4df;
+    border-radius: 6px;
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+.ct-gift-card:hover .ct-gift-card__inner {
+    border-color: #d4c4a8;
+}
+
+.ct-gift-card--selected .ct-gift-card__inner,
+.ct-gift-card input[type="radio"]:checked ~ .ct-gift-card__inner {
+    border-color: #C6A75E;
+    background: rgba(198, 167, 94, 0.05);
+    box-shadow: 0 0 0 1px #C6A75E;
+}
+
+.ct-gift-card__check {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #d4c4a8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.25s, background 0.25s;
+}
+
+.ct-gift-card__check svg {
+    opacity: 0;
+    transition: opacity 0.2s;
+    color: #fff;
+}
+
+.ct-gift-card--selected .ct-gift-card__check,
+.ct-gift-card input[type="radio"]:checked ~ .ct-gift-card__inner .ct-gift-card__check {
+    background: #C6A75E;
+    border-color: #C6A75E;
+}
+
+.ct-gift-card--selected .ct-gift-card__check svg,
+.ct-gift-card input[type="radio"]:checked ~ .ct-gift-card__inner .ct-gift-card__check svg {
+    opacity: 1;
+}
+
+.ct-gift-card__image {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #f0ece6;
+}
+
+.ct-gift-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ct-gift-card__content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.ct-gift-card__name {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #0a0a0a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ct-gift-card__desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 300;
+    color: #6b6b6b;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ct-gift-card__price {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #C6A75E;
+}
+
+.ct-gift-section__limit {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: #9a9a9a;
+}
+
+.ct-gift-section__limit svg {
+    flex-shrink: 0;
+    color: #C6A75E;
+}
+
+
+/* ==========================================================
    10. RESPONSIVE — TABLET (≤1023px)
    ========================================================== */
 @media (max-width: 1023px) {

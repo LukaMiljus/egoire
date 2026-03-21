@@ -3,6 +3,7 @@ declare(strict_types=1);
 requireUser();
 $user = currentUser();
 $title = 'Podešavanja | Egoire';
+$pageStyles = ['/css/account.css'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     requireCsrf();
@@ -48,38 +49,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require __DIR__ . '/../layout/header.php';
 ?>
 
-<section class="section">
-    <div class="container">
-        <div class="account-layout">
+<section class="ac-page">
+    <div class="ac-container">
+        <div class="ac-layout">
             <?php require __DIR__ . '/account-sidebar.php'; ?>
 
-            <div class="account-content">
-                <h1>Podešavanja</h1>
+            <div class="ac-content">
+                <h1 class="ac-title">Podešavanja</h1>
 
-                <div class="card mb-4">
-                    <h3>Informacije o profilu</h3>
+                <div class="ac-card">
+                    <h3 class="ac-card__title">Informacije o profilu</h3>
                     <form method="POST">
                         <?= csrfField() ?>
                         <input type="hidden" name="action" value="update_profile">
-                        <div class="form-row">
-                            <div class="form-group"><label>Ime</label><input type="text" name="first_name" class="form-control" value="<?= htmlspecialchars($user['first_name']) ?>" required></div>
-                            <div class="form-group"><label>Prezime</label><input type="text" name="last_name" class="form-control" value="<?= htmlspecialchars($user['last_name']) ?>" required></div>
+                        <div class="ac-form-row">
+                            <div class="ac-form-group"><label class="ac-form-label">Ime</label><input type="text" name="first_name" class="ac-form-input" value="<?= htmlspecialchars($user['first_name']) ?>" required></div>
+                            <div class="ac-form-group"><label class="ac-form-label">Prezime</label><input type="text" name="last_name" class="ac-form-input" value="<?= htmlspecialchars($user['last_name']) ?>" required></div>
                         </div>
-                        <div class="form-group"><label>Email</label><input type="email" class="form-control" value="<?= htmlspecialchars($user['email']) ?>" disabled></div>
-                        <div class="form-group"><label>Telefon</label><input type="tel" name="phone" class="form-control" value="<?= htmlspecialchars($user['phone'] ?? '') ?>"></div>
-                        <button type="submit" class="btn btn-primary">Sačuvaj</button>
+                        <div class="ac-form-group"><label class="ac-form-label">Email</label><input type="email" class="ac-form-input" value="<?= htmlspecialchars($user['email']) ?>" disabled></div>
+                        <div class="ac-form-group"><label class="ac-form-label">Telefon</label><input type="tel" name="phone" class="ac-form-input" value="<?= htmlspecialchars($user['phone'] ?? '') ?>"></div>
+                        <button type="submit" class="ac-form-btn">Sačuvaj</button>
                     </form>
                 </div>
 
-                <div class="card">
-                    <h3>Promena lozinke</h3>
+                <div class="ac-card">
+                    <h3 class="ac-card__title">Promena lozinke</h3>
                     <form method="POST">
                         <?= csrfField() ?>
                         <input type="hidden" name="action" value="change_password">
-                        <div class="form-group"><label>Trenutna lozinka</label><input type="password" name="current_password" class="form-control" required></div>
-                        <div class="form-group"><label>Nova lozinka</label><input type="password" name="new_password" class="form-control" required></div>
-                        <div class="form-group"><label>Potvrdi novu lozinku</label><input type="password" name="confirm_password" class="form-control" required></div>
-                        <button type="submit" class="btn btn-primary">Promeni lozinku</button>
+                        <div class="ac-form-group"><label class="ac-form-label">Trenutna lozinka</label><input type="password" name="current_password" class="ac-form-input" required></div>
+                        <div class="ac-form-group"><label class="ac-form-label">Nova lozinka</label><input type="password" name="new_password" class="ac-form-input" required></div>
+                        <div class="ac-form-group"><label class="ac-form-label">Potvrdi novu lozinku</label><input type="password" name="confirm_password" class="ac-form-input" required></div>
+                        <button type="submit" class="ac-form-btn">Promeni lozinku</button>
                     </form>
                 </div>
             </div>

@@ -28,6 +28,7 @@ $hasFreeShipping = $subtotal >= $shippingThreshold;
 /* Gift wrap cost (client-side toggle, but define the amount here) */
 $giftWrapCost = 300;
 $giftWrappingOptions = fetchGiftWrappingOptions(true);
+$selectedGiftWrappingId = (int) ($_SESSION['gift_wrapping_id'] ?? 0);
 
 /* Page-specific assets */
 $pageStyles  = ['/css/cart.css'];
@@ -203,34 +204,64 @@ require __DIR__ . '/../layout/header.php';
                         <span id="ctSubtotal"><?= formatPrice($subtotal) ?></span>
                     </div>
 
-                    <!-- Gift Wrapping Options -->
+                    <!-- Gift Wrapping Options — Enhanced Card Selection -->
                     <?php if (!empty($giftWrappingOptions)): ?>
-                    <div class="ct-summary__gift" id="ctGiftWrap">
-                        <p style="font-size:0.85rem;font-weight:600;margin-bottom:8px;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
-                            Poklon pakovanje
-                        </p>
-                        <?php foreach ($giftWrappingOptions as $gwo): ?>
-                        <label class="ct-gift-toggle" style="display:block;margin-bottom:6px;">
-                            <input type="radio" name="gift_wrapping_id" value="<?= $gwo['id'] ?>" data-gift-cost="<?= $gwo['price'] ?>" class="ct-gift-radio">
-                            <span class="ct-gift-toggle__text">
-                                <span class="ct-gift-toggle__label">
+                    <div class="ct-gift-section" id="ctGiftWrap">
+                        <div class="ct-gift-section__header">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+                            <span>Poklon pakovanje</span>
+                        </div>
+
+                        <?php if ($totalQty > 4): ?>
+                        <div class="ct-gift-section__note">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                            <span>Jedan Gift Bag prima maksimalno 4 proizvoda. Za <?= $totalQty ?> artikala u korpi, biće potrebno više Gift Bag pakovanja.</span>
+                        </div>
+                        <?php endif; ?>
+
+                        <div class="ct-gift-options" id="ctGiftOptions">
+                            <!-- No packaging option -->
+                            <label class="ct-gift-card<?= $selectedGiftWrappingId === 0 ? ' ct-gift-card--selected' : '' ?>" data-gift-id="0">
+                                <input type="radio" name="gift_wrapping_id" value="0" data-gift-cost="0" class="ct-gift-radio"<?= $selectedGiftWrappingId === 0 ? ' checked' : '' ?>>
+                                <div class="ct-gift-card__inner">
+                                    <div class="ct-gift-card__check">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                    </div>
+                                    <div class="ct-gift-card__content">
+                                        <span class="ct-gift-card__name">Bez pakovanja</span>
+                                        <span class="ct-gift-card__price">Besplatno</span>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <?php foreach ($giftWrappingOptions as $gwo): ?>
+                            <label class="ct-gift-card<?= $selectedGiftWrappingId === (int) $gwo['id'] ? ' ct-gift-card--selected' : '' ?>" data-gift-id="<?= $gwo['id'] ?>">
+                                <input type="radio" name="gift_wrapping_id" value="<?= $gwo['id'] ?>" data-gift-cost="<?= $gwo['price'] ?>" class="ct-gift-radio"<?= $selectedGiftWrappingId === (int) $gwo['id'] ? ' checked' : '' ?>>
+                                <div class="ct-gift-card__inner">
+                                    <div class="ct-gift-card__check">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                    </div>
                                     <?php if (!empty($gwo['image'])): ?>
-                                    <img src="<?= htmlspecialchars($gwo['image']) ?>" alt="" style="width:24px;height:24px;object-fit:cover;border-radius:4px;vertical-align:middle;margin-right:4px;">
+                                    <div class="ct-gift-card__image">
+                                        <img src="<?= htmlspecialchars($gwo['image']) ?>" alt="<?= htmlspecialchars($gwo['name']) ?>" loading="lazy">
+                                    </div>
                                     <?php endif; ?>
-                                    <?= htmlspecialchars($gwo['name']) ?>
-                                </span>
-                                <span class="ct-gift-toggle__price">+<?= formatPrice((float)$gwo['price']) ?></span>
-                            </span>
-                        </label>
-                        <?php endforeach; ?>
-                        <label class="ct-gift-toggle" style="display:block;margin-bottom:6px;">
-                            <input type="radio" name="gift_wrapping_id" value="0" data-gift-cost="0" class="ct-gift-radio" checked>
-                            <span class="ct-gift-toggle__text">
-                                <span class="ct-gift-toggle__label">Bez pakovanja</span>
-                                <span class="ct-gift-toggle__price">Besplatno</span>
-                            </span>
-                        </label>
+                                    <div class="ct-gift-card__content">
+                                        <span class="ct-gift-card__name"><?= htmlspecialchars($gwo['name']) ?></span>
+                                        <?php if (!empty($gwo['description'])): ?>
+                                        <span class="ct-gift-card__desc"><?= htmlspecialchars(truncate($gwo['description'], 60)) ?></span>
+                                        <?php endif; ?>
+                                        <span class="ct-gift-card__price">+<?= formatPrice((float) $gwo['price']) ?></span>
+                                    </div>
+                                </div>
+                            </label>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <p class="ct-gift-section__limit">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                            Maks. 4 proizvoda po Gift Bag-u
+                        </p>
                     </div>
                     <?php else: ?>
                     <!-- Fallback: simple gift wrap toggle -->
@@ -252,9 +283,9 @@ require __DIR__ . '/../layout/header.php';
                     <?php endif; ?>
 
                     <!-- Gift Wrap Cost (hidden until checked) -->
-                    <div class="ct-summary__row ct-summary__row--gift" id="ctGiftRow" style="display: none;">
+                    <div class="ct-summary__row ct-summary__row--gift" id="ctGiftRow" style="display: <?= $selectedGiftWrappingId > 0 ? 'flex' : 'none' ?>;">
                         <span>Poklon pakovanje</span>
-                        <span id="ctGiftPrice">+<?= formatPrice((float) $giftWrapCost) ?></span>
+                        <span id="ctGiftPrice">+<?= formatPrice((float) ($totals['gift_wrapping_cost'] ?? $giftWrapCost)) ?></span>
                     </div>
 
                     <!-- Shipping -->

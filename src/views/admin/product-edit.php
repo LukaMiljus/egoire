@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'meta_description' => inputString('meta_description', '', $_POST),
         'ingredients'      => trim($_POST['ingredients'] ?? ''),
         'fragrance_notes'  => trim($_POST['fragrance_notes'] ?? ''),
+        'gender'           => in_array($_POST['gender'] ?? '', ['male', 'female']) ? $_POST['gender'] : 'female',
         'is_active'        => isset($_POST['is_active']) ? 1 : 0,
         'on_sale'          => (inputFloat('sale_price', 0, $_POST) > 0) ? 1 : 0,
     ];
@@ -222,6 +223,13 @@ require __DIR__ . '/../layout/admin-header.php';
                         <input type="checkbox" name="is_active" value="1" <?= ($product['is_active'] ?? 1) ? 'checked' : '' ?>>
                         Aktivan
                     </label>
+                </div>
+                <div class="form-group">
+                    <label>Pol</label>
+                    <select name="gender" class="form-control">
+                        <option value="female" <?= ($product['gender'] ?? 'female') === 'female' ? 'selected' : '' ?>>Ženski</option>
+                        <option value="male" <?= ($product['gender'] ?? 'female') === 'male' ? 'selected' : '' ?>>Muški</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Oznake</label>

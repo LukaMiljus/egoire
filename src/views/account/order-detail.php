@@ -13,50 +13,61 @@ if (!$order) redirect('/account/orders');
 $items = fetchOrderItems($orderId);
 $address = fetchOrderAddress($orderId);
 $title = 'Porudžbina ' . $order['order_number'] . ' | Egoire';
+$pageStyles = ['/css/account.css'];
 
 require __DIR__ . '/../layout/header.php';
 ?>
 
-<section class="section">
-    <div class="container">
-        <div class="account-layout">
+<section class="ac-page">
+    <div class="ac-container">
+        <div class="ac-layout">
             <?php require __DIR__ . '/account-sidebar.php'; ?>
 
-            <div class="account-content">
-                <a href="/account/orders" class="btn btn-secondary btn-sm">&larr; Nazad</a>
-                <h1>Porudžbina <?= htmlspecialchars($order['order_number']) ?></h1>
+            <div class="ac-content">
+                <a href="/account/orders" class="ac-back-link">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M19 12H5m0 0l7 7m-7-7l7-7"/></svg>
+                    Nazad na porudžbine
+                </a>
+                <h1 class="ac-title">Porudžbina <?= htmlspecialchars($order['order_number']) ?></h1>
 
-                <div class="order-status-bar mb-4">
-                    <span class="badge <?= orderStatusClass($order['status']) ?>"><?= orderStatusLabel($order['status']) ?></span>
-                    <span class="text-muted"><?= formatDateTime($order['created_at']) ?></span>
+                <div class="ac-order-status">
+                    <span class="ac-badge ac-badge--<?= htmlspecialchars($order['status']) ?>"><?= orderStatusLabel($order['status']) ?></span>
+                    <span class="ac-order__date"><?= formatDateTime($order['created_at']) ?></span>
                 </div>
 
-                <div class="card mb-4">
-                    <h3>Stavke</h3>
+                <div class="ac-card">
+                    <h3 class="ac-card__title">Stavke</h3>
                     <?php foreach ($items as $item): ?>
-                    <div class="order-item-row">
-                        <span><?= htmlspecialchars($item['product_name']) ?></span>
-                        <span>× <?= (int) $item['quantity'] ?></span>
-                        <span><?= formatPrice((float) $item['unit_price'] * (int) $item['quantity']) ?></span>
+                    <div class="ac-order-item">
+                        <span class="ac-order-item__name"><?= htmlspecialchars($item['product_name']) ?></span>
+                        <span class="ac-order-item__qty">× <?= (int) $item['quantity'] ?></span>
+                        <span class="ac-order-item__price"><?= formatPrice((float) $item['unit_price'] * (int) $item['quantity']) ?></span>
                     </div>
                     <?php endforeach; ?>
-                    <hr>
-                    <div class="order-item-row total">
+
+                    <?php if (!empty($order['gift_wrapping_name'])): ?>
+                    <div class="ac-order-item ac-order-item--gift">
+                        <span class="ac-order-item__name">🎁 <?= htmlspecialchars($order['gift_wrapping_name']) ?></span>
+                        <span class="ac-order-item__qty"></span>
+                        <span class="ac-order-item__price"><?= formatPrice((float) $order['gift_wrapping_price']) ?></span>
+                    </div>
+                    <?php endif; ?>
+
+                    <div class="ac-order-total-row">
                         <span>Ukupno</span>
-                        <span></span>
-                        <span><strong><?= formatPrice((float) $order['total_price']) ?></strong></span>
+                        <span><?= formatPrice((float) $order['total_price']) ?></span>
                     </div>
                 </div>
 
                 <?php if ($address): ?>
-                <div class="card">
-                    <h3>Adresa dostave</h3>
-                    <p>
+                <div class="ac-card">
+                    <h3 class="ac-card__title">Adresa dostave</h3>
+                    <div class="ac-address-block">
                         <?= htmlspecialchars($address['first_name'] . ' ' . $address['last_name']) ?><br>
                         <?= htmlspecialchars($address['address']) ?><br>
                         <?= htmlspecialchars($address['city']) ?>, <?= htmlspecialchars($address['postal_code']) ?><br>
                         <?= htmlspecialchars($address['phone'] ?? '') ?>
-                    </p>
+                    </div>
                 </div>
                 <?php endif; ?>
             </div>

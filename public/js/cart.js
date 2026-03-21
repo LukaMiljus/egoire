@@ -283,11 +283,24 @@
         });
     }
 
-    // Radio button gift wrapping options
+    // Radio button gift wrapping options — enhanced card selection
     if (GIFT_RADIOS.length > 0) {
         GIFT_RADIOS.forEach(function (radio) {
             radio.addEventListener('change', function () {
+                // Remove selected class from all cards
+                document.querySelectorAll('.ct-gift-card').forEach(function (card) {
+                    card.classList.remove('ct-gift-card--selected');
+                });
+                // Add selected class to the checked card
+                var parentCard = radio.closest('.ct-gift-card');
+                if (parentCard) {
+                    parentCard.classList.add('ct-gift-card--selected');
+                }
                 recalcAll();
+
+                // Persist selection to session via AJAX
+                var selectedId = parseInt(radio.value, 10) || 0;
+                fetchJSON('/api/cart/gift-wrapping', { gift_wrapping_id: selectedId });
             });
         });
     }

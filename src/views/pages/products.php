@@ -18,6 +18,7 @@ $filters = [
     'search'      => inputString('search'),
     'brand_id'    => inputInt('brand_id') ?: null,
     'category_id' => inputInt('category_id') ?: null,
+    'gender'      => in_array(inputString('gender'), ['male', 'female']) ? inputString('gender') : null,
     'price_min'   => inputFloat('price_min') ?: null,
     'price_max'   => inputFloat('price_max') ?: null,
     'sort'        => inputString('sort'),
@@ -71,6 +72,10 @@ if (inputString('price_min') || inputString('price_max')) {
 }
 if (inputString('search')) {
     $activeFilters[] = ['key' => 'search', 'label' => '„' . inputString('search') . '"'];
+}
+if (inputString('gender')) {
+    $genderLabels = ['male' => 'Muški', 'female' => 'Ženski'];
+    $activeFilters[] = ['key' => 'gender', 'label' => $genderLabels[inputString('gender')] ?? inputString('gender')];
 }
 
 /* Sort label map */
@@ -166,6 +171,28 @@ require __DIR__ . '/../layout/header.php';
                                placeholder="∞" value="<?= htmlspecialchars(inputString('price_max')) ?>">
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Pol -->
+        <div class="ep-accordion" data-accordion>
+            <button class="ep-accordion__trigger" type="button">
+                <span>Pol</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5 6 7.5 9 4.5"/></svg>
+            </button>
+            <div class="ep-accordion__content">
+                <label class="ep-checkbox">
+                    <input type="radio" name="gender" value="female"
+                        <?= inputString('gender') === 'female' ? 'checked' : '' ?>>
+                    <span class="ep-checkbox__mark"></span>
+                    <span class="ep-checkbox__label">Ženski</span>
+                </label>
+                <label class="ep-checkbox">
+                    <input type="radio" name="gender" value="male"
+                        <?= inputString('gender') === 'male' ? 'checked' : '' ?>>
+                    <span class="ep-checkbox__mark"></span>
+                    <span class="ep-checkbox__label">Muški</span>
+                </label>
             </div>
         </div>
 

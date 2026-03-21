@@ -52,6 +52,7 @@ $orderData = [
     'gift_card_code'  => $giftCardCode ?: null,
     'use_loyalty'     => $useLoyalty,
     'loyalty_points'  => $loyaltyPoints,
+    'gift_wrapping_id' => (int) ($_SESSION['gift_wrapping_id'] ?? 0),
 ];
 
 $addressData = [

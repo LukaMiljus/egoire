@@ -31,6 +31,7 @@ $filters = [
     'search'   => inputString('search'),
     'brand_id' => inputInt('brand_id') ?: null,
     'active'   => inputString('active') !== '' ? (inputString('active') === '1') : null,
+    'gender'   => in_array(inputString('gender'), ['male', 'female']) ? inputString('gender') : null,
 ];
 $filters = array_filter($filters, fn($v) => $v !== null && $v !== '');
 
@@ -71,6 +72,14 @@ require __DIR__ . '/../layout/admin-header.php';
                     <option value="">Svi</option>
                     <option value="1" <?= inputString('active') === '1' ? 'selected' : '' ?>>Aktivan</option>
                     <option value="0" <?= inputString('active') === '0' ? 'selected' : '' ?>>Neaktivan</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Pol</label>
+                <select name="gender">
+                    <option value="">Svi</option>
+                    <option value="female" <?= inputString('gender') === 'female' ? 'selected' : '' ?>>Ženski</option>
+                    <option value="male" <?= inputString('gender') === 'male' ? 'selected' : '' ?>>Muški</option>
                 </select>
             </div>
             <div class="filter-group filter-actions">

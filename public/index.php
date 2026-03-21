@@ -31,9 +31,9 @@ $routes = [
     'contact'           => ['pages/contact', false],
     'faq'               => ['pages/faq', false],
     'about'             => ['pages/static-page', false],
-    'terms'             => ['pages/static-page', false],
-    'privacy'           => ['pages/static-page', false],
-    'shipping'          => ['pages/static-page', false],
+    'terms'             => ['pages/terms', false],
+    'privacy'           => ['pages/privacy', false],
+    'shipping'          => ['pages/shipping-returns', false],
     'search'            => ['pages/search', false],
     'unsubscribe'       => ['pages/unsubscribe', false],
 
@@ -57,6 +57,7 @@ $routes = [
     'api/cart/update'    => ['api/cart-update', false],
     'api/cart/remove'    => ['api/cart-remove', false],
     'api/cart/count'     => ['api/cart-count', false],
+    'api/cart/gift-wrapping' => ['api/cart-gift-wrapping', false],
     'api/checkout'       => ['api/checkout', false],
     'api/gift-card/validate' => ['api/gift-card-validate', false],
     'api/newsletter'     => ['api/newsletter', false],
@@ -108,7 +109,7 @@ $routeParams = [];
 $route = $routes[$path] ?? null;
 
 // For static pages, set slug from the path itself
-if ($route && in_array($path, ['about', 'terms', 'privacy', 'shipping'])) {
+if ($route && in_array($path, ['about'])) {
     $routeParams = ['slug' => $path];
 }
 

@@ -22,6 +22,11 @@ $shipping = (float) ($totals['shipping'] ?? 0);
 $total    = (float) ($totals['total'] ?? 0);
 $hasFreeShipping = $shipping <= 0;
 
+/* --- Gift wrapping from session --- */
+$giftWrappingId = (int) ($totals['gift_wrapping_id'] ?? 0);
+$giftWrappingCost = (float) ($totals['gift_wrapping_cost'] ?? 0);
+$giftWrappingOption = $giftWrappingId > 0 ? fetchGiftWrappingById($giftWrappingId) : null;
+
 /* --- User data --- */
 $user      = isUserAuthenticated() ? currentUser() : null;
 $addresses = $user ? fetchUserAddresses((int) $user['id']) : [];
@@ -185,7 +190,7 @@ require __DIR__ . '/../layout/header.php';
                     <!-- ============================
                          3. GIFT CARD (collapsible)
                          ============================ -->
-                    <section class="co-section co-section--compact">
+                    <!-- <section class="co-section co-section--compact">
                         <button class="co-expand-trigger" type="button" data-co-expand="giftCard">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
                             <span>Imate poklon karticu?</span>
@@ -205,12 +210,12 @@ require __DIR__ . '/../layout/header.php';
                                 <div class="co-feedback" id="coGiftFeedback"></div>
                             </div>
                         </div>
-                    </section>
+                    </section> -->
 
                     <!-- ============================
                          4. PROMO CODE (collapsible)
                          ============================ -->
-                    <section class="co-section co-section--compact">
+                    <!-- <section class="co-section co-section--compact">
                         <button class="co-expand-trigger" type="button" data-co-expand="promo">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
                             <span>Imate promo kod?</span>
@@ -230,7 +235,7 @@ require __DIR__ . '/../layout/header.php';
                                 <div class="co-feedback" id="coPromoFeedback"></div>
                             </div>
                         </div>
-                    </section>
+                    </section> -->
 
                     <!-- ============================
                          5. LOYALTY (conditional)
@@ -326,6 +331,13 @@ require __DIR__ . '/../layout/header.php';
                             <span>Dostava</span>
                             <span><?= $hasFreeShipping ? '<span class="co-summary__free">Besplatna</span>' : formatPrice($shipping) ?></span>
                         </div>
+
+                        <?php if ($giftWrappingOption): ?>
+                        <div class="co-summary__row co-summary__row--gift">
+                            <span>🎁 <?= htmlspecialchars($giftWrappingOption['name']) ?></span>
+                            <span><?= formatPrice($giftWrappingCost) ?></span>
+                        </div>
+                        <?php endif; ?>
 
                         <div class="co-summary__row co-summary__row--discount" id="coDiscountRow" style="display: none;">
                             <span>Popust</span>

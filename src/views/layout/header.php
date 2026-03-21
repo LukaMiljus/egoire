@@ -165,41 +165,6 @@
                     </div>
                 </li>
 
-                <!-- 5. Gift kartice — 3 card horizontal -->
-                <li class="eg-nav__item eg-nav__item--has-dd">
-                    <a href="/gift-card" class="eg-nav__link <?= isActivePath('/gift-card') ? 'is-active' : '' ?>">
-                        Gift kartice
-                        <svg class="eg-nav__chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 3.5 5 6 7.5 3.5"/></svg>
-                    </a>
-                    <div class="eg-dropdown">
-                        <div class="eg-dropdown__panel">
-                            <div class="eg-dropdown__inner">
-                                <h3 class="eg-dropdown__title">Gift kartice</h3>
-                                <div class="eg-dropdown__gift-grid">
-                                    <div class="eg-gift-tile">
-                                        <div class="img-placeholder img-placeholder--card"></div>
-                                        <!-- image placeholder -->
-                                        <p class="eg-gift-tile__label">2.000 RSD</p>
-                                        <p class="eg-gift-tile__desc">Idealan poklon za prijatelje</p>
-                                    </div>
-                                    <div class="eg-gift-tile">
-                                        <div class="img-placeholder img-placeholder--card"></div>
-                                        <!-- image placeholder -->
-                                        <p class="eg-gift-tile__label">5.000 RSD</p>
-                                        <p class="eg-gift-tile__desc">Za posebne prilike</p>
-                                    </div>
-                                    <div class="eg-gift-tile">
-                                        <div class="img-placeholder img-placeholder--card"></div>
-                                        <!-- image placeholder -->
-                                        <p class="eg-gift-tile__label">10.000 RSD</p>
-                                        <p class="eg-gift-tile__desc">Premium iskustvo nege</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-
                 <!-- 6. Loyalty — luxury mini panel with progress -->
                 <li class="eg-nav__item eg-nav__item--has-dd">
                     <a href="/account/loyalty" class="eg-nav__link <?= isActivePath('/loyalty') || isActivePath('/account/loyalty') ? 'is-active' : '' ?>">
@@ -472,7 +437,6 @@
             </div>
         </div>
 
-        <a href="/gift-card" class="eg-mobile__link">Gift kartice</a>
         <a href="/account/loyalty" class="eg-mobile__link">Loyalty program</a>
         <a href="/contact" class="eg-mobile__link">Konsultacije</a>
 

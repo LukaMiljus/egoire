@@ -135,6 +135,12 @@ require __DIR__ . '/../layout/admin-header.php';
                 <td>-<?= formatPrice((float) $order['gift_card_amount']) ?></td>
             </tr>
             <?php endif; ?>
+            <?php if (!empty($order['gift_wrapping_name'])): ?>
+            <tr>
+                <td colspan="4" class="text-right">🎁 <?= htmlspecialchars($order['gift_wrapping_name']) ?></td>
+                <td><?= formatPrice((float) $order['gift_wrapping_price']) ?></td>
+            </tr>
+            <?php endif; ?>
             <tr class="total-row">
                 <td colspan="4" class="text-right"><strong>Ukupno</strong></td>
                 <td><strong><?= formatPrice((float) $order['total_price']) ?></strong></td>

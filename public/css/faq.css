@@ -1,0 +1,338 @@
+/* ============================================================
+   Egoire – FAQ Page Stylesheet
+   File:  public/css/faq.css
+   Namespace: fq-
+   ============================================================
+
+   Design:  Clean accordion, editorial luxury
+   Palette: Gold #C6A75E · Beige #FAF6F3 · Black #0a0a0a
+   Fonts:   Playfair Display · Inter
+
+   Table of Contents:
+   1.  Container
+   2.  Hero Section
+   3.  Content Wrapper
+   4.  FAQ List
+   5.  FAQ Item
+   6.  Trigger / Question
+   7.  Panel / Answer
+   8.  Empty State
+   9.  CTA Section
+   10. Tablet  (≤ 1024px)
+   11. Mobile  (≤ 767px)
+   12. Small Mobile (≤ 479px)
+   13. Reduced Motion
+   ============================================================ */
+
+
+/* ============================================================
+   1. CONTAINER
+   ============================================================ */
+.fq-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 48px);
+}
+
+.fq-container--narrow {
+    max-width: 780px;
+}
+
+
+/* ============================================================
+   2. HERO SECTION
+   ============================================================ */
+.fq-hero {
+    padding: clamp(72px, 12vw, 120px) 0 clamp(48px, 7vw, 72px);
+    text-align: center;
+    background: linear-gradient(180deg, #FAF6F3 0%, #ffffff 100%);
+}
+
+.fq-hero__label {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #C6A75E;
+    margin-bottom: 20px;
+}
+
+.fq-hero__title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #0a0a0a;
+    margin: 0 0 16px;
+    line-height: 1.15;
+}
+
+.fq-hero__text {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.9rem, 1.5vw, 1.02rem);
+    font-weight: 300;
+    line-height: 1.75;
+    color: #6b6b6b;
+    max-width: 540px;
+    margin: 0 auto;
+}
+
+
+/* ============================================================
+   3. CONTENT WRAPPER
+   ============================================================ */
+.fq-content {
+    padding: clamp(24px, 4vw, 48px) 0 clamp(64px, 10vw, 112px);
+    background: #ffffff;
+}
+
+
+/* ============================================================
+   4. FAQ LIST
+   ============================================================ */
+.fq-list {
+    margin-bottom: clamp(48px, 8vw, 80px);
+}
+
+
+/* ============================================================
+   5. FAQ ITEM
+   ============================================================ */
+.fq-item {
+    border-bottom: 1px solid rgba(10, 10, 10, 0.08);
+}
+
+.fq-item:first-child {
+    border-top: 1px solid rgba(10, 10, 10, 0.08);
+}
+
+
+/* ============================================================
+   6. TRIGGER / QUESTION
+   ============================================================ */
+.fq-item__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: clamp(18px, 3vw, 24px) 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    gap: 16px;
+    transition: color 0.2s ease;
+}
+
+.fq-item__trigger:hover {
+    color: #C6A75E;
+}
+
+.fq-item__question {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(0.92rem, 1.4vw, 1.02rem);
+    font-weight: 500;
+    color: #0a0a0a;
+    line-height: 1.5;
+    transition: color 0.2s ease;
+}
+
+.fq-item__trigger:hover .fq-item__question {
+    color: #C6A75E;
+}
+
+.fq-item__icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #FAF6F3;
+    color: #C6A75E;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.fq-item__icon-v {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform-origin: center;
+}
+
+/* Open state */
+.fq-item--open .fq-item__icon {
+    background: #C6A75E;
+    color: #ffffff;
+}
+
+.fq-item--open .fq-item__icon-v {
+    opacity: 0;
+    transform: scaleY(0);
+}
+
+
+/* ============================================================
+   7. PANEL / ANSWER
+   ============================================================ */
+.fq-item__panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.fq-item--open .fq-item__panel {
+    max-height: 600px;
+}
+
+.fq-item__answer {
+    padding: 0 0 clamp(18px, 3vw, 28px);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #4a4a4a;
+}
+
+
+/* ============================================================
+   8. EMPTY STATE
+   ============================================================ */
+.fq-empty {
+    text-align: center;
+    padding: clamp(48px, 8vw, 96px) 0;
+}
+
+.fq-empty p {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    color: #6b6b6b;
+}
+
+
+/* ============================================================
+   9. CTA SECTION
+   ============================================================ */
+.fq-cta {
+    text-align: center;
+}
+
+.fq-cta__inner {
+    padding: clamp(36px, 6vw, 56px) clamp(24px, 4vw, 48px);
+    background: #FAF6F3;
+    border-radius: 6px;
+    border: 1px solid rgba(198, 167, 94, 0.1);
+}
+
+.fq-cta__title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+    font-weight: 400;
+    color: #0a0a0a;
+    margin: 0 0 12px;
+}
+
+.fq-cta__text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: #6b6b6b;
+    max-width: 420px;
+    margin: 0 auto 24px;
+}
+
+.fq-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: #0a0a0a;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.fq-cta__btn:hover {
+    background: #C6A75E;
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   10. TABLET (≤ 1024px)
+   ============================================================ */
+@media (max-width: 1024px) {
+    .fq-container--narrow {
+        max-width: 100%;
+    }
+}
+
+
+/* ============================================================
+   11. MOBILE (≤ 767px)
+   ============================================================ */
+@media (max-width: 767px) {
+    .fq-hero {
+        padding: clamp(56px, 10vw, 80px) 0 clamp(32px, 6vw, 48px);
+    }
+
+    .fq-item__trigger {
+        padding: 16px 0;
+    }
+
+    .fq-item__icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .fq-cta__inner {
+        padding: 28px 20px;
+    }
+}
+
+
+/* ============================================================
+   12. SMALL MOBILE (≤ 479px)
+   ============================================================ */
+@media (max-width: 479px) {
+    .fq-hero__title {
+        font-size: 1.8rem;
+    }
+
+    .fq-item__question {
+        font-size: 0.88rem;
+    }
+
+    .fq-cta__btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+
+/* ============================================================
+   13. REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .fq-item__panel {
+        transition: none;
+    }
+
+    .fq-item__icon,
+    .fq-item__icon-v,
+    .fq-item__trigger,
+    .fq-item__question,
+    .fq-cta__btn {
+        transition: none;
+    }
+}

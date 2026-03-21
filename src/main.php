@@ -371,6 +371,11 @@ function fetchProducts(array $filters = []): array
         $params[] = (float) $filters['price_max'];
     }
 
+    if (!empty($filters['gender'])) {
+        $sql .= ' AND p.gender = ?';
+        $params[] = $filters['gender'];
+    }
+
     // Sort handling
     $orderBy = match ($filters['sort'] ?? '') {
         'price_asc'  => 'p.price ASC',
@@ -421,6 +426,11 @@ function countProducts(array $filters = []): int
         $searchTerm = '%' . $filters['search'] . '%';
         $params[] = $searchTerm;
         $params[] = $searchTerm;
+    }
+
+    if (!empty($filters['gender'])) {
+        $sql .= ' AND p.gender = ?';
+        $params[] = $filters['gender'];
     }
 
     $stmt = db()->prepare($sql);
@@ -510,7 +520,7 @@ function saveProduct(array $data, ?int $id = null): int
             UPDATE products SET brand_id = ?, name = ?, slug = ?, short_description = ?,
             description = ?, how_to_use = ?, sku = ?, price = ?, sale_price = ?,
             on_sale = ?, is_active = ?, main_image = COALESCE(?, main_image),
-            ingredients = ?, fragrance_notes = ?,
+            ingredients = ?, fragrance_notes = ?, gender = ?,
             meta_title = ?, meta_description = ?, updated_at = NOW()
             WHERE id = ?
         ');
@@ -522,14 +532,15 @@ function saveProduct(array $data, ?int $id = null): int
             $data['on_sale'] ?? 0, $data['is_active'] ?? 1,
             $data['main_image'] ?? null,
             $data['ingredients'] ?? null, $data['fragrance_notes'] ?? null,
+            $data['gender'] ?? 'female',
             $data['meta_title'] ?? null, $data['meta_description'] ?? null, $id
         ]);
         return $id;
     }
 
     $stmt = $conn->prepare('
-        INSERT INTO products (brand_id, name, slug, short_description, description, how_to_use, sku, price, sale_price, on_sale, is_active, main_image, ingredients, fragrance_notes, meta_title, meta_description)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO products (brand_id, name, slug, short_description, description, how_to_use, sku, price, sale_price, on_sale, is_active, main_image, ingredients, fragrance_notes, gender, meta_title, meta_description)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ');
     $stmt->execute([
         $data['brand_id'] ?? null, $data['name'], $data['slug'],
@@ -539,6 +550,7 @@ function saveProduct(array $data, ?int $id = null): int
         $data['on_sale'] ?? 0, $data['is_active'] ?? 1,
         $data['main_image'] ?? null,
         $data['ingredients'] ?? null, $data['fragrance_notes'] ?? null,
+        $data['gender'] ?? 'female',
         $data['meta_title'] ?? null, $data['meta_description'] ?? null
     ]);
     $productId = (int) $conn->lastInsertId();
@@ -681,12 +693,24 @@ function calculateCartTotals(array $items): array
 
     $shipping = $subtotal >= $shippingThreshold ? 0.0 : $shippingCost;
 
+    // Gift wrapping cost from session
+    $giftWrappingCost = 0.0;
+    $giftWrappingId = (int) ($_SESSION['gift_wrapping_id'] ?? 0);
+    if ($giftWrappingId > 0) {
+        $giftOption = fetchGiftWrappingById($giftWrappingId);
+        if ($giftOption) {
+            $giftWrappingCost = (float) $giftOption['price'];
+        }
+    }
+
     return [
         'subtotal'           => round($subtotal, 2),
         'shipping'           => $shipping,
         'shipping_threshold' => $shippingThreshold,
         'gift_bag_discount'  => 0.0,
-        'total'              => round($subtotal + $shipping, 2),
+        'gift_wrapping_cost' => round($giftWrappingCost, 2),
+        'gift_wrapping_id'   => $giftWrappingId,
+        'total'              => round($subtotal + $shipping + $giftWrappingCost, 2),
         'quantity'           => $quantity,
     ];
 }
@@ -756,6 +780,7 @@ function clearCart(?string $sessionId = null): void
 {
     $sessionId = $sessionId ?? cartSessionId();
     db()->prepare('DELETE FROM cart WHERE session_id = ?')->execute([$sessionId]);
+    unset($_SESSION['gift_wrapping_id']);
 }
 
 function cartItemCount(?string $sessionId = null): int
@@ -786,6 +811,18 @@ function createOrder(array $orderData, array $cartItems, array $addressData): ar
         $giftCardAmount = (float) ($orderData['gift_card_amount'] ?? 0);
         $shippingCost = (float) ($orderData['shipping_cost'] ?? 0);
 
+        // Gift wrapping
+        $giftWrappingId = !empty($orderData['gift_wrapping_id']) ? (int) $orderData['gift_wrapping_id'] : null;
+        $giftWrappingName = null;
+        $giftWrappingPrice = 0.0;
+        if ($giftWrappingId) {
+            $giftOption = fetchGiftWrappingById($giftWrappingId);
+            if ($giftOption) {
+                $giftWrappingName = $giftOption['name'];
+                $giftWrappingPrice = (float) $giftOption['price'];
+            }
+        }
+
         $totalPrice = $cartTotals['total'] - $discountAmount - $loyaltyDiscount - $giftCardAmount + $shippingCost;
         $totalPrice = max(0, $totalPrice);
 
@@ -793,8 +830,9 @@ function createOrder(array $orderData, array $cartItems, array $addressData): ar
         $stmt = $conn->prepare('
             INSERT INTO orders (order_number, user_id, session_id, status, payment_method,
                 subtotal, discount_amount, loyalty_discount, gift_card_amount, shipping_cost,
-                total_price, customer_name, email, phone, customer_note, is_gift_bag)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                total_price, customer_name, email, phone, customer_note, is_gift_bag,
+                gift_wrapping_id, gift_wrapping_name, gift_wrapping_price)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ');
         $stmt->execute([
             $orderNumber, $userId, cartSessionId(), 'new',
@@ -805,7 +843,10 @@ function createOrder(array $orderData, array $cartItems, array $addressData): ar
             sanitizeEmail($orderData['email']),
             sanitize($orderData['phone']),
             sanitize($orderData['customer_note'] ?? ''),
-            !empty($orderData['is_gift_bag']) ? 1 : 0,
+            $giftWrappingId ? 1 : 0,
+            $giftWrappingId,
+            $giftWrappingName,
+            $giftWrappingPrice,
         ]);
 
         $orderId = (int) $conn->lastInsertId();

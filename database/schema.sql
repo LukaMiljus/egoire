@@ -155,6 +155,7 @@ CREATE TABLE `products` (
     `on_sale`          TINYINT(1) NOT NULL DEFAULT 0,
     `is_active`        TINYINT(1) NOT NULL DEFAULT 1,
     `main_image`       VARCHAR(500) DEFAULT NULL,
+    `gender`           ENUM('female','male') NOT NULL DEFAULT 'female',
     `created_at`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
@@ -266,6 +267,9 @@ CREATE TABLE `orders` (
     `phone`            VARCHAR(30) NOT NULL,
     `customer_note`    TEXT DEFAULT NULL,
     `is_gift_bag`      TINYINT(1) NOT NULL DEFAULT 0,
+    `gift_wrapping_id`    INT UNSIGNED DEFAULT NULL,
+    `gift_wrapping_name`  VARCHAR(255) DEFAULT NULL,
+    `gift_wrapping_price` DECIMAL(12,2) NOT NULL DEFAULT 0.00,
     `created_at`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 

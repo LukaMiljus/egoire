@@ -3,6 +3,7 @@ declare(strict_types=1);
 requireUser();
 $user = currentUser();
 $title = 'Adrese | Egoire';
+$pageStyles = ['/css/account.css'];
 $addresses = fetchUserAddresses((int) $user['id']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -37,52 +38,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 require __DIR__ . '/../layout/header.php';
 ?>
 
-<section class="section">
-    <div class="container">
-        <div class="account-layout">
+<section class="ac-page">
+    <div class="ac-container">
+        <div class="ac-layout">
             <?php require __DIR__ . '/account-sidebar.php'; ?>
 
-            <div class="account-content">
-                <h1>Moje adrese</h1>
+            <div class="ac-content">
+                <h1 class="ac-title">Moje adrese</h1>
 
-                <div class="address-grid">
+                <div class="ac-addresses">
                     <?php foreach ($addresses as $addr): ?>
-                    <div class="address-card">
-                        <p><strong><?= htmlspecialchars($addr['first_name'] . ' ' . $addr['last_name']) ?></strong></p>
-                        <p><?= htmlspecialchars($addr['address']) ?></p>
-                        <p><?= htmlspecialchars($addr['city']) ?>, <?= htmlspecialchars($addr['postal_code']) ?></p>
-                        <p><?= htmlspecialchars($addr['phone']) ?></p>
-                        <?php if ($addr['is_default']): ?><span class="badge badge-info">Podrazumevana</span><?php endif; ?>
-                        <div class="mt-2">
-                            <form method="POST" class="inline-form" onsubmit="return confirm('Obriši?')">
+                    <div class="ac-address">
+                        <div class="ac-address__name"><?= htmlspecialchars($addr['first_name'] . ' ' . $addr['last_name']) ?></div>
+                        <div class="ac-address__line">
+                            <?= htmlspecialchars($addr['address']) ?><br>
+                            <?= htmlspecialchars($addr['city']) ?>, <?= htmlspecialchars($addr['postal_code']) ?><br>
+                            <?= htmlspecialchars($addr['phone']) ?>
+                        </div>
+                        <?php if ($addr['is_default']): ?><span class="ac-address__default">Podrazumevana</span><?php endif; ?>
+                        <div class="ac-address__actions">
+                            <form method="POST" onsubmit="return confirm('Obriši?')">
                                 <?= csrfField() ?>
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="address_id" value="<?= $addr['id'] ?>">
-                                <button type="submit" class="btn btn-sm btn-danger">Obriši</button>
+                                <button type="submit" class="ac-form-btn ac-form-btn--danger">Obriši</button>
                             </form>
                         </div>
                     </div>
                     <?php endforeach; ?>
                 </div>
 
-                <div class="card mt-4">
-                    <h3>Dodaj novu adresu</h3>
+                <div class="ac-card">
+                    <h3 class="ac-card__title">Dodaj novu adresu</h3>
                     <form method="POST">
                         <?= csrfField() ?>
                         <input type="hidden" name="action" value="save">
-                        <div class="form-row">
-                            <div class="form-group"><label>Ime</label><input type="text" name="first_name" class="form-control" required></div>
-                            <div class="form-group"><label>Prezime</label><input type="text" name="last_name" class="form-control" required></div>
+                        <div class="ac-form-row">
+                            <div class="ac-form-group"><label class="ac-form-label">Ime</label><input type="text" name="first_name" class="ac-form-input" required></div>
+                            <div class="ac-form-group"><label class="ac-form-label">Prezime</label><input type="text" name="last_name" class="ac-form-input" required></div>
                         </div>
-                        <div class="form-group"><label>Telefon</label><input type="tel" name="phone" class="form-control" required></div>
-                        <div class="form-group"><label>Adresa</label><input type="text" name="address" class="form-control" required></div>
-                        <div class="form-row">
-                            <div class="form-group"><label>Grad</label><input type="text" name="city" class="form-control" required></div>
-                            <div class="form-group"><label>Poštanski broj</label><input type="text" name="postal_code" class="form-control" required></div>
+                        <div class="ac-form-group"><label class="ac-form-label">Telefon</label><input type="tel" name="phone" class="ac-form-input" required></div>
+                        <div class="ac-form-group"><label class="ac-form-label">Adresa</label><input type="text" name="address" class="ac-form-input" required></div>
+                        <div class="ac-form-row">
+                            <div class="ac-form-group"><label class="ac-form-label">Grad</label><input type="text" name="city" class="ac-form-input" required></div>
+                            <div class="ac-form-group"><label class="ac-form-label">Poštanski broj</label><input type="text" name="postal_code" class="ac-form-input" required></div>
                         </div>
-                        <div class="form-group"><label>Država</label><input type="text" name="country" class="form-control" value="Srbija"></div>
-                        <div class="form-group"><label class="checkbox-label"><input type="checkbox" name="is_default" value="1"> Podrazumevana</label></div>
-                        <button type="submit" class="btn btn-primary">Sačuvaj adresu</button>
+                        <div class="ac-form-group"><label class="ac-form-label">Država</label><input type="text" name="country" class="ac-form-input" value="Srbija"></div>
+                        <div class="ac-form-group"><label class="ac-checkbox-label"><input type="checkbox" name="is_default" value="1"> Podrazumevana</label></div>
+                        <button type="submit" class="ac-form-btn">Sačuvaj adresu</button>
                     </form>
                 </div>
             </div>
