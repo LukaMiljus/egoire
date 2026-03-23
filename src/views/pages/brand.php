@@ -11,7 +11,9 @@ $slug  = $routeParams['slug'] ?? '';
 $brand = fetchBrandBySlug($slug);
 if (!$brand) { http_response_code(404); require __DIR__ . '/404.php'; return; }
 
-$title = ($brand['meta_title'] ?: $brand['name']) . ' | Egoire';
+$title           = (($brand['meta_title'] ?? '') ?: $brand['name']) . ' | Egoire';
+$metaDescription = $brand['meta_description'] ?? $brand['description'] ?? '';
+$ogImage         = !empty($brand['logo']) ? (baseUrl() . $brand['logo']) : '';
 
 /* --- Page-specific assets --- */
 $pageStyles  = ['/css/product-card.css', '/css/brand.css'];

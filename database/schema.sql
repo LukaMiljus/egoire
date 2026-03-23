@@ -687,4 +687,30 @@ ALTER TABLE `stock_adjustments`
     ADD INDEX `idx_sadj_variant` (`variant_id`),
     ADD CONSTRAINT `fk_sadj_variant` FOREIGN KEY (`variant_id`) REFERENCES `product_variants` (`id`) ON DELETE SET NULL;
 
+ALTER TABLE products ADD COLUMN gender ENUM('female','male') NOT NULL DEFAULT 'female' AFTER main_image;
+
+-- ============================================================
+-- 25. ALTER brands – add SEO fields
+-- ============================================================
+
+ALTER TABLE `brands`
+    ADD COLUMN `meta_title`       VARCHAR(255) DEFAULT NULL,
+    ADD COLUMN `meta_description` TEXT DEFAULT NULL;
+
+-- ============================================================
+-- 26. ALTER categories – add SEO fields
+-- ============================================================
+
+ALTER TABLE `categories`
+    ADD COLUMN `meta_title`       VARCHAR(255) DEFAULT NULL,
+    ADD COLUMN `meta_description` TEXT DEFAULT NULL;
+
+-- ============================================================
+-- 27. ALTER blog_posts – add SEO fields
+-- ============================================================
+
+ALTER TABLE `blog_posts`
+    ADD COLUMN `meta_title`       VARCHAR(255) DEFAULT NULL,
+    ADD COLUMN `meta_description` TEXT DEFAULT NULL;
+
 SET FOREIGN_KEY_CHECKS = 1;

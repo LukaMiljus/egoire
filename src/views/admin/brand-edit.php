@@ -14,6 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'description'      => trim($_POST['description'] ?? ''),
         'is_active'        => isset($_POST['is_active']) ? 1 : 0,
         'sort_order'       => inputInt('sort_order', 0, $_POST),
+        'meta_title'       => inputString('meta_title', '', $_POST),
+        'meta_description' => inputString('meta_description', '', $_POST),
     ];
 
     if (!empty($_FILES['logo']['name'])) {

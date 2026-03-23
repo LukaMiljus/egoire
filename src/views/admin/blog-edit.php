@@ -15,6 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'excerpt'          => inputString('excerpt', '', $_POST),
         'status'           => isset($_POST['is_published']) ? 'published' : 'draft',
         'published_at'     => isset($_POST['is_published']) ? date('Y-m-d H:i:s') : null,
+        'meta_title'       => inputString('meta_title', '', $_POST),
+        'meta_description' => inputString('meta_description', '', $_POST),
     ];
 
     if (!empty($_FILES['featured_image']['name'])) {

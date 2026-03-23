@@ -10,7 +10,8 @@ $slug     = $routeParams['slug'] ?? '';
 $category = fetchCategoryBySlug($slug);
 if (!$category) { http_response_code(404); require __DIR__ . '/404.php'; return; }
 
-$title = htmlspecialchars($category['name']) . ' | Egoire';
+$title           = (($category['meta_title'] ?? '') ?: $category['name']) . ' | Egoire';
+$metaDescription = $category['meta_description'] ?? $category['description'] ?? '';
 
 /* --- Page-specific assets --- */
 $pageStyles  = ['/css/product-card.css', '/css/category-detail.css'];

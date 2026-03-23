@@ -132,23 +132,26 @@ function saveBrand(array $data, ?int $id = null): int
 
     if ($id) {
         $stmt = $conn->prepare('
-            UPDATE brands SET name = ?, slug = ?, description = ?, logo = COALESCE(?, logo), is_active = ?, sort_order = ?, updated_at = NOW()
+            UPDATE brands SET name = ?, slug = ?, description = ?, logo = COALESCE(?, logo), is_active = ?, sort_order = ?,
+            meta_title = ?, meta_description = ?, updated_at = NOW()
             WHERE id = ?
         ');
         $stmt->execute([
             $data['name'], $data['slug'], $data['description'] ?? null,
-            $data['logo'] ?? null, $data['is_active'] ?? 1, $data['sort_order'] ?? 0, $id
+            $data['logo'] ?? null, $data['is_active'] ?? 1, $data['sort_order'] ?? 0,
+            $data['meta_title'] ?? null, $data['meta_description'] ?? null, $id
         ]);
         return $id;
     }
 
     $stmt = $conn->prepare('
-        INSERT INTO brands (name, slug, description, logo, is_active, sort_order)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO brands (name, slug, description, logo, is_active, sort_order, meta_title, meta_description)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ');
     $stmt->execute([
         $data['name'], $data['slug'], $data['description'] ?? null,
-        $data['logo'] ?? null, $data['is_active'] ?? 1, $data['sort_order'] ?? 0
+        $data['logo'] ?? null, $data['is_active'] ?? 1, $data['sort_order'] ?? 0,
+        $data['meta_title'] ?? null, $data['meta_description'] ?? null
     ]);
     return (int) $conn->lastInsertId();
 }
@@ -248,25 +251,28 @@ function saveCategory(array $data, ?int $id = null): int
     if ($id) {
         $stmt = $conn->prepare('
             UPDATE categories SET parent_id = ?, name = ?, slug = ?, description = ?,
-            image = COALESCE(?, image), status = ?, sort_order = ?, updated_at = NOW()
+            image = COALESCE(?, image), status = ?, sort_order = ?,
+            meta_title = ?, meta_description = ?, updated_at = NOW()
             WHERE id = ?
         ');
         $stmt->execute([
             $data['parent_id'] ?? null, $data['name'], $data['slug'],
             $data['description'] ?? null, $data['image'] ?? null,
-            $data['status'] ?? 'active', $data['sort_order'] ?? 0, $id
+            $data['status'] ?? 'active', $data['sort_order'] ?? 0,
+            $data['meta_title'] ?? null, $data['meta_description'] ?? null, $id
         ]);
         return $id;
     }
 
     $stmt = $conn->prepare('
-        INSERT INTO categories (parent_id, name, slug, description, image, status, sort_order)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO categories (parent_id, name, slug, description, image, status, sort_order, meta_title, meta_description)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ');
     $stmt->execute([
         $data['parent_id'] ?? null, $data['name'], $data['slug'],
         $data['description'] ?? null, $data['image'] ?? null,
-        $data['status'] ?? 'active', $data['sort_order'] ?? 0
+        $data['status'] ?? 'active', $data['sort_order'] ?? 0,
+        $data['meta_title'] ?? null, $data['meta_description'] ?? null
     ]);
     return (int) $conn->lastInsertId();
 }
@@ -1923,23 +1929,25 @@ function saveBlogPost(array $data, ?int $id = null): int
         $conn->prepare('
             UPDATE blog_posts SET title = ?, slug = ?, excerpt = ?, body = ?,
             featured_image = COALESCE(?, featured_image), status = ?,
-            published_at = ?, updated_at = NOW()
+            published_at = ?, meta_title = ?, meta_description = ?, updated_at = NOW()
             WHERE id = ?
         ')->execute([
             $data['title'], $data['slug'], $data['excerpt'] ?? null,
             $data['body'], $data['featured_image'] ?? null,
-            $data['status'] ?? 'draft', $data['published_at'] ?? null, $id
+            $data['status'] ?? 'draft', $data['published_at'] ?? null,
+            $data['meta_title'] ?? null, $data['meta_description'] ?? null, $id
         ]);
         return $id;
     }
 
     $conn->prepare('
-        INSERT INTO blog_posts (title, slug, excerpt, body, featured_image, status, published_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO blog_posts (title, slug, excerpt, body, featured_image, status, published_at, meta_title, meta_description)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ')->execute([
         $data['title'], $data['slug'], $data['excerpt'] ?? null,
         $data['body'], $data['featured_image'] ?? null,
-        $data['status'] ?? 'draft', $data['published_at'] ?? null
+        $data['status'] ?? 'draft', $data['published_at'] ?? null,
+        $data['meta_title'] ?? null, $data['meta_description'] ?? null
     ]);
     return (int) $conn->lastInsertId();
 }
