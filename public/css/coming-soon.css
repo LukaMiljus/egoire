@@ -1,0 +1,289 @@
+/* ============================================================
+   Egoire – Coming Soon Page
+   Style:  public/css/coming-soon.css
+   ============================================================ */
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    color: #f5f0eb;
+    background: #0a0a0a;
+}
+
+/* --- Loading Overlay --- */
+.cs-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity .8s ease, visibility .8s ease;
+}
+
+.cs-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.cs-loader__ring {
+    width: 48px;
+    height: 48px;
+    border: 2px solid rgba(198, 167, 94, .15);
+    border-top-color: #C6A75E;
+    border-radius: 50%;
+    animation: csRingSpin 1s linear infinite;
+}
+
+@keyframes csRingSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* --- Background Video --- */
+.cs-video-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.cs-video-wrap video,
+.cs-video-wrap .cs-fallback-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.cs-video-wrap .cs-fallback-img {
+    display: none;
+}
+
+/* --- Dark Overlay --- */
+.cs-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+        180deg,
+        rgba(10, 10, 10, .65) 0%,
+        rgba(10, 10, 10, .55) 40%,
+        rgba(10, 10, 10, .70) 100%
+    );
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+/* --- Centered Content --- */
+.cs-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    height: 100dvh;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    opacity: 0;
+    animation: csFadeIn 1.4s ease forwards;
+    animation-delay: .6s;
+}
+
+@keyframes csFadeIn {
+    to { opacity: 1; }
+}
+
+/* --- Logo --- */
+.cs-logo {
+    width: 20%;
+    margin-bottom: 2.5rem;
+    filter: brightness(1.1) drop-shadow(0 0 30px rgba(198, 167, 94, .15));
+    animation: csLogoGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes csLogoGlow {
+    from { filter: brightness(1.1) drop-shadow(0 0 20px rgba(198, 167, 94, .1)); }
+    to   { filter: brightness(1.15) drop-shadow(0 0 40px rgba(198, 167, 94, .2)); }
+}
+
+/* --- Heading --- */
+.cs-heading {
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(1.35rem, 4vw, 2.6rem);
+    line-height: 1.35;
+    letter-spacing: .02em;
+    color: #f5f0eb;
+    max-width: 640px;
+    margin-bottom: 3rem;
+}
+
+.cs-heading .cs-accent {
+    color: #C6A75E;
+}
+
+/* --- Countdown --- */
+.cs-countdown {
+    display: flex;
+    gap: clamp(.75rem, 3vw, 2rem);
+    margin-bottom: 2.5rem;
+}
+
+.cs-countdown__block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: clamp(56px, 14vw, 100px);
+    padding: clamp(.75rem, 2vw, 1.25rem) clamp(.5rem, 1.5vw, 1rem);
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(198, 167, 94, .18);
+    border-radius: 14px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: border-color .3s ease, box-shadow .3s ease;
+}
+
+.cs-countdown__block:hover {
+    border-color: rgba(198, 167, 94, .4);
+    box-shadow: 0 0 24px rgba(198, 167, 94, .08);
+}
+
+.cs-countdown__number {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.6rem, 5vw, 3rem);
+    font-weight: 600;
+    line-height: 1;
+    color: #C6A75E;
+    transition: transform .3s ease;
+}
+
+.cs-countdown__label {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(.6rem, 1.5vw, .75rem);
+    font-weight: 400;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 235, .5);
+    margin-top: .4rem;
+}
+
+/* --- Divider --- */
+.cs-divider {
+    width: 50px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #C6A75E, transparent);
+    border: none;
+    margin-bottom: 2rem;
+    opacity: .6;
+}
+
+/* --- Subtext --- */
+.cs-subtext {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(.75rem, 1.8vw, .9rem);
+    font-weight: 300;
+    letter-spacing: .06em;
+    color: rgba(245, 240, 235, .45);
+    max-width: 400px;
+}
+
+/* --- "Otvoreni smo!" message --- */
+.cs-open-message {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.cs-open-message.visible {
+    display: flex;
+    animation: csFadeIn .8s ease forwards;
+}
+
+.cs-open-message__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-weight: 600;
+    color: #C6A75E;
+    letter-spacing: .02em;
+}
+
+.cs-open-message__cta {
+    display: inline-block;
+    padding: .85rem 2.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: .85rem;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #0a0a0a;
+    background: #C6A75E;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background .3s ease, transform .2s ease, box-shadow .3s ease;
+}
+
+.cs-open-message__cta:hover {
+    background: #d4b96e;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(198, 167, 94, .25);
+}
+
+/* --- Mobile Adjustments --- */
+@media (max-width: 480px) {
+    .cs-content {
+        padding: 1.5rem 1rem;
+    }
+
+    .cs-logo {
+        margin-bottom: 2rem;
+        width: 70%;
+    }
+
+    .cs-heading {
+        margin-bottom: 2rem;
+    }
+
+    .cs-countdown {
+        gap: .6rem;
+    }
+
+    .cs-countdown__block {
+        border-radius: 10px;
+    }
+}
+
+/* --- Tablet+ --- */
+@media (min-width: 768px) {
+    .cs-heading {
+        max-width: 700px;
+    }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

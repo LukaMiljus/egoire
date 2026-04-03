@@ -2066,6 +2066,167 @@ function topCategories(int $limit = 5): array
     return $stmt->fetchAll();
 }
 
+// ============================================================
+// ANALYTICS – Extended helpers
+// ============================================================
+
+function topSellingProducts(string $dateFrom, string $dateTo, int $limit = 10): array
+{
+    $stmt = db()->prepare("
+        SELECT oi.product_id, oi.product_name, oi.product_sku,
+               SUM(oi.quantity) AS total_qty,
+               COALESCE(SUM(oi.subtotal), 0) AS total_revenue
+        FROM order_items oi
+        JOIN orders o ON o.id = oi.order_id AND o.status != 'canceled'
+        WHERE DATE(o.created_at) BETWEEN ? AND ?
+        GROUP BY oi.product_id, oi.product_name, oi.product_sku
+        ORDER BY total_qty DESC
+        LIMIT ?
+    ");
+    $stmt->execute([$dateFrom, $dateTo, $limit]);
+    return $stmt->fetchAll();
+}
+
+function topSellingBrands(string $dateFrom, string $dateTo, int $limit = 10): array
+{
+    $stmt = db()->prepare("
+        SELECT b.id, b.name, SUM(oi.quantity) AS items_sold,
+               COALESCE(SUM(oi.subtotal), 0) AS revenue
+        FROM order_items oi
+        JOIN products p ON p.id = oi.product_id
+        JOIN brands b ON b.id = p.brand_id
+        JOIN orders o ON o.id = oi.order_id AND o.status != 'canceled'
+        WHERE DATE(o.created_at) BETWEEN ? AND ?
+        GROUP BY b.id
+        ORDER BY revenue DESC
+        LIMIT ?
+    ");
+    $stmt->execute([$dateFrom, $dateTo, $limit]);
+    return $stmt->fetchAll();
+}
+
+function ordersByStatus(string $dateFrom, string $dateTo): array
+{
+    $stmt = db()->prepare("
+        SELECT status, COUNT(*) AS cnt
+        FROM orders
+        WHERE DATE(created_at) BETWEEN ? AND ?
+        GROUP BY status
+        ORDER BY FIELD(status, 'new','processing','shipped','delivered','canceled')
+    ");
+    $stmt->execute([$dateFrom, $dateTo]);
+    return $stmt->fetchAll();
+}
+
+function revenueByPeriodAggregated(string $dateFrom, string $dateTo): array
+{
+    $stmt = db()->prepare("
+        SELECT COUNT(*) AS total_orders,
+               COALESCE(SUM(total_price), 0) AS total_revenue,
+               COALESCE(AVG(total_price), 0) AS avg_order,
+               COALESCE(MAX(total_price), 0) AS max_order,
+               COALESCE(MIN(total_price), 0) AS min_order
+        FROM orders
+        WHERE status != 'canceled' AND DATE(created_at) BETWEEN ? AND ?
+    ");
+    $stmt->execute([$dateFrom, $dateTo]);
+    return $stmt->fetch() ?: [];
+}
+
+function newUsersInPeriod(string $dateFrom, string $dateTo): int
+{
+    $stmt = db()->prepare("SELECT COUNT(*) FROM users WHERE DATE(created_at) BETWEEN ? AND ?");
+    $stmt->execute([$dateFrom, $dateTo]);
+    return (int) $stmt->fetchColumn();
+}
+
+function newSubscribersInPeriod(string $dateFrom, string $dateTo): int
+{
+    $stmt = db()->prepare("SELECT COUNT(*) FROM email_subscribers WHERE DATE(created_at) BETWEEN ? AND ?");
+    $stmt->execute([$dateFrom, $dateTo]);
+    return (int) $stmt->fetchColumn();
+}
+
+function ordersByPaymentMethod(string $dateFrom, string $dateTo): array
+{
+    $stmt = db()->prepare("
+        SELECT payment_method, COUNT(*) AS cnt, COALESCE(SUM(total_price), 0) AS revenue
+        FROM orders
+        WHERE status != 'canceled' AND DATE(created_at) BETWEEN ? AND ?
+        GROUP BY payment_method
+    ");
+    $stmt->execute([$dateFrom, $dateTo]);
+    return $stmt->fetchAll();
+}
+
+function recentOrders(int $limit = 10): array
+{
+    $stmt = db()->prepare("
+        SELECT id, order_number, customer_name, total_price, status, created_at
+        FROM orders
+        ORDER BY created_at DESC
+        LIMIT ?
+    ");
+    $stmt->execute([$limit]);
+    return $stmt->fetchAll();
+}
+
+function lowStockProducts(int $limit = 10): array
+{
+    $stmt = db()->prepare("
+        SELECT p.id, p.name, p.sku, ps.quantity, ps.low_stock_threshold
+        FROM product_stock ps
+        JOIN products p ON p.id = ps.product_id
+        WHERE ps.track_stock = 1 AND ps.quantity <= ps.low_stock_threshold AND p.is_active = 1
+        ORDER BY ps.quantity ASC
+        LIMIT ?
+    ");
+    $stmt->execute([$limit]);
+    return $stmt->fetchAll();
+}
+
+function conversionRate(string $dateFrom, string $dateTo): float
+{
+    $stmt = db()->prepare("
+        SELECT COUNT(*) AS total,
+               SUM(CASE WHEN user_id IS NOT NULL THEN 1 ELSE 0 END) AS registered
+        FROM orders
+        WHERE status != 'canceled' AND DATE(created_at) BETWEEN ? AND ?
+    ");
+    $stmt->execute([$dateFrom, $dateTo]);
+    $data = $stmt->fetch();
+    $total = (int) ($data['total'] ?? 0);
+    return $total > 0 ? round((int) ($data['registered'] ?? 0) / $total * 100, 1) : 0;
+}
+
+function monthlyRevenueTrend(int $months = 12): array
+{
+    $stmt = db()->prepare("
+        SELECT DATE_FORMAT(created_at, '%Y-%m') AS month,
+               COUNT(*) AS orders,
+               COALESCE(SUM(total_price), 0) AS revenue
+        FROM orders
+        WHERE status != 'canceled' AND created_at >= DATE_SUB(CURDATE(), INTERVAL ? MONTH)
+        GROUP BY month
+        ORDER BY month ASC
+    ");
+    $stmt->execute([$months]);
+    return $stmt->fetchAll();
+}
+
+function guestVsRegisteredOrders(string $dateFrom, string $dateTo): array
+{
+    $stmt = db()->prepare("
+        SELECT
+            SUM(CASE WHEN user_id IS NULL THEN 1 ELSE 0 END) AS guest,
+            SUM(CASE WHEN user_id IS NOT NULL THEN 1 ELSE 0 END) AS registered
+        FROM orders
+        WHERE status != 'canceled' AND DATE(created_at) BETWEEN ? AND ?
+    ");
+    $stmt->execute([$dateFrom, $dateTo]);
+    return $stmt->fetch() ?: ['guest' => 0, 'registered' => 0];
+}
+
 function analyticsExportOrders(string $dateFrom, string $dateTo): array
 {
     $stmt = db()->prepare("

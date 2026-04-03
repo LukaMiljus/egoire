@@ -15,6 +15,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 $routes = [
     // PUBLIC PAGES
     ''                  => ['pages/home', false],
+    'coming-soon'       => ['pages/coming-soon', false],
     'products'          => ['pages/products', false],
     'product'           => ['pages/product-detail', false],
     'categories'        => ['pages/categories', false],

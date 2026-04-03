@@ -1,0 +1,1128 @@
+/* ==========================================================================
+   Egoire – Admin Panel Mobile & Tablet Responsive Styles
+   App-like native feel. Desktop (1024px+) untouched.
+   ========================================================================== */
+
+/* ---------- Global Mobile Overrides ---------- */
+@media (max-width: 1024px) {
+
+    /* Prevent horizontal scroll everywhere */
+    html, body.admin-body {
+        max-width: 100vw;
+        overflow-x: hidden;
+    }
+
+    /* --- Cards: app-like component feel --- */
+    .card {
+        border-radius: 14px;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+        padding: 20px;
+    }
+    .card-header {
+        margin-bottom: 16px;
+    }
+
+    /* --- Stat cards: softer style --- */
+    .stat-card {
+        border-radius: 14px;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+        padding: 16px;
+    }
+
+    /* --- Buttons: touch-friendly --- */
+    .btn {
+        min-height: 42px;
+        border-radius: 12px;
+        font-size: 14px;
+        padding: 10px 18px;
+        transition: all .2s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active {
+        transform: scale(.97);
+        opacity: .85;
+    }
+    .btn-sm {
+        min-height: 36px;
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+
+    /* --- Forms: iOS zoom prevention --- */
+    input, select, textarea,
+    .form-control,
+    .filter-group input,
+    .filter-group select {
+        font-size: 16px !important;
+        border-radius: 10px;
+    }
+    .form-control:focus,
+    .filter-group input:focus,
+    .filter-group select:focus {
+        border-color: #b68e57;
+        box-shadow: 0 0 0 3px rgba(182,142,87,.12);
+    }
+    .form-group {
+        margin-bottom: 14px;
+    }
+    .form-group label {
+        margin-bottom: 6px;
+        font-size: 13px;
+    }
+
+    /* --- Typography overflow --- */
+    h1, h2, h3, h4, h5, h6,
+    td, th, p, span, a, label {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* --- Badges --- */
+    .badge {
+        border-radius: 12px;
+        font-size: 11px;
+        padding: 4px 10px;
+    }
+
+    /* --- Flash messages --- */
+    .flash {
+        border-radius: 12px;
+    }
+
+    /* --- Pagination: touch-friendly --- */
+    .pagination a, .pagination span {
+        min-width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    /* --- Image gallery --- */
+    .image-gallery {
+        gap: 8px;
+    }
+    .image-item {
+        width: 80px;
+        height: 80px;
+    }
+
+    /* --- Order info grid --- */
+    .order-info-block {
+        border-radius: 12px;
+    }
+
+    /* --- Notes --- */
+    .note-item {
+        border-radius: 10px;
+    }
+
+    /* --- Tabs: scrollable --- */
+    .tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        gap: 0;
+        flex-wrap: nowrap;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+
+    /* --- Analytics KPIs --- */
+    .analytics-kpi {
+        border-radius: 14px;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    }
+    .analytics-card {
+        border-radius: 14px;
+        border: none;
+        box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    }
+
+    /* --- Filter form cards --- */
+    .filters-bar {
+        border-radius: 12px;
+    }
+
+    /* --- Dashboard grid --- */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    /* --- Checkbox grid --- */
+    .checkbox-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        border-radius: 10px;
+    }
+
+    /* --- Dynamic rows --- */
+    .dynamic-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 12px;
+        background: #f9fafb;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+    .dynamic-row input,
+    .dynamic-row select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* --- Form actions --- */
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .form-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* --- Alert --- */
+    .alert {
+        border-radius: 12px;
+    }
+
+    /* --- Empty state --- */
+    .empty-state {
+        padding: 40px 16px;
+    }
+
+    /* --- Micro-interactions --- */
+    .stat-card,
+    .analytics-kpi,
+    .card,
+    .analytics-card {
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .stat-card:active,
+    .analytics-kpi:active {
+        transform: scale(.98);
+    }
+}
+
+/* ==========================================================================
+   Tablet (768px – 1024px)
+   ========================================================================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    /* Sidebar hidden, toggle visible */
+    .admin-sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+        border-radius: 0 20px 20px 0;
+        box-shadow: 4px 0 24px rgba(0,0,0,.15);
+    }
+    .admin-sidebar.open {
+        transform: translateX(0);
+    }
+    .admin-sidebar-overlay.active {
+        display: block;
+        background: rgba(0,0,0,.35);
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+    }
+    .admin-sidebar-toggle {
+        display: flex;
+    }
+    .admin-main {
+        margin-left: 0;
+    }
+
+    /* Topbar: app-like sticky bar */
+    .admin-topbar {
+        padding: 14px 20px;
+        background: rgba(255,255,255,.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(229,231,235,.6);
+    }
+    .admin-topbar h1 {
+        font-size: 18px;
+    }
+
+    .admin-content {
+        padding: 20px;
+    }
+
+    /* Stats: 2-col */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    /* Filter row: 2-col wrap */
+    .filter-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    .filter-group {
+        min-width: 0;
+    }
+    .filter-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 8px;
+    }
+
+    /* Form grids */
+    .form-row {
+        grid-template-columns: 1fr 1fr;
+    }
+    .form-row-3 {
+        grid-template-columns: 1fr 1fr;
+    }
+    .form-grid-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* Analytics */
+    .analytics-kpi-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+    .analytics-filter-form {
+        flex-wrap: wrap;
+    }
+    .analytics-presets {
+        margin-left: 0;
+        margin-top: 8px;
+        width: 100%;
+    }
+    .analytics-global-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Page header */
+    .page-header h1 {
+        font-size: 22px;
+    }
+}
+
+/* ==========================================================================
+   Mobile (up to 768px) — Full native app treatment
+   ========================================================================== */
+@media (max-width: 768px) {
+
+    /* --- Body background --- */
+    body.admin-body {
+        background: #f5f6f8;
+    }
+
+    /* --- Sidebar: fullscreen overlay slide --- */
+    .admin-sidebar {
+        transform: translateX(-100%);
+        width: 100%;
+        max-width: 300px;
+        border-radius: 0 24px 24px 0;
+        box-shadow: 6px 0 32px rgba(0,0,0,.2);
+        transition: transform .35s cubic-bezier(.4, 0, .2, 1);
+    }
+    .admin-sidebar.open {
+        transform: translateX(0);
+    }
+    .admin-sidebar-overlay {
+        transition: opacity .3s ease, visibility .3s ease;
+        opacity: 0;
+        visibility: hidden;
+        display: block;
+    }
+    .admin-sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
+        background: rgba(0,0,0,.4);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+    .admin-sidebar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        transition: background .2s;
+    }
+    .admin-sidebar-toggle:active {
+        background: rgba(0,0,0,.06);
+    }
+
+    /* Sidebar nav: larger touch targets */
+    .admin-nav a {
+        padding: 13px 20px;
+        font-size: 14px;
+        border-radius: 0 12px 12px 0;
+        margin-right: 12px;
+    }
+    .admin-nav a.active {
+        background: rgba(182,142,87,.12);
+    }
+    .admin-nav .nav-label {
+        padding: 14px 20px 6px;
+        font-size: 10px;
+    }
+    .admin-sidebar-header {
+        padding: 20px;
+    }
+    .admin-sidebar-footer {
+        padding: 16px 20px;
+    }
+    .admin-sidebar-footer a {
+        padding: 10px 0;
+        font-size: 14px;
+    }
+
+    /* --- Main layout --- */
+    .admin-main {
+        margin-left: 0;
+        min-height: 100vh;
+    }
+
+    /* --- Topbar: app-style sticky --- */
+    .admin-topbar {
+        padding: 12px 16px;
+        background: rgba(255,255,255,.95);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(229,231,235,.5);
+        box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    }
+    .admin-topbar h1 {
+        font-size: 17px;
+        line-height: 1.3;
+    }
+    .admin-topbar-actions .btn {
+        font-size: 12px;
+        padding: 6px 12px;
+        min-height: 34px;
+    }
+
+    /* --- Content area --- */
+    .admin-content {
+        padding: 16px;
+    }
+
+    /* --- Page header --- */
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+    .page-header h1 {
+        font-size: 20px;
+    }
+    .page-header .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* --- Stats grid: single column --- */
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+    .stat-card {
+        padding: 14px;
+        gap: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .stat-card .stat-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        font-size: 20px;
+    }
+    .stat-card .stat-value {
+        font-size: 20px;
+    }
+    .stat-card .stat-label {
+        font-size: 11px;
+    }
+
+    /* --- Cards: full app component --- */
+    .card {
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+    .card-header h2 {
+        font-size: 16px;
+    }
+    .card-header h3 {
+        font-size: 15px;
+    }
+    .card-title {
+        font-size: 15px;
+        margin-bottom: 14px;
+    }
+
+    /* --- Filter form: single column --- */
+    .filter-form .filter-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .filter-group {
+        width: 100%;
+        min-width: 0;
+    }
+    .filter-group input,
+    .filter-group select {
+        padding: 12px 14px;
+        border-radius: 10px;
+    }
+    .filter-actions {
+        width: 100%;
+        display: flex;
+        gap: 8px;
+    }
+    .filter-actions .btn {
+        flex: 1;
+        justify-content: center;
+    }
+
+    /* --- Filters bar: stacked --- */
+    .filters-bar {
+        flex-direction: column;
+        padding: 14px;
+        gap: 10px;
+        border-radius: 14px;
+    }
+    .filters-bar .form-group {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* --- Forms: full-width, proper spacing --- */
+    .form-group {
+        margin-bottom: 14px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+    .form-control {
+        padding: 12px 14px;
+        border-radius: 10px;
+        font-size: 16px !important;
+    }
+    select.form-control {
+        padding-right: 36px;
+    }
+    textarea.form-control {
+        min-height: 100px;
+    }
+    .form-row,
+    .form-row-3 {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    .form-grid-2 {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .form-check {
+        padding: 6px 0;
+        font-size: 14px;
+    }
+    .form-check input[type="checkbox"],
+    .form-check input[type="radio"] {
+        width: 20px;
+        height: 20px;
+    }
+    .form-inline {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .form-inline .form-group {
+        width: 100%;
+    }
+
+    /* Form actions: full-width buttons */
+    .form-actions {
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 18px;
+        margin-top: 18px;
+    }
+    .form-actions .btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 46px;
+        font-size: 15px;
+    }
+
+    /* --- Buttons: large touch targets --- */
+    .btn {
+        min-height: 44px;
+        border-radius: 12px;
+        font-size: 14px;
+        padding: 10px 16px;
+    }
+    .btn:active {
+        transform: scale(.96);
+        opacity: .85;
+    }
+    .btn-sm {
+        min-height: 38px;
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+
+    /* --- Tables: card-style mobile layout --- */
+    .admin-table thead {
+        display: none;
+    }
+    .admin-table,
+    .admin-table tbody,
+    .admin-table tr,
+    .admin-table td {
+        display: block;
+        width: 100%;
+    }
+    .admin-table tr {
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 1px 3px rgba(0,0,0,.06);
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        border: none;
+        position: relative;
+    }
+    .admin-table td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid #f3f4f6;
+        font-size: 14px;
+        min-height: 0;
+    }
+    .admin-table td:last-child {
+        border-bottom: none;
+        padding-top: 10px;
+    }
+    .admin-table td:first-child {
+        padding-top: 0;
+    }
+
+    /* Label from data-label attribute (set by JS) */
+    .admin-table td[data-label]::before {
+        content: attr(data-label);
+        font-size: 11px;
+        font-weight: 700;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        flex-shrink: 0;
+        margin-right: 12px;
+    }
+
+    /* Actions cell: full width row */
+    .admin-table td.actions-cell,
+    .admin-table td:last-child:has(.btn) {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        justify-content: flex-start;
+        padding-top: 10px;
+        border-top: 1px solid #f0f1f3;
+        border-bottom: none;
+        margin-top: 4px;
+    }
+    .admin-table td.actions-cell::before,
+    .admin-table td:last-child:has(.btn)::before {
+        display: none;
+    }
+    .admin-table .actions-cell .btn,
+    .admin-table .actions-cell a,
+    .admin-table .actions-cell button {
+        flex: 1;
+        min-width: 0;
+        text-align: center;
+        justify-content: center;
+    }
+    .admin-table .inline-form {
+        flex: 1;
+    }
+    .admin-table .inline-form .btn {
+        width: 100%;
+    }
+
+    /* Table within cards: remove card shadow (already in a card) */
+    .card .admin-table tr {
+        box-shadow: none;
+        border: 1px solid #f0f1f3;
+    }
+
+    /* Thumbnails in mobile cards */
+    .admin-table .thumb-sm,
+    .admin-table .thumb {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+    }
+
+    /* Analytics-specific table */
+    .analytics-table thead {
+        display: none;
+    }
+    .analytics-table,
+    .analytics-table tbody,
+    .analytics-table tr,
+    .analytics-table td {
+        display: block;
+        width: 100%;
+    }
+    .analytics-table tr {
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        border-radius: 12px;
+        border: 1px solid #f0f1f3;
+    }
+    .analytics-table td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 4px 0;
+        border-bottom: 1px solid #f8f9fa;
+        font-size: 13px;
+    }
+    .analytics-table td:last-child {
+        border-bottom: none;
+    }
+    .analytics-table td[data-label]::before {
+        content: attr(data-label);
+        font-size: 10px;
+        font-weight: 700;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+
+    /* --- Pagination: scrollable, touch --- */
+    .pagination {
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 4px 0;
+    }
+    .pagination a, .pagination span {
+        min-width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    /* --- Order detail --- */
+    .order-info-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .order-info-block {
+        padding: 14px;
+        border-radius: 14px;
+    }
+    .order-info-block h4 {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+
+    /* --- Image upload --- */
+    .image-upload-area {
+        border-radius: 14px;
+        padding: 24px 16px;
+    }
+    .image-preview {
+        max-width: 150px;
+    }
+
+    /* --- Image gallery: smaller items --- */
+    .image-gallery {
+        gap: 6px;
+    }
+    .image-item {
+        width: 70px;
+        height: 70px;
+    }
+    .image-item img {
+        border-radius: 8px;
+    }
+
+    /* --- Dynamic rows: stacked --- */
+    .dynamic-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 14px;
+        background: #f9fafb;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        border: 1px solid #f0f1f3;
+    }
+    .dynamic-row input,
+    .dynamic-row select {
+        width: 100%;
+        min-width: 0;
+    }
+    .stock-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    /* --- Checkbox grid: 2 col on mobile --- */
+    .checkbox-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        border-radius: 12px;
+    }
+    .checkbox-list {
+        border-radius: 12px;
+    }
+    .checkbox-label {
+        padding: 4px 0;
+        font-size: 14px;
+    }
+    .checkbox-label input[type="checkbox"],
+    .checkbox-label input[type="radio"] {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* --- Alerts: rounded --- */
+    .alert {
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-size: 13px;
+    }
+
+    /* --- Flash messages: rounded --- */
+    .flash {
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-size: 13px;
+    }
+
+    /* --- Empty state --- */
+    .empty-state {
+        padding: 32px 16px;
+    }
+    .empty-state h3 {
+        font-size: 16px;
+    }
+
+    /* --- Chart container: shorter --- */
+    .chart-container {
+        height: 200px;
+    }
+    canvas {
+        max-height: 220px;
+    }
+
+    /* --- Analytics: mobile optimizations --- */
+    .analytics-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .analytics-title {
+        font-size: 20px;
+    }
+    .analytics-header-actions {
+        width: 100%;
+    }
+    .analytics-header-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .analytics-filter {
+        border-radius: 14px;
+        padding: 14px;
+    }
+    .analytics-filter-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    .analytics-filter-group {
+        width: 100%;
+    }
+    .analytics-filter-group input[type="date"] {
+        width: 100%;
+        padding: 12px 14px;
+        font-size: 16px !important;
+        border-radius: 10px;
+    }
+    .analytics-filter-actions {
+        width: 100%;
+    }
+    .analytics-filter-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .analytics-presets {
+        margin-left: 0;
+        justify-content: flex-start;
+        width: 100%;
+    }
+    .analytics-preset {
+        border-radius: 8px;
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+
+    /* KPI grid: 2-col compact */
+    .analytics-kpi-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    .analytics-kpi {
+        padding: 14px 12px;
+        border-radius: 14px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .analytics-kpi__icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+    }
+    .analytics-kpi__value {
+        font-size: 18px;
+    }
+    .analytics-kpi__label {
+        font-size: 10px;
+    }
+
+    /* Analytics grids: single column */
+    .analytics-grid--2,
+    .analytics-grid--2-1,
+    .analytics-grid--3 {
+        grid-template-columns: 1fr;
+    }
+    .analytics-card {
+        border-radius: 14px;
+    }
+    .analytics-card__header {
+        padding: 14px 16px;
+    }
+    .analytics-card__header h3 {
+        font-size: 14px;
+    }
+    .analytics-card__body {
+        padding: 14px;
+    }
+    .analytics-card__body--no-padding .table-responsive {
+        max-height: 300px;
+    }
+
+    /* Global stats */
+    .analytics-global-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    .analytics-global-stat__value {
+        font-size: 18px;
+    }
+    .analytics-global-stat__label {
+        font-size: 11px;
+    }
+
+    /* --- Dashboard grid: single column --- */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .dashboard-grid .card {
+        margin-bottom: 0;
+    }
+
+    /* --- Inline form within table (contacts select) --- */
+    .admin-table .form-control-sm,
+    .admin-table select {
+        font-size: 14px !important;
+        padding: 8px 12px;
+        border-radius: 8px;
+        min-height: 38px;
+    }
+
+    /* --- Login page mobile: already handled, ensure consistency --- */
+    body.admin-login-page .login-box {
+        border-radius: 18px;
+        padding: 32px 20px 28px;
+    }
+    body.admin-login-page .form-group input[type="text"],
+    body.admin-login-page .form-group input[type="password"] {
+        font-size: 16px;
+        border-radius: 12px;
+    }
+    body.admin-login-page .btn-full {
+        border-radius: 12px;
+        min-height: 48px;
+    }
+
+    /* --- Page subtitle --- */
+    .page-subtitle {
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    /* --- Table within a card: no extra spacing --- */
+    .card > .table-responsive {
+        margin: -16px;
+        margin-top: 0;
+        border-radius: 0 0 16px 16px;
+        overflow: hidden;
+    }
+
+    /* --- Smooth transitions for interactive elements --- */
+    a, button, .btn, .stat-card, .card, .badge, .admin-nav a {
+        transition: all .2s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* --- Select dropdown within table actions (contacts) --- */
+    .contact-status-select {
+        font-size: 14px !important;
+        padding: 8px 12px;
+        min-height: 38px;
+        border-radius: 8px;
+    }
+}
+
+/* ==========================================================================
+   Small Mobile (up to 480px) — Extra compact
+   ========================================================================== */
+@media (max-width: 480px) {
+
+    .admin-content {
+        padding: 12px;
+    }
+
+    .admin-topbar {
+        padding: 10px 12px;
+    }
+    .admin-topbar h1 {
+        font-size: 15px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    .stat-card {
+        padding: 12px;
+    }
+    .stat-card .stat-value {
+        font-size: 18px;
+    }
+    .stat-card .stat-label {
+        font-size: 10px;
+    }
+
+    .card {
+        padding: 14px;
+        border-radius: 14px;
+        margin-bottom: 12px;
+    }
+
+    .page-header h1 {
+        font-size: 18px;
+    }
+
+    /* KPI grid: single column on very small */
+    .analytics-kpi-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .analytics-kpi {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Table cards: tighter */
+    .admin-table tr {
+        padding: 12px 14px;
+        border-radius: 12px;
+        margin-bottom: 8px;
+    }
+    .admin-table td {
+        font-size: 13px;
+        padding: 5px 0;
+    }
+    .admin-table td[data-label]::before {
+        font-size: 10px;
+    }
+
+    /* Pagination: smaller */
+    .pagination a, .pagination span {
+        min-width: 36px;
+        height: 36px;
+        font-size: 13px;
+    }
+}
+
+/* ==========================================================================
+   Print styles override (keep for desktop)
+   ========================================================================== */
+@media print {
+    .admin-sidebar,
+    .admin-sidebar-overlay,
+    .admin-sidebar-toggle,
+    .admin-topbar-actions,
+    .filter-form,
+    .form-actions,
+    .btn,
+    .pagination {
+        display: none !important;
+    }
+    .admin-main {
+        margin-left: 0 !important;
+    }
+    .admin-table thead {
+        display: table-header-group !important;
+    }
+    .admin-table tr {
+        display: table-row !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .admin-table td {
+        display: table-cell !important;
+    }
+    .admin-table td::before {
+        display: none !important;
+    }
+}

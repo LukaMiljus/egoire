@@ -214,4 +214,71 @@ document.addEventListener('DOMContentLoaded', function () {
             if (tip) tip.remove();
         });
     });
+
+    /* ---------- Mobile: Table → Card Labels ---------- */
+    /* Reads <th> text and sets data-label on each <td> for CSS ::before */
+    (function () {
+        if (window.innerWidth > 768) return;
+
+        document.querySelectorAll('.admin-table, .analytics-table').forEach(function (table) {
+            var headers = [];
+            table.querySelectorAll('thead th').forEach(function (th) {
+                headers.push(th.textContent.trim());
+            });
+            if (!headers.length) return;
+
+            table.querySelectorAll('tbody tr').forEach(function (row) {
+                row.querySelectorAll('td').forEach(function (td, i) {
+                    if (headers[i] && headers[i] !== '') {
+                        td.setAttribute('data-label', headers[i]);
+                    }
+                });
+            });
+        });
+    })();
+
+    /* ---------- Mobile: Close sidebar on nav click ---------- */
+    if (window.innerWidth <= 1024 && sidebar) {
+        document.querySelectorAll('.admin-nav a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                sidebar.classList.remove('open');
+                if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+    }
+
+    /* ---------- Mobile: Swipe to close sidebar ---------- */
+    (function () {
+        if (window.innerWidth > 1024 || !sidebar) return;
+        var startX = 0;
+        var currentX = 0;
+        var swiping = false;
+
+        sidebar.addEventListener('touchstart', function (e) {
+            startX = e.touches[0].clientX;
+            swiping = true;
+        }, { passive: true });
+
+        sidebar.addEventListener('touchmove', function (e) {
+            if (!swiping) return;
+            currentX = e.touches[0].clientX;
+            var diff = startX - currentX;
+            if (diff > 0 && sidebar.classList.contains('open')) {
+                sidebar.style.transform = 'translateX(' + Math.max(-diff, -300) + 'px)';
+            }
+        }, { passive: true });
+
+        sidebar.addEventListener('touchend', function () {
+            if (!swiping) return;
+            swiping = false;
+            var diff = startX - currentX;
+            if (diff > 80 && sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            sidebar.style.transform = '';
+        }, { passive: true });
+    })();
 });

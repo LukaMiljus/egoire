@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="<?= csrfToken() ?>">
     <title><?= htmlspecialchars($title ?? 'Admin') ?> – Egoire Admin</title>
     <link rel="stylesheet" href="<?= asset('/css/admin.css') ?>">
+    <link rel="stylesheet" href="<?= asset('/css/admin-responsive.css') ?>">
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
 </head>
 <body class="admin-body">
@@ -90,10 +91,10 @@
                 <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                 Blog
             </a>
-            <a href="/admin/pages">
+            <!-- <a href="/admin/pages">
                 <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                 Stranice
-            </a>
+            </a> -->
             <a href="/admin/marketing">
                 <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                 Email Marketing
