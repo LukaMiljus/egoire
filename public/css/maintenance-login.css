@@ -1,0 +1,163 @@
+/* Egoire – Maintenance / team login */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100%;
+}
+
+body.ml-page {
+    font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+    color: #f5f0eb;
+    background: #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    -webkit-font-smoothing: antialiased;
+}
+
+.ml-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(198, 167, 94, 0.12) 0%, transparent 55%),
+        #0a0a0a url('/images/coming-soon-poster.jpg') center / cover no-repeat;
+}
+
+.ml-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: rgba(0, 0, 0, 0.72);
+}
+
+.ml-card {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 420px;
+    padding: 2.5rem 2rem 2rem;
+    background: rgba(18, 18, 18, 0.92);
+    border: 1px solid rgba(198, 167, 94, 0.22);
+    backdrop-filter: blur(12px);
+}
+
+.ml-back {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 235, 0.55);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.ml-back:hover {
+    color: #C6A75E;
+}
+
+.ml-logo {
+    display: block;
+    width: auto;
+    max-width: 140px;
+    height: auto;
+    margin: 0 auto 1.75rem;
+}
+
+.ml-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.75rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.ml-subtitle {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    text-align: center;
+    color: rgba(245, 240, 235, 0.6);
+    margin-bottom: 2rem;
+}
+
+.ml-alert {
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.875rem;
+    color: #ffb4b4;
+    background: rgba(180, 40, 40, 0.2);
+    border: 1px solid rgba(255, 120, 120, 0.35);
+}
+
+.ml-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.ml-field label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245, 240, 235, 0.65);
+}
+
+.ml-field input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    color: #f5f0eb;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(198, 167, 94, 0.25);
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.ml-field input:focus {
+    border-color: #C6A75E;
+    background: rgba(255, 255, 255, 0.09);
+}
+
+.ml-submit {
+    margin-top: 0.5rem;
+    padding: 0.95rem 1rem;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    background: #C6A75E;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.ml-submit:hover {
+    background: #d4b86a;
+}
+
+.ml-submit:active {
+    transform: scale(0.98);
+}
+
+@media (max-width: 480px) {
+    .ml-card {
+        padding: 2rem 1.25rem 1.5rem;
+    }
+
+    .ml-title {
+        font-size: 1.5rem;
+    }
+}

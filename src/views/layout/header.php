@@ -16,16 +16,12 @@
     <?php else: ?>
     <meta name="description" content="Egoire – Premium proizvodi za negu kose. Ekskluzivni brendovi, luxury hair care.">
     <?php endif; ?>
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="<?= htmlspecialchars($title ?? 'Egoire – Luxury Hair Care') ?>">
-    <meta property="og:description" content="<?= htmlspecialchars($metaDescription ?? 'Egoire – Premium proizvodi za negu kose.') ?>">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="<?= htmlspecialchars(baseUrl() . ($_SERVER['REQUEST_URI'] ?? '/')) ?>">
-    <meta property="og:site_name" content="Egoire">
-    <?php if (!empty($ogImage)): ?>
-    <meta property="og:image" content="<?= htmlspecialchars($ogImage) ?>">
-    <?php endif; ?>
-    <link rel="canonical" href="<?= htmlspecialchars(baseUrl() . parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH)) ?>">
+<?php require __DIR__ . '/../components/seo-head.php'; ?>
+
+    <!-- Favicon / ikonica u tabu -->
+    <link rel="icon" href="<?= asset('/images/logos/egoire-nav.png?v=<?php echo time(); ?>') ?>" type="image/png">
+    <link rel="apple-touch-icon" href="<?= asset('/images/logos/egoire-nav.png?v=<?php echo time(); ?>') ?>">
+    <meta name="theme-color" content="#0a0a0a">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,6 +40,13 @@
     <link rel="manifest" href="/manifest.json">
 </head>
 <body>
+<?php if (isMaintenanceMode() && isMaintenanceBypass()): ?>
+    <div class="eg-maintenance-bar" role="status">
+        <span>Režim pripreme – vidite pun sajt kao administrator.</span>
+        <a href="/maintenance-logout">Odjava</a>
+        <a href="/admin/dashboard">Admin panel</a>
+    </div>
+<?php endif; ?>
 
 <!-- ============================================================
      Announcement Bar
@@ -60,7 +63,7 @@
 
         <!-- Logo -->
         <a href="/" class="eg-logo">
-            <img src="/images/logos/egoire-logo.png" alt="Egoire" class="eg-logo__img">
+            <img src="/images/logos/egoire-logo.png?v=<?php echo time(); ?>" alt="Egoire" class="eg-logo__img">
         </a>
 
         <!-- Desktop Navigation -->
@@ -141,7 +144,7 @@
                 </li>
 
                 <!-- 4. Poklon vrećice — text + image split -->
-                <li class="eg-nav__item eg-nav__item--has-dd">
+                <!-- <li class="eg-nav__item eg-nav__item--has-dd">
                     <a href="/gift-bag" class="eg-nav__link <?= isActivePath('/gift-bag') ? 'is-active' : '' ?>">
                         Poklon vrećice
                         <svg class="eg-nav__chevron" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 3.5 5 6 7.5 3.5"/></svg>
@@ -163,7 +166,7 @@
                             </div>
                         </div>
                     </div>
-                </li>
+                </li> -->
 
                 <!-- 6. Loyalty — luxury mini panel with progress -->
                 <li class="eg-nav__item eg-nav__item--has-dd">
@@ -425,10 +428,10 @@
 
         <!-- Poklon vrećice -->
         <div class="eg-accordion__item">
-            <button class="eg-accordion__trigger">
+            <!-- <button class="eg-accordion__trigger">
                 <span>Poklon vrećice</span>
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5 6 7.5 9 4.5"/></svg>
-            </button>
+            </button> -->
             <div class="eg-accordion__content">
                 <div class="eg-accordion__pad">
                     <p class="eg-mobile__desc">Elegantne poklon vrećice sa premium proizvodima za negu kose.</p>

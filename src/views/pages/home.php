@@ -6,6 +6,7 @@
 declare(strict_types=1);
 
 $title = 'Egoire | Luxury Hair Care';
+$metaDescription = 'Egoire – premium proizvodi za negu kose u Srbiji. Ekskluzivni brendovi, luksuzna nega i besplatna dostava preko 5.000 RSD.';
 
 /* --- Page-specific assets --- */
 $pageStyles  = ['/css/home/home.css'];
@@ -68,7 +69,7 @@ require __DIR__ . '/../layout/header.php';
 
     <div class="eh-hero__content">
         <span class="eh-hero__eyebrow" data-reveal data-delay="200">Ekskluzivna kolekcija</span>
-        <img class="eh-hero__logo" src="/public/images/logos/egoire-logo.png" alt="Egoire Logo" srcset="">
+        <img class="eh-hero__logo" src="/images/logos/egoire-logo.png?v=<?php echo time(); ?>" alt="Egoire Logo" srcset="">
         <h1 class="eh-hero__title" data-reveal data-delay="400">Luxury Hair Care</h1>
         <p class="eh-hero__subtitle" data-reveal data-delay="600">
             Premium proizvodi svetskih brendova za transformaciju i negu vaše kose

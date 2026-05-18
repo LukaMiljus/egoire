@@ -18,6 +18,9 @@ declare(strict_types=1);
     <meta property="og:title" content="Egoire – Uskoro">
     <meta property="og:description" content="Uskoro sve što vam treba za vašu kosu.">
     <meta property="og:type" content="website">
+    <link rel="icon" href="<?= asset('/images/logos/egoire-nav.png?v=<?php echo time(); ?>') ?>" type="image/png">
+    <link rel="apple-touch-icon" href="<?= asset('/images/logos/egoire-nav.png?v=<?php echo time(); ?>') ?>">
+    <meta name="theme-color" content="#0a0a0a">
 
     <!-- Preconnect fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,10 +28,10 @@ declare(strict_types=1);
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="/css/coming-soon.css">
+    <link rel="stylesheet" href="/css/coming-soon.css?v=<?php echo time(); ?>">
 
     <!-- Preload video poster for mobile fallback -->
-    <link rel="preload" as="image" href="/images/coming-soon-poster.jpg">
+    <link rel="preload" as="image" href="/images/coming-soon-poster.jpg?v=<?php echo time(); ?>">
 </head>
 <body>
 
@@ -67,7 +70,7 @@ declare(strict_types=1);
         <!-- ★ CHANGE LOGO: Replace the src below with your logo path ★ -->
         <img
             class="cs-logo"
-            src="/images/logos/egoire-logo.png"
+            src="/images/logos/egoire-logo.png?v=<?php echo time(); ?>"
             alt="Egoire Logo"
             
         >
@@ -99,6 +102,8 @@ declare(strict_types=1);
         <hr class="cs-divider" id="cs-divider">
 
         <p class="cs-subtext" id="cs-subtext">Luxury hair care &middot; Ekskluzivni brendovi</p>
+
+        <a href="/maintenance-login" class="cs-staff-link" title="Prijava tima">&#9679;</a>
 
         <!-- Shown when countdown finishes -->
         <div class="cs-open-message" id="cs-open-message">

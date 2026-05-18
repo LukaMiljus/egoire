@@ -558,9 +558,9 @@ CREATE TABLE `admin_users` (
     UNIQUE KEY `uk_admin_username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Default admin: password = Victory2024!
+-- Default admin (maintenance / panel): username admin, password TMEgoire2026!
 INSERT INTO `admin_users` (`username`, `password_hash`, `role`)
-VALUES ('victoryadmin', '$2y$10$/F8YqwEIyDVUmRNhSC1W4Omo3jlNSyb4LIceQew7nR6sfkVTG6/Ju', 'superadmin');
+VALUES ('admin', '$2y$12$ENPLhLGRq.omJJopLfde2.iGmWwKW/pPDZv4H9Lvtdrjnj.0gqM/2', 'superadmin');
 
 -- ============================================================
 -- 16. STATIC PAGES (FAQ, About, Terms, etc.)

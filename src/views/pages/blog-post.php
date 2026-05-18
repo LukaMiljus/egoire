@@ -16,7 +16,9 @@ if (!$post || $post['status'] !== 'published') {
 
 $title           = (($post['meta_title'] ?? '') ?: $post['title']) . ' | Blog | Egoire';
 $metaDescription = $post['meta_description'] ?? $post['excerpt'] ?? '';
-$ogImage         = !empty($post['featured_image']) ? (baseUrl() . $post['featured_image']) : '';
+$ogImage         = !empty($post['featured_image']) ? absoluteUrl($post['featured_image']) : '';
+$ogType          = 'article';
+$jsonLdExtra     = [seoJsonLdArticle($post)];
 $pageStyles      = ['/css/blog.css'];
 
 /* Fetch related posts (latest 3 excluding current) */

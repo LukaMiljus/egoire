@@ -1,19 +1,21 @@
 {
-  "name": "Victory Sport",
-  "short_name": "Victory",
-  "start_url": "/index.php",
+  "name": "Egoire – Luxury Hair Care",
+  "short_name": "Egoire",
+  "description": "Premium proizvodi za negu kose u Srbiji.",
+  "lang": "sr",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f0f0f",
-  "theme_color": "#e53935",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/images/app-icon.png",
+      "src": "/images/logos/egoire-nav.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/images/app-icon.png",
+      "src": "/images/logos/egoire-logo.png",
       "sizes": "512x512",
       "type": "image/png"
     }

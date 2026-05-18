@@ -23,7 +23,9 @@ $inStock    = !$stock || (int) ($stock['quantity'] ?? 0) > 0;
 
 $title           = (($product['meta_title'] ?? '') ?: $product['name']) . ' | Egoire';
 $metaDescription = $product['meta_description'] ?? $product['short_description'] ?? '';
-$ogImage         = !empty($images) ? (baseUrl() . $images[0]['image_path']) : '';
+$ogImage         = !empty($images) ? absoluteUrl($images[0]['image_path']) : '';
+$ogType          = 'product';
+$jsonLdExtra     = [seoJsonLdProduct($product, $images, $inStock)];
 $productVariants = fetchProductVariants((int) $product['id']);
 
 $salePercent = ($product['sale_price'] && (float) $product['price'] > 0)

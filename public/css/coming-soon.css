@@ -81,8 +81,8 @@ body {
     z-index: 1;
     background: linear-gradient(
         180deg,
-        rgba(10, 10, 10, .65) 0%,
-        rgba(10, 10, 10, .55) 40%,
+        rgba(175, 174, 174, 0.65) 0%,
+        rgba(187, 187, 187, 0.55) 40%,
         rgba(10, 10, 10, .70) 100%
     );
     backdrop-filter: blur(2px);
@@ -246,6 +246,27 @@ body {
     background: #d4b96e;
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(198, 167, 94, .25);
+}
+
+/* --- Discreet staff login link --- */
+.cs-staff-link {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 10;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.55rem;
+    color: rgba(245, 240, 235, 0.2);
+    text-decoration: none;
+    transition: color 0.25s ease;
+}
+
+.cs-staff-link:hover {
+    color: rgba(198, 167, 94, 0.75);
 }
 
 /* --- Mobile Adjustments --- */

@@ -42,6 +42,8 @@ require_once __DIR__ . '/libs/validation.php';
 require_once __DIR__ . '/libs/csrf.php';
 require_once __DIR__ . '/libs/rate_limit.php';
 require_once __DIR__ . '/libs/auth.php';
+require_once __DIR__ . '/libs/maintenance.php';
+require_once __DIR__ . '/libs/seo.php';
 require_once __DIR__ . '/libs/connection.php';
 require_once __DIR__ . '/main.php';
 

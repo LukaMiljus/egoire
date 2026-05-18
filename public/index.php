@@ -11,11 +11,32 @@ require __DIR__ . '/../src/bootstrap.php';
 $path = trim(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), '/');
 $method = $_SERVER['REQUEST_METHOD'];
 
+// SEO – robots.txt i sitemap.xml (uvek dostupni crawlerima)
+$seoEndpoints = [
+    'robots.txt'  => 'seo/robots',
+    'sitemap.xml' => 'seo/sitemap',
+];
+if (isset($seoEndpoints[$path])) {
+    $seoView = __DIR__ . '/../src/views/' . $seoEndpoints[$path] . '.php';
+    if (file_exists($seoView)) {
+        require $seoView;
+        exit;
+    }
+}
+
+// Maintenance mode – javnost vidi samo Coming Soon
+enforceMaintenanceMode($path);
+if (serveMaintenanceHome($path)) {
+    exit;
+}
+
 // Route map: path => [file, requireAuth]
 $routes = [
     // PUBLIC PAGES
     ''                  => ['pages/home', false],
     'coming-soon'       => ['pages/coming-soon', false],
+    'maintenance-login' => ['pages/maintenance-login', false],
+    'maintenance-logout'=> ['pages/maintenance-logout', false],
     'products'          => ['pages/products', false],
     'product'           => ['pages/product-detail', false],
     'categories'        => ['pages/categories', false],

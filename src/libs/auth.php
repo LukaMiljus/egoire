@@ -24,7 +24,7 @@ if (!function_exists('requireAdmin')) {
                 echo json_encode(['error' => 'Neautorizovan pristup.']);
                 exit;
             }
-            header('Location: /admin/login.php');
+            header('Location: /admin/login');
             exit;
         }
     }

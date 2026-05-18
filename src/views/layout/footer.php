@@ -50,8 +50,8 @@
                             <li><a href="/products">Svi proizvodi</a></li>
                             <li><a href="/categories">Kategorije</a></li>
                             <li><a href="/brands">Brendovi</a></li>
-                            <li><a href="/gift-bag">Gift Bag</a></li>
-                            <li><a href="/gift-card">Gift Card</a></li>
+                            <!-- <li><a href="/gift-bag">Gift Bag</a></li> -->
+                            <!-- <li><a href="/gift-card">Gift Card</a></li> -->
                         </ul>
                     </div>
 

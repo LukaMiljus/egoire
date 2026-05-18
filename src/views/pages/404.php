@@ -1,5 +1,6 @@
 <?php
 $title = '404 - Stranica nije pronađena | Egoire';
+$seoNoIndex = true;
 if (!headers_sent()) http_response_code(404);
 require __DIR__ . '/../layout/header.php';
 ?>
