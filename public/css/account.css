@@ -820,7 +820,7 @@
     }
 
     .ac-nav {
-        flex-direction: row;
+        /* flex-direction: row; */
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         gap: 4px;

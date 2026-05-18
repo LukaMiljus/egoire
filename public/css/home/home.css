@@ -2013,6 +2013,7 @@ body.eh-vr-modal-open {
 
     .eh-hero__scroll {
         bottom: 20px;
+        left: auto;
     }
 
     /* Section headers */

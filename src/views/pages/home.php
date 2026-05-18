@@ -61,7 +61,7 @@ require __DIR__ . '/../layout/header.php';
            playsinline
            preload="metadata"
            aria-hidden="true">
-        <source src="/images/banner/hero-video.mp4" type="video/mp4">
+        <source src="/videos/cs-video.mp4" type="video/mp4">
     </video>
 
     <div class="eh-hero__overlay"></div>
@@ -550,7 +550,7 @@ require __DIR__ . '/../layout/header.php';
 <!-- ============================================================
      6. GIFT CARDS  –  3-column
      ============================================================ -->
-
+<!-- 
 <?php if ($giftCardAmounts): ?>
 <section class="eh-section eh-section--alt" data-reveal>
     <div class="eh-container">
@@ -578,7 +578,7 @@ require __DIR__ . '/../layout/header.php';
         </div>
     </div>
 </section>
-<?php endif; ?>
+<?php endif; ?> -->
 
 <!-- ============================================================
      6b. VIDEO TESTIMONIALS  –  UGC swipeable stories
