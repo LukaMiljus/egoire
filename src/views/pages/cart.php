@@ -16,19 +16,20 @@ $totals    = calculateCartTotals($cartItems);
 $subtotal           = (float) ($totals['subtotal'] ?? 0);
 $shipping           = (float) ($totals['shipping'] ?? 0);
 $shippingThreshold  = (float) ($totals['shipping_threshold'] ?? 6000);
+$shippingEnabled    = (bool)  ($totals['shipping_enabled'] ?? isShippingEnabled());
 $total              = (float) ($totals['total'] ?? 0);
 $totalQty           = (int)   ($totals['quantity'] ?? 0);
 
-$freeShippingRemaining = max(0, $shippingThreshold - $subtotal);
-$freeShippingProgress  = $shippingThreshold > 0
-    ? min(100, round(($subtotal / $shippingThreshold) * 100))
-    : 100;
-$hasFreeShipping = $subtotal >= $shippingThreshold;
+$shippingData          = calculateShipping($subtotal);
+$freeShippingRemaining = (float) $shippingData['remaining'];
+$freeShippingProgress  = (float) $shippingData['progress'];
+$hasFreeShipping       = (bool) $shippingData['has_free_shipping'];
 
-/* Gift wrap cost (client-side toggle, but define the amount here) */
-$giftWrapCost = 300;
-$giftWrappingOptions = fetchGiftWrappingOptions(true);
-$selectedGiftWrappingId = (int) ($_SESSION['gift_wrapping_id'] ?? 0);
+/* Gift wrap */
+$giftWrappingEnabled    = (bool) ($totals['gift_wrapping_enabled'] ?? isGiftWrappingEnabled());
+$giftWrapCost           = 300;
+$giftWrappingOptions    = $giftWrappingEnabled ? fetchGiftWrappingOptions(true) : [];
+$selectedGiftWrappingId = $giftWrappingEnabled ? (int) ($_SESSION['gift_wrapping_id'] ?? 0) : 0;
 
 /* Page-specific assets */
 $pageStyles  = ['/css/cart.css'];
@@ -75,8 +76,11 @@ require __DIR__ . '/../layout/header.php';
         <!-- ============================================================
              FREE SHIPPING PROGRESS BAR
              ============================================================ -->
+        <?php if ($shippingEnabled): ?>
         <div class="ct-shipping-bar" id="ctShippingBar"
+             data-enabled="1"
              data-threshold="<?= $shippingThreshold ?>"
+             data-cost="<?= (float) (shippingConfig()['cost'] ?? 500) ?>"
              data-subtotal="<?= $subtotal ?>">
             <div class="ct-shipping-bar__track">
                 <div class="ct-shipping-bar__fill" id="ctShippingFill"
@@ -92,6 +96,7 @@ require __DIR__ . '/../layout/header.php';
                 <?php endif; ?>
             </p>
         </div>
+        <?php endif; ?>
 
         <!-- ============================================================
              TWO-COLUMN LAYOUT
@@ -194,7 +199,7 @@ require __DIR__ . '/../layout/header.php';
             </div>
 
             <!-- RIGHT: Summary Sidebar -->
-            <aside class="ct-summary" id="ctSummary">
+            <aside class="ct-summary" id="ctSummary" data-gift-enabled="<?= $giftWrappingEnabled ? '1' : '0' ?>">
                 <div class="ct-summary__card">
                     <h3 class="ct-summary__title">Rezime narudžbine</h3>
 
@@ -205,7 +210,7 @@ require __DIR__ . '/../layout/header.php';
                     </div>
 
                     <!-- Gift Wrapping Options — Enhanced Card Selection -->
-                    <?php if (!empty($giftWrappingOptions)): ?>
+                    <?php if ($giftWrappingEnabled && !empty($giftWrappingOptions)): ?>
                     <div class="ct-gift-section" id="ctGiftWrap">
                         <div class="ct-gift-section__header">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
@@ -263,7 +268,7 @@ require __DIR__ . '/../layout/header.php';
                             Maks. 4 proizvoda po Gift Bag-u
                         </p>
                     </div>
-                    <?php else: ?>
+                    <?php elseif ($giftWrappingEnabled): ?>
                     <!-- Fallback: simple gift wrap toggle -->
                     <div class="ct-summary__gift" id="ctGiftWrap">
                         <label class="ct-gift-toggle">
@@ -282,17 +287,21 @@ require __DIR__ . '/../layout/header.php';
                     </div>
                     <?php endif; ?>
 
+                    <?php if ($giftWrappingEnabled): ?>
                     <!-- Gift Wrap Cost (hidden until checked) -->
                     <div class="ct-summary__row ct-summary__row--gift" id="ctGiftRow" style="display: <?= $selectedGiftWrappingId > 0 ? 'flex' : 'none' ?>;">
                         <span>Poklon pakovanje</span>
                         <span id="ctGiftPrice">+<?= formatPrice((float) ($totals['gift_wrapping_cost'] ?? $giftWrapCost)) ?></span>
                     </div>
+                    <?php endif; ?>
 
                     <!-- Shipping -->
+                    <?php if ($shippingEnabled): ?>
                     <div class="ct-summary__row">
                         <span>Dostava</span>
                         <span id="ctShipping"><?= $hasFreeShipping ? '<span class="ct-summary__free">Besplatna</span>' : formatPrice($shipping) ?></span>
                     </div>
+                    <?php endif; ?>
 
                     <hr class="ct-summary__divider">
 

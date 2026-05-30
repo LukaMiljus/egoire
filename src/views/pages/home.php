@@ -6,7 +6,9 @@
 declare(strict_types=1);
 
 $title = 'Egoire | Luxury Hair Care';
-$metaDescription = 'Egoire – premium proizvodi za negu kose u Srbiji. Ekskluzivni brendovi, luksuzna nega i besplatna dostava preko 5.000 RSD.';
+$metaDescription = isShippingEnabled()
+    ? 'Egoire – premium proizvodi za negu kose u Srbiji. Ekskluzivni brendovi, luksuzna nega i besplatna dostava preko ' . formatPrice((float) (shippingConfig()['free_threshold'] ?? 6000)) . '.'
+    : 'Egoire – premium proizvodi za negu kose u Srbiji. Ekskluzivni brendovi, luksuzna nega i besplatna dostava za sve porudžbine.';
 
 /* --- Page-specific assets --- */
 $pageStyles  = ['/css/home/home.css'];
@@ -516,7 +518,7 @@ require __DIR__ . '/../layout/header.php';
      5. GIFT BAG  –  Two-column split
      ============================================================ -->
 
-<section class="eh-section eh-section--gift-bag" data-reveal>
+<!-- <section class="eh-section eh-section--gift-bag" data-reveal>
     <div class="eh-container">
         <div class="eh-split">
             <div class="eh-split__media" data-reveal data-delay="0">
@@ -546,7 +548,7 @@ require __DIR__ . '/../layout/header.php';
             </div>
         </div>
     </div>
-</section>
+</section> -->
 
 <!-- ============================================================
      6. GIFT CARDS  –  3-column
@@ -771,21 +773,21 @@ require __DIR__ . '/../layout/header.php';
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                         <div>
                             <span class="eh-contact__label">Email</span>
-                            <a href="mailto:info@egoire.rs">info@egoire.rs</a>
+                            <a href="mailto:office@egoire.rs">office@egoire.rs</a>
                         </div>
                     </div>
                     <div class="eh-contact__item">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
                         <div>
                             <span class="eh-contact__label">Telefon</span>
-                            <a href="tel:+381641234567">+381 64 123 4567</a>
+                            <a href="tel:+381631122880">+381 63 11 22 880</a>
                         </div>
                     </div>
                     <div class="eh-contact__item">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                         <div>
                             <span class="eh-contact__label">Radno vreme</span>
-                            <span>Pon – Pet: 09:00 – 17:00</span>
+                            <span>Utorak–Petak: 10–19<br>Subota: 9–15</span>
                         </div>
                     </div>
                 </div>

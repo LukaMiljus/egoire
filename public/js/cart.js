@@ -24,8 +24,9 @@
     var SHIPPING_BAR   = document.getElementById('ctShippingBar');
     var SHIPPING_FILL  = document.getElementById('ctShippingFill');
     var SHIPPING_MSG   = document.getElementById('ctShippingMsg');
+    var SHIPPING_ON    = SHIPPING_BAR ? SHIPPING_BAR.dataset.enabled === '1' : false;
     var THRESHOLD      = SHIPPING_BAR ? parseFloat(SHIPPING_BAR.dataset.threshold) || 6000 : 6000;
-    var SHIPPING_COST  = 500; // Flat rate when below threshold
+    var SHIPPING_COST  = SHIPPING_BAR ? parseFloat(SHIPPING_BAR.dataset.cost) || 500 : 500;
 
     var EL_SUBTOTAL  = document.getElementById('ctSubtotal');
     var EL_SHIPPING  = document.getElementById('ctShipping');
@@ -33,6 +34,8 @@
     var EL_GIFT_ROW  = document.getElementById('ctGiftRow');
     var EL_GIFT_CHECK = document.getElementById('ctGiftCheck');
     var EL_GIFT_PRICE = document.getElementById('ctGiftPrice');
+    var EL_SUMMARY   = document.getElementById('ctSummary');
+    var GIFT_ON      = EL_SUMMARY ? EL_SUMMARY.dataset.giftEnabled === '1' : false;
 
     // Gift wrapping: support both radio buttons (multiple options) and checkbox (fallback)
     var GIFT_RADIOS = document.querySelectorAll('.ct-gift-radio');
@@ -97,19 +100,21 @@
 
         // Gift wrap cost: check radio buttons first, then checkbox fallback
         var giftWrap = 0;
-        if (GIFT_RADIOS.length > 0) {
-            GIFT_RADIOS.forEach(function (radio) {
-                if (radio.checked) {
-                    giftWrap = parseFloat(radio.dataset.giftCost) || 0;
-                }
-            });
-        } else if (EL_GIFT_CHECK && EL_GIFT_CHECK.checked) {
-            giftWrap = GIFT_COST;
+        if (GIFT_ON) {
+            if (GIFT_RADIOS.length > 0) {
+                GIFT_RADIOS.forEach(function (radio) {
+                    if (radio.checked) {
+                        giftWrap = parseFloat(radio.dataset.giftCost) || 0;
+                    }
+                });
+            } else if (EL_GIFT_CHECK && EL_GIFT_CHECK.checked) {
+                giftWrap = GIFT_COST;
+            }
         }
 
         // Shipping uses subtotal WITHOUT gift wrap for threshold check
-        var hasFree  = subtotal >= THRESHOLD;
-        var shipping = hasFree ? 0 : SHIPPING_COST;
+        var hasFree  = !SHIPPING_ON || subtotal >= THRESHOLD;
+        var shipping = SHIPPING_ON && !hasFree ? SHIPPING_COST : 0;
         var total    = subtotal + giftWrap + shipping;
 
         // Update subtotal
@@ -117,13 +122,17 @@
 
         // Update shipping display
         if (EL_SHIPPING) {
-            EL_SHIPPING.innerHTML = hasFree
-                ? '<span class="ct-summary__free">Besplatna</span>'
-                : formatPrice(shipping);
+            if (!SHIPPING_ON) {
+                EL_SHIPPING.innerHTML = '<span class="ct-summary__free">Besplatna</span>';
+            } else {
+                EL_SHIPPING.innerHTML = hasFree
+                    ? '<span class="ct-summary__free">Besplatna</span>'
+                    : formatPrice(shipping);
+            }
         }
 
         // Update gift row visibility
-        if (EL_GIFT_ROW) {
+        if (GIFT_ON && EL_GIFT_ROW) {
             EL_GIFT_ROW.style.display = giftWrap > 0 ? 'flex' : 'none';
             if (EL_GIFT_PRICE && giftWrap > 0) {
                 EL_GIFT_PRICE.textContent = '+' + formatPrice(giftWrap);
@@ -151,7 +160,7 @@
        3. SHIPPING PROGRESS BAR
        ========================================================== */
     function updateShippingBar(subtotal) {
-        if (!SHIPPING_BAR || !SHIPPING_FILL || !SHIPPING_MSG) return;
+        if (!SHIPPING_ON || !SHIPPING_BAR || !SHIPPING_FILL || !SHIPPING_MSG) return;
 
         var progress = THRESHOLD > 0 ? Math.min(100, (subtotal / THRESHOLD) * 100) : 100;
         var remaining = Math.max(0, THRESHOLD - subtotal);
@@ -284,7 +293,7 @@
     }
 
     // Radio button gift wrapping options — enhanced card selection
-    if (GIFT_RADIOS.length > 0) {
+    if (GIFT_ON && GIFT_RADIOS.length > 0) {
         GIFT_RADIOS.forEach(function (radio) {
             radio.addEventListener('change', function () {
                 // Remove selected class from all cards

@@ -10,6 +10,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 requireCsrf();
 
+if (!isGiftWrappingEnabled()) {
+    unset($_SESSION['gift_wrapping_id']);
+    echo json_encode(['success' => true, 'gift_wrapping_id' => 0]);
+    exit;
+}
+
 $input = json_decode(file_get_contents('php://input'), true);
 $giftWrappingId = (int) ($input['gift_wrapping_id'] ?? 0);
 

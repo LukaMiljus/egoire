@@ -153,8 +153,8 @@ require __DIR__ . '/../layout/header.php';
             <h2>13. Kontakt</h2>
             <p>Za sva pitanja u vezi sa ovim Uslovima korišćenja, kontaktirajte nas:</p>
             <ul>
-                <li>Email: <a href="mailto:info@egoire.rs">info@egoire.rs</a></li>
-                <li>Telefon: +381 64 123 4567</li>
+                <li>Email: <a href="mailto:office@egoire.rs">office@egoire.rs</a></li>
+                <li>Telefon: <a href="tel:+381631122880">+381 63 11 22 880</a></li>
             </ul>
         </article>
 

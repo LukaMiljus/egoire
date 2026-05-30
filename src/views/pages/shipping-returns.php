@@ -35,6 +35,11 @@ require __DIR__ . '/../layout/header.php';
 
         <article class="legal-section">
             <h2>2. Troškovi dostave</h2>
+            <?php if (isShippingEnabled()): ?>
+            <?php
+                $shipThreshold = (float) (shippingConfig()['free_threshold'] ?? 6000);
+                $shipCost = (float) (shippingConfig()['cost'] ?? 500);
+            ?>
             <table class="legal-table">
                 <thead>
                     <tr>
@@ -44,16 +49,19 @@ require __DIR__ . '/../layout/header.php';
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Do 6.000 RSD</td>
-                        <td>500 RSD</td>
+                        <td>Do <?= formatPrice($shipThreshold) ?></td>
+                        <td><?= formatPrice($shipCost) ?></td>
                     </tr>
                     <tr>
-                        <td>Preko 6.000 RSD</td>
+                        <td>Preko <?= formatPrice($shipThreshold) ?></td>
                         <td><strong>Besplatna dostava</strong></td>
                     </tr>
                 </tbody>
             </table>
             <p>Troškovi dostave se automatski obračunavaju u korpi i jasno su prikazani pre finalizacije narudžbine.</p>
+            <?php else: ?>
+            <p>Trenutno je dostava <strong>besplatna za sve porudžbine</strong> na teritoriji Republike Srbije.</p>
+            <?php endif; ?>
         </article>
 
         <article class="legal-section">

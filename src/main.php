@@ -687,8 +687,6 @@ function calculateCartTotals(array $items): array
 {
     $subtotal = 0.0;
     $quantity = 0;
-    $shippingThreshold = 6000.0;
-    $shippingCost = 500.0;
 
     foreach ($items as $item) {
         $unitPrice = isset($item['price']) ? productDisplayPrice($item) : 0;
@@ -697,25 +695,37 @@ function calculateCartTotals(array $items): array
         $quantity += $qty;
     }
 
-    $shipping = $subtotal >= $shippingThreshold ? 0.0 : $shippingCost;
+    $subtotal = round($subtotal, 2);
+    $shippingData = calculateShipping($subtotal);
+    $shipping = (float) $shippingData['shipping'];
 
     // Gift wrapping cost from session
     $giftWrappingCost = 0.0;
-    $giftWrappingId = (int) ($_SESSION['gift_wrapping_id'] ?? 0);
-    if ($giftWrappingId > 0) {
-        $giftOption = fetchGiftWrappingById($giftWrappingId);
-        if ($giftOption) {
-            $giftWrappingCost = (float) $giftOption['price'];
+    $giftWrappingId = 0;
+    $giftWrappingEnabled = isGiftWrappingEnabled();
+
+    if ($giftWrappingEnabled) {
+        $giftWrappingId = (int) ($_SESSION['gift_wrapping_id'] ?? 0);
+        if ($giftWrappingId > 0) {
+            $giftOption = fetchGiftWrappingById($giftWrappingId);
+            if ($giftOption) {
+                $giftWrappingCost = (float) $giftOption['price'];
+            }
         }
+    } elseif (!empty($_SESSION['gift_wrapping_id'])) {
+        unset($_SESSION['gift_wrapping_id']);
     }
 
     return [
-        'subtotal'           => round($subtotal, 2),
-        'shipping'           => $shipping,
-        'shipping_threshold' => $shippingThreshold,
-        'gift_bag_discount'  => 0.0,
-        'gift_wrapping_cost' => round($giftWrappingCost, 2),
-        'gift_wrapping_id'   => $giftWrappingId,
+        'subtotal'             => $subtotal,
+        'shipping'             => $shipping,
+        'shipping_threshold'   => (float) $shippingData['shipping_threshold'],
+        'shipping_enabled'     => (bool) $shippingData['shipping_enabled'],
+        'has_free_shipping'    => (bool) $shippingData['has_free_shipping'],
+        'gift_bag_discount'    => 0.0,
+        'gift_wrapping_enabled'=> $giftWrappingEnabled,
+        'gift_wrapping_cost'   => round($giftWrappingCost, 2),
+        'gift_wrapping_id'     => $giftWrappingId,
         'total'              => round($subtotal + $shipping + $giftWrappingCost, 2),
         'quantity'           => $quantity,
     ];
@@ -815,10 +825,12 @@ function createOrder(array $orderData, array $cartItems, array $addressData): ar
         $discountAmount = (float) ($orderData['discount_amount'] ?? 0);
         $loyaltyDiscount = (float) ($orderData['loyalty_discount'] ?? 0);
         $giftCardAmount = (float) ($orderData['gift_card_amount'] ?? 0);
-        $shippingCost = (float) ($orderData['shipping_cost'] ?? 0);
+        $shippingCost = (float) ($cartTotals['shipping'] ?? 0);
 
         // Gift wrapping
-        $giftWrappingId = !empty($orderData['gift_wrapping_id']) ? (int) $orderData['gift_wrapping_id'] : null;
+        $giftWrappingId = (isGiftWrappingEnabled() && !empty($orderData['gift_wrapping_id']))
+            ? (int) $orderData['gift_wrapping_id']
+            : null;
         $giftWrappingName = null;
         $giftWrappingPrice = 0.0;
         if ($giftWrappingId) {
@@ -829,7 +841,7 @@ function createOrder(array $orderData, array $cartItems, array $addressData): ar
             }
         }
 
-        $totalPrice = $cartTotals['total'] - $discountAmount - $loyaltyDiscount - $giftCardAmount + $shippingCost;
+        $totalPrice = $cartTotals['total'] - $discountAmount - $loyaltyDiscount - $giftCardAmount;
         $totalPrice = max(0, $totalPrice);
 
         // Create order

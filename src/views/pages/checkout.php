@@ -20,12 +20,14 @@ if (empty($cartItems)) {
 $subtotal = (float) ($totals['subtotal'] ?? 0);
 $shipping = (float) ($totals['shipping'] ?? 0);
 $total    = (float) ($totals['total'] ?? 0);
-$hasFreeShipping = $shipping <= 0;
+$shippingEnabled = (bool) ($totals['shipping_enabled'] ?? isShippingEnabled());
+$hasFreeShipping = !$shippingEnabled || $shipping <= 0;
 
 /* --- Gift wrapping from session --- */
-$giftWrappingId = (int) ($totals['gift_wrapping_id'] ?? 0);
-$giftWrappingCost = (float) ($totals['gift_wrapping_cost'] ?? 0);
-$giftWrappingOption = $giftWrappingId > 0 ? fetchGiftWrappingById($giftWrappingId) : null;
+$giftWrappingEnabled = (bool) ($totals['gift_wrapping_enabled'] ?? isGiftWrappingEnabled());
+$giftWrappingId = $giftWrappingEnabled ? (int) ($totals['gift_wrapping_id'] ?? 0) : 0;
+$giftWrappingCost = $giftWrappingEnabled ? (float) ($totals['gift_wrapping_cost'] ?? 0) : 0.0;
+$giftWrappingOption = ($giftWrappingEnabled && $giftWrappingId > 0) ? fetchGiftWrappingById($giftWrappingId) : null;
 
 /* --- User data --- */
 $user      = isUserAuthenticated() ? currentUser() : null;
@@ -327,10 +329,12 @@ require __DIR__ . '/../layout/header.php';
                             <span><?= formatPrice($subtotal) ?></span>
                         </div>
 
+                        <?php if ($shippingEnabled): ?>
                         <div class="co-summary__row">
                             <span>Dostava</span>
                             <span><?= $hasFreeShipping ? '<span class="co-summary__free">Besplatna</span>' : formatPrice($shipping) ?></span>
                         </div>
+                        <?php endif; ?>
 
                         <?php if ($giftWrappingOption): ?>
                         <div class="co-summary__row co-summary__row--gift">

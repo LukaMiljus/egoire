@@ -52,7 +52,7 @@
      Announcement Bar
      ============================================================ -->
 <div class="eg-announce">
-    <p>Besplatna dostava za porudžbine iznad 5.000 RSD</p>
+    <p><?= htmlspecialchars(shippingAnnouncementText()) ?></p>
 </div>
 
 <!-- ============================================================
