@@ -32,7 +32,7 @@ foreach ($products as $p) {
         'slug'       => $p['slug'],
         'price'      => (float)$p['price'],
         'sale_price' => $p['sale_price'] ? (float)$p['sale_price'] : null,
-        'formatted_price' => formatPrice($p['sale_price'] ?: $p['price']),
+        'formatted_price' => formatPrice((float) ($p['sale_price'] ?: $p['price'])),
         'image'      => $p['primary_image'] ?? '/uploads/products/placeholder.jpg',
         'brand'      => htmlspecialchars($p['brand_name'] ?? '', ENT_QUOTES, 'UTF-8'),
         'url'        => '/product/' . $p['slug'],

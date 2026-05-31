@@ -30,6 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = [];
     if (!$data['name']) $errors[] = 'Naziv je obavezan.';
+    if ($data['slug'] && isCategorySlugTaken($data['slug'], $id ?: null)) {
+        $errors[] = 'Slug je već u upotrebi. Izaberite drugi.';
+    }
 
     if (empty($errors)) {
         saveCategory($data, $id ?: null);

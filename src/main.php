@@ -239,6 +239,21 @@ function fetchCategoryBySlug(string $slug): ?array
     return $stmt->fetch() ?: null;
 }
 
+function isCategorySlugTaken(string $slug, ?int $excludeId = null): bool
+{
+    $sql = 'SELECT COUNT(*) FROM categories WHERE slug = ?';
+    $params = [$slug];
+
+    if ($excludeId) {
+        $sql .= ' AND id != ?';
+        $params[] = $excludeId;
+    }
+
+    $stmt = db()->prepare($sql);
+    $stmt->execute($params);
+    return (int) $stmt->fetchColumn() > 0;
+}
+
 function fetchSubcategories(int $parentId): array
 {
     return fetchCategories(['parent_id' => $parentId, 'active_only' => true]);
