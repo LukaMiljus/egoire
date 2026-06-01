@@ -6,6 +6,11 @@
    Standalone page – no header/footer layout.
    ============================================================ */
 declare(strict_types=1);
+
+if (!isMaintenanceMode()) {
+    header('Location: /', true, 302);
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="sr">

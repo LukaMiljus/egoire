@@ -3,6 +3,28 @@
 declare(strict_types=1);
 
 /**
+ * Read an environment variable (Dotenv fills $_ENV; getenv alone is unreliable on many hosts).
+ */
+function envVar(string $key, ?string $default = null): ?string
+{
+    if (array_key_exists($key, $_ENV)) {
+        $value = $_ENV[$key];
+        return ($value === '' || $value === null) ? $default : (string) $value;
+    }
+    if (array_key_exists($key, $_SERVER)) {
+        $value = $_SERVER[$key];
+        return ($value === '' || $value === null) ? $default : (string) $value;
+    }
+
+    $fromGetenv = getenv($key);
+    if ($fromGetenv !== false) {
+        return (string) $fromGetenv;
+    }
+
+    return $default;
+}
+
+/**
  * Render a view/template file with data.
  */
 function view(string $filename, array $data = []): void

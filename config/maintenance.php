@@ -9,7 +9,7 @@ declare(strict_types=1);
 return [
     // Uključeno po defaultu; isključiti u .env: MAINTENANCE_MODE=false
     'enabled' => filter_var(
-        getenv('MAINTENANCE_MODE') !== false ? getenv('MAINTENANCE_MODE') : 'true',
+        envVar('MAINTENANCE_MODE', 'true'),
         FILTER_VALIDATE_BOOLEAN
     ),
 
