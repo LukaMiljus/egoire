@@ -22,7 +22,7 @@ if (!function_exists('siteUrl')) {
             return $url;
         }
 
-        $fromEnv = getenv('SITE_URL');
+        $fromEnv = function_exists('envVar') ? envVar('SITE_URL') : ($_ENV['SITE_URL'] ?? getenv('SITE_URL'));
         if (is_string($fromEnv) && $fromEnv !== '' && filter_var($fromEnv, FILTER_VALIDATE_URL)) {
             $url = rtrim($fromEnv, '/');
             return $url;

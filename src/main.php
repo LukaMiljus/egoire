@@ -1189,7 +1189,14 @@ function countOrders(array $filters = []): int
 
 function adminNotificationRecipients(): array
 {
-    $configured = getenv('ORDER_NOTIFICATION_EMAILS');
+    // Prefer Dotenv-loaded vars (getenv() is unreliable on some hosts)
+    $configured = function_exists('envVar')
+        ? envVar('ORDER_NOTIFICATION_EMAILS')
+        : ($_ENV['ORDER_NOTIFICATION_EMAILS'] ?? getenv('ORDER_NOTIFICATION_EMAILS'));
+
+    if (is_string($configured)) {
+        $configured = trim($configured);
+    }
     if ($configured) {
         $emails = array_filter(array_map('trim', explode(',', $configured)));
         if ($emails) {

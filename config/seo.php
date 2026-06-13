@@ -3,19 +3,19 @@
 declare(strict_types=1);
 
 return [
-    'site_name'        => getenv('SITE_NAME') ?: 'Egoire',
-    'site_description' => getenv('SITE_DESCRIPTION') ?: 'Egoire – premium proizvodi za negu kose. Ekskluzivni brendovi i luxury hair care u Srbiji.',
+    'site_name'        => (function_exists('envVar') ? envVar('SITE_NAME') : ($_ENV['SITE_NAME'] ?? getenv('SITE_NAME'))) ?: 'Egoire',
+    'site_description' => (function_exists('envVar') ? envVar('SITE_DESCRIPTION') : ($_ENV['SITE_DESCRIPTION'] ?? getenv('SITE_DESCRIPTION'))) ?: 'Egoire – premium proizvodi za negu kose. Ekskluzivni brendovi i luxury hair care u Srbiji.',
     'locale'           => 'sr_RS',
     'language'         => 'sr-RS',
     'country'          => 'RS',
     'default_og_image' => '/images/logos/egoire-logo.png',
-    'twitter_handle'   => getenv('TWITTER_HANDLE') ?: '',
+    'twitter_handle'   => (function_exists('envVar') ? envVar('TWITTER_HANDLE') : ($_ENV['TWITTER_HANDLE'] ?? getenv('TWITTER_HANDLE'))) ?: '',
 
     // Google Search Console – meta tag vrednost (samo kod, bez "meta name=")
-    'google_site_verification' => getenv('GOOGLE_SITE_VERIFICATION') ?: '',
+    'google_site_verification' => (function_exists('envVar') ? envVar('GOOGLE_SITE_VERIFICATION') : ($_ENV['GOOGLE_SITE_VERIFICATION'] ?? getenv('GOOGLE_SITE_VERIFICATION'))) ?: '',
 
     // Bing Webmaster Tools (opciono)
-    'bing_site_verification' => getenv('BING_SITE_VERIFICATION') ?: '',
+    'bing_site_verification' => (function_exists('envVar') ? envVar('BING_SITE_VERIFICATION') : ($_ENV['BING_SITE_VERIFICATION'] ?? getenv('BING_SITE_VERIFICATION'))) ?: '',
 
     /** Statične javne stranice za sitemap */
     'static_paths' => [
