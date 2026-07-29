@@ -15,15 +15,9 @@ $totals    = calculateCartTotals($cartItems);
 
 $subtotal           = (float) ($totals['subtotal'] ?? 0);
 $shipping           = (float) ($totals['shipping'] ?? 0);
-$shippingThreshold  = (float) ($totals['shipping_threshold'] ?? 6000);
 $shippingEnabled    = (bool)  ($totals['shipping_enabled'] ?? isShippingEnabled());
 $total              = (float) ($totals['total'] ?? 0);
 $totalQty           = (int)   ($totals['quantity'] ?? 0);
-
-$shippingData          = calculateShipping($subtotal);
-$freeShippingRemaining = (float) $shippingData['remaining'];
-$freeShippingProgress  = (float) $shippingData['progress'];
-$hasFreeShipping       = (bool) $shippingData['has_free_shipping'];
 
 /* Gift wrap */
 $giftWrappingEnabled    = (bool) ($totals['gift_wrapping_enabled'] ?? isGiftWrappingEnabled());
@@ -43,7 +37,9 @@ require __DIR__ . '/../layout/header.php';
      ============================================================ -->
 
      
-<section class="ct-page">
+<section class="ct-page" id="ctPage"
+         data-shipping-enabled="<?= $shippingEnabled ? '1' : '0' ?>"
+         data-shipping-cost="<?= (float) (shippingConfig()['cost'] ?? 600) ?>">
     <div class="ct-container">
 
         <!-- Page Header -->
@@ -73,31 +69,6 @@ require __DIR__ . '/../layout/header.php';
         </div>
 
         <?php else: ?>
-        <!-- ============================================================
-             FREE SHIPPING PROGRESS BAR
-             ============================================================ -->
-        <?php if ($shippingEnabled): ?>
-        <div class="ct-shipping-bar" id="ctShippingBar"
-             data-enabled="1"
-             data-threshold="<?= $shippingThreshold ?>"
-             data-cost="<?= (float) (shippingConfig()['cost'] ?? 500) ?>"
-             data-subtotal="<?= $subtotal ?>">
-            <div class="ct-shipping-bar__track">
-                <div class="ct-shipping-bar__fill" id="ctShippingFill"
-                     style="width: <?= $freeShippingProgress ?>%"></div>
-            </div>
-            <p class="ct-shipping-bar__msg" id="ctShippingMsg">
-                <?php if ($hasFreeShipping): ?>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                Čestitamo! Ostvarili ste <strong>besplatnu dostavu</strong>.
-                <?php else: ?>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                Još <strong id="ctShippingRemaining"><?= formatPrice($freeShippingRemaining) ?></strong> do besplatne dostave.
-                <?php endif; ?>
-            </p>
-        </div>
-        <?php endif; ?>
-
         <!-- ============================================================
              TWO-COLUMN LAYOUT
              ============================================================ -->
@@ -299,7 +270,7 @@ require __DIR__ . '/../layout/header.php';
                     <?php if ($shippingEnabled): ?>
                     <div class="ct-summary__row">
                         <span>Dostava</span>
-                        <span id="ctShipping"><?= $hasFreeShipping ? '<span class="ct-summary__free">Besplatna</span>' : formatPrice($shipping) ?></span>
+                        <span id="ctShipping"><?= formatPrice($shipping) ?></span>
                     </div>
                     <?php endif; ?>
 

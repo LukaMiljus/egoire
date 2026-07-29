@@ -7,8 +7,7 @@
    2. Remove item (AJAX, animated removal)
    3. Gift wrap toggle
    4. Dynamic subtotal / total / shipping recalculation
-   5. Free shipping progress bar animation
-   6. Formatters
+   5. Formatters
    ============================================================ */
 (function () {
     'use strict';
@@ -21,12 +20,9 @@
         return meta ? meta.content : '';
     })();
 
-    var SHIPPING_BAR   = document.getElementById('ctShippingBar');
-    var SHIPPING_FILL  = document.getElementById('ctShippingFill');
-    var SHIPPING_MSG   = document.getElementById('ctShippingMsg');
-    var SHIPPING_ON    = SHIPPING_BAR ? SHIPPING_BAR.dataset.enabled === '1' : false;
-    var THRESHOLD      = SHIPPING_BAR ? parseFloat(SHIPPING_BAR.dataset.threshold) || 6000 : 6000;
-    var SHIPPING_COST  = SHIPPING_BAR ? parseFloat(SHIPPING_BAR.dataset.cost) || 500 : 500;
+    var CART_PAGE      = document.getElementById('ctPage');
+    var SHIPPING_ON    = CART_PAGE ? CART_PAGE.dataset.shippingEnabled === '1' : false;
+    var SHIPPING_COST  = CART_PAGE ? parseFloat(CART_PAGE.dataset.shippingCost) || 600 : 600;
 
     var EL_SUBTOTAL  = document.getElementById('ctSubtotal');
     var EL_SHIPPING  = document.getElementById('ctShipping');
@@ -112,9 +108,7 @@
             }
         }
 
-        // Shipping uses subtotal WITHOUT gift wrap for threshold check
-        var hasFree  = !SHIPPING_ON || subtotal >= THRESHOLD;
-        var shipping = SHIPPING_ON && !hasFree ? SHIPPING_COST : 0;
+        var shipping = SHIPPING_ON ? SHIPPING_COST : 0;
         var total    = subtotal + giftWrap + shipping;
 
         // Update subtotal
@@ -122,13 +116,7 @@
 
         // Update shipping display
         if (EL_SHIPPING) {
-            if (!SHIPPING_ON) {
-                EL_SHIPPING.innerHTML = '<span class="ct-summary__free">Besplatna</span>';
-            } else {
-                EL_SHIPPING.innerHTML = hasFree
-                    ? '<span class="ct-summary__free">Besplatna</span>'
-                    : formatPrice(shipping);
-            }
+            EL_SHIPPING.textContent = formatPrice(shipping);
         }
 
         // Update gift row visibility
@@ -142,9 +130,6 @@
         // Update total
         if (EL_TOTAL) EL_TOTAL.textContent = formatPrice(total);
 
-        // Update progress bar
-        updateShippingBar(subtotal);
-
         // Update header cart badge
         var totalQty = 0;
         collectItems().forEach(function (item) { totalQty += item.quantity; });
@@ -154,35 +139,6 @@
             badge.style.display = totalQty > 0 ? 'flex' : 'none';
         }
     }
-
-
-    /* ==========================================================
-       3. SHIPPING PROGRESS BAR
-       ========================================================== */
-    function updateShippingBar(subtotal) {
-        if (!SHIPPING_ON || !SHIPPING_BAR || !SHIPPING_FILL || !SHIPPING_MSG) return;
-
-        var progress = THRESHOLD > 0 ? Math.min(100, (subtotal / THRESHOLD) * 100) : 100;
-        var remaining = Math.max(0, THRESHOLD - subtotal);
-        var achieved = subtotal >= THRESHOLD;
-
-        // Animate fill width
-        SHIPPING_FILL.style.width = progress + '%';
-
-        // Toggle achieved class
-        if (achieved) {
-            SHIPPING_BAR.classList.add('ct-shipping-bar--achieved');
-            SHIPPING_MSG.innerHTML =
-                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> ' +
-                'Čestitamo! Ostvarili ste <strong>besplatnu dostavu</strong>.';
-        } else {
-            SHIPPING_BAR.classList.remove('ct-shipping-bar--achieved');
-            SHIPPING_MSG.innerHTML =
-                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg> ' +
-                'Još <strong>' + formatPrice(remaining) + '</strong> do besplatne dostave.';
-        }
-    }
-
 
     /* ==========================================================
        4. QUANTITY STEPPER

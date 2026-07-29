@@ -21,7 +21,6 @@ $subtotal = (float) ($totals['subtotal'] ?? 0);
 $shipping = (float) ($totals['shipping'] ?? 0);
 $total    = (float) ($totals['total'] ?? 0);
 $shippingEnabled = (bool) ($totals['shipping_enabled'] ?? isShippingEnabled());
-$hasFreeShipping = !$shippingEnabled || $shipping <= 0;
 
 /* --- Gift wrapping from session --- */
 $giftWrappingEnabled = (bool) ($totals['gift_wrapping_enabled'] ?? isGiftWrappingEnabled());
@@ -332,7 +331,7 @@ require __DIR__ . '/../layout/header.php';
                         <?php if ($shippingEnabled): ?>
                         <div class="co-summary__row">
                             <span>Dostava</span>
-                            <span><?= $hasFreeShipping ? '<span class="co-summary__free">Besplatna</span>' : formatPrice($shipping) ?></span>
+                            <span><?= formatPrice($shipping) ?></span>
                         </div>
                         <?php endif; ?>
 

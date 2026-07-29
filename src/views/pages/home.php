@@ -6,9 +6,7 @@
 declare(strict_types=1);
 
 $title = 'Egoire | Luxury Hair Care';
-$metaDescription = isShippingEnabled()
-    ? 'Egoire – premium proizvodi za negu kose u Srbiji. Ekskluzivni brendovi, luksuzna nega i besplatna dostava preko ' . formatPrice((float) (shippingConfig()['free_threshold'] ?? 6000)) . '.'
-    : 'Egoire – premium proizvodi za negu kose u Srbiji. Ekskluzivni brendovi, luksuzna nega i besplatna dostava za sve porudžbine.';
+$metaDescription = 'Egoire – premium proizvodi za negu kose u Srbiji. Ekskluzivni brendovi i luksuzna nega.';
 
 /* --- Page-specific assets --- */
 $pageStyles  = ['/css/home/home.css'];

@@ -49,13 +49,6 @@
 <?php endif; ?>
 
 <!-- ============================================================
-     Announcement Bar
-     ============================================================ -->
-<div class="eg-announce">
-    <p><?= htmlspecialchars(shippingAnnouncementText()) ?></p>
-</div>
-
-<!-- ============================================================
      Header — Three-layer glassmorphism
      ============================================================ -->
 <header class="eg-hdr" id="egHeader">

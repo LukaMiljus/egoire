@@ -35,33 +35,11 @@ require __DIR__ . '/../layout/header.php';
 
         <article class="legal-section">
             <h2>2. Troškovi dostave</h2>
-            <?php if (isShippingEnabled()): ?>
             <?php
-                $shipThreshold = (float) (shippingConfig()['free_threshold'] ?? 6000);
-                $shipCost = (float) (shippingConfig()['cost'] ?? 500);
+                $shipCost = (float) (shippingConfig()['cost'] ?? 600);
             ?>
-            <table class="legal-table">
-                <thead>
-                    <tr>
-                        <th>Vrednost narudžbine</th>
-                        <th>Trošak dostave</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Do <?= formatPrice($shipThreshold) ?></td>
-                        <td><?= formatPrice($shipCost) ?></td>
-                    </tr>
-                    <tr>
-                        <td>Preko <?= formatPrice($shipThreshold) ?></td>
-                        <td><strong>Besplatna dostava</strong></td>
-                    </tr>
-                </tbody>
-            </table>
+            <p>Fiksni trošak dostave iznosi <strong><?= formatPrice($shipCost) ?></strong> za svaku narudžbinu, bez obzira na njenu vrednost.</p>
             <p>Troškovi dostave se automatski obračunavaju u korpi i jasno su prikazani pre finalizacije narudžbine.</p>
-            <?php else: ?>
-            <p>Trenutno je dostava <strong>besplatna za sve porudžbine</strong> na teritoriji Republike Srbije.</p>
-            <?php endif; ?>
         </article>
 
         <article class="legal-section">
